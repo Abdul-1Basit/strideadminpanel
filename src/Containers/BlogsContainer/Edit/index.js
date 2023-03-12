@@ -6,7 +6,7 @@ import { primaryColor } from "../../../Constants";
 import { CloseOutlined } from "@ant-design/icons";
 import { initVals, blogSchema } from "../Constants";
 import { Formik } from "formik";
-// import RichTextEditor from "react-rte";
+import RichTextEditor from "react-rte";
 import Typography from "../../../Components/Typography";
 import { addBlog, getAllBlogs } from "../../../Helpers/firebase";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,8 +16,7 @@ const EditBlogContainer = (props) => {
 	const navigate = useNavigate();
 	const [addingUser, setAddingUser] = React.useState(false);
 	const [retrievedBlog, setRetrievedBlog] = React.useState(null);
-	const [value, setValue] = React.useState([]);
-	//RichTextEditor.createEmptyValue());
+	const [value, setValue] = React.useState(RichTextEditor.createEmptyValue());
 	const [imageurl, setImageUrl] = React.useState(null);
 	const onChange = (value) => {
 		console.log(`selected ${value}`);
@@ -69,9 +68,9 @@ const EditBlogContainer = (props) => {
 		let blogs = await getAllBlogs();
 		let blog = blogs.find((item) => item.id === id);
 		// console.log("retrivedblog", blog);
-		// setValue(
-		// 	RichTextEditor.createValueFromString(blog.description, "markdown")
-		// );
+		setValue(
+			RichTextEditor.createValueFromString(blog.description, "markdown")
+		);
 		setImageUrl(blog.image);
 		setRetrievedBlog(blog);
 	};
@@ -245,7 +244,7 @@ const EditBlogContainer = (props) => {
 						<div>
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10, width: "100%" }}>
-								{/* <RichTextEditor
+								<RichTextEditor
 									value={value}
 									onChange={(val) => {
 										// console.log("value", val.toString("html"));
@@ -256,7 +255,7 @@ const EditBlogContainer = (props) => {
 										height: 441,
 										marginBottom: 50,
 									}}
-								/> */}
+								/>
 								{errors.description && touched.description ? (
 									<Typography
 										alignment="left"

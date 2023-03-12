@@ -6,7 +6,7 @@ import { primaryColor } from "../../../Constants";
 import { CloseOutlined } from "@ant-design/icons";
 import { initVals, blogSchema } from "../Constants";
 import { Formik } from "formik";
-// import RichTextEditor from "react-rte";
+import RichTextEditor from "react-rte";
 import Typography from "../../../Components/Typography";
 import { addBlog } from "../../../Helpers/firebase";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,7 @@ const AddBlogContainer = (props) => {
 	const [addingUser, setAddingUser] = React.useState(false);
 	// const [roleError, setRoleError] = React.useState(false);
 	const navigate = useNavigate();
-	const [value, setValue] = React.useState([]);
-	// RichTextEditor.createEmptyValue());
+	const [value, setValue] = React.useState(RichTextEditor.createEmptyValue());
 	const [imageurl, setImageUrl] = React.useState(null);
 	const onChange = (value) => {
 		console.log(`selected ${value}`);
@@ -222,7 +221,7 @@ const AddBlogContainer = (props) => {
 						<div>
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10, width: "100%" }}>
-								{/* <RichTextEditor
+								<RichTextEditor
 									value={value}
 									onChange={(val) => {
 										// console.log("value", val.toString("html"));
@@ -233,7 +232,7 @@ const AddBlogContainer = (props) => {
 										height: 441,
 										marginBottom: 50,
 									}}
-								/> */}
+								/>
 								{errors.description && touched.description ? (
 									<Typography
 										alignment="left"
