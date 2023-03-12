@@ -1,0 +1,10 @@
+.usersTableTopDiv{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+	margin-bottom: 23px;
+    width: 100%;
+    background-color: transparent;
+			
+}

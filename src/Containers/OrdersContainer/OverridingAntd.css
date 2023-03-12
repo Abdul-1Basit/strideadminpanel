@@ -1,0 +1,20 @@
+.tabs-main .ant-tabs-tab {
+    background: unset !important;
+    color: #94A3B8  !important;
+    border: none !important;
+    width: 156px;
+      justify-content: center;
+  }
+  .tabs-main .ant-tabs-tab.ant-tabs-tab-active  {
+    border-bottom: 1px solid #0F172A !important;
+    z-index: 2;
+    background: #E2E8F0  !important;
+  box-shadow: 0px 2px 0px #0F172A;
+  border-radius: 4px 4px 0px 0px;
+  color: #0F172A !important;
+  
+  
+  }
+   .tabs-main .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #0F172A !important;
+  }

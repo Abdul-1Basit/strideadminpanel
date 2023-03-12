@@ -1,0 +1,80 @@
+.cardAdditionBlog{
+    margin-top: 25px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.16);
+    border-radius: 20px;
+    padding-bottom: 50px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 30px;
+}.barVertical{
+    margin-top: 13px;
+    margin-bottom: 25px;
+    border: 1px solid #E9EDF7
+}
+.inputText{
+    
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 22px;
+color: #222222;
+}
+.mr72{
+    margin-right: 72px;
+}
+.mrDynamic{
+    margin-right: 280px;
+}
+.savebtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 152px;
+    height: 46px;
+    background: #5DB135;
+    border-radius: 8px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.duplicateBtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 207px;
+    height: 46px;
+    background: #FE5000;
+    border-radius: 8px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+.rowing{
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.savebtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 152px;
+    height: 46px;
+    background: #5DB135;
+    border-radius: 8px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    color: #FFFFFF;
+}

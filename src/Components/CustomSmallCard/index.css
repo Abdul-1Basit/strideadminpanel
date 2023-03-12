@@ -1,0 +1,65 @@
+.customCrd{
+    width: 330px;
+    height: 127px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.16);
+    border-radius: 26.5323px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding-left: 22px;
+}
+.iconCircle{
+    width: 74.29px;
+height: 74.29px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.cardHeading{
+font-family: 'Montserrat';
+font-style: normal;
+/* font-weight: 500; */
+font-size: 18.5726px;
+line-height: 32px;
+}
+.cardSubHeading{
+    /* padding-top: 10px; */
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 700;
+font-size: 31.8387px;
+/* line-height: 42px; */
+letter-spacing: -0.02em;
+}
+.counting{
+    
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 700;
+font-size: 31.8387px;
+line-height: 42px;
+/* identical to box height, or 133% */
+
+letter-spacing: -0.02em;
+}
+.cardContent{
+    padding-left: 25px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.cardSmallSubHeading{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 18.5726px;
+line-height: 32px;
+letter-spacing: -0.02em;
+color: #D18A00;
+
+}
