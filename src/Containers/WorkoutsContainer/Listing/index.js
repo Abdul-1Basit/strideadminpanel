@@ -20,7 +20,7 @@ const PrizeListing = (props) => {
 						}}
 					>
 						<img
-							src={rowData.workoutImage ?? "/noImage.png"}
+							src={rowData.basicDetailMedia ?? "/noImage.png"}
 							style={{
 								height: 40,
 								width: 50,
@@ -87,7 +87,7 @@ const PrizeListing = (props) => {
 							justifyContent: "flex-start",
 						}}
 					>
-						<span className="label">{rowData.noOfExercises}</span>
+						<span className="label">{rowData.listOfExercises.length}</span>
 					</div>
 				);
 			},
@@ -102,12 +102,12 @@ const PrizeListing = (props) => {
 						className="capsule"
 						style={{
 							backgroundColor:
-								rowData.status === "Active" ? "#5DB135" : "#D30E0E",
+								rowData.status === "Inactive" ? "#D30E0E" : "#5DB135",
 							// : "#E2BB2E",
 						}}
 					>
 						<span className="tableContent" style={{ color: "#fff" }}>
-							{rowData.status}
+							{rowData.status ?? "Active"}
 						</span>
 					</div>
 				);
@@ -128,6 +128,7 @@ const PrizeListing = (props) => {
 								// props.setActiveCategory(rowData);
 								// //console.log(rowData);
 								// props.setEditModal(true);
+								props.editThisWorkout(rowData.id);
 							}}
 						>
 							<FiEdit color="#0F172A" />
@@ -137,8 +138,8 @@ const PrizeListing = (props) => {
 						<div
 							className={"centerAligner actions"}
 							onClick={() => {
-								// props.setActiveCategory(rowData);
-								// props.setShowDeleteModal(true);
+								props.setActiveCategory(rowData);
+								props.setShowDeleteModal(true);
 							}}
 						>
 							<RiDeleteBinLine color="#EF4444" />
@@ -173,17 +174,18 @@ const PrizeListing = (props) => {
 				<Table
 					// rowSelection
 					columns={columns}
-					dataSource={[
-						{
-							id: 0,
-							workoutImage:
-								"https://firebasestorage.googleapis.com/v0/b/stride-gym.appspot.com/o/files%2FRectangle%2030.png?alt=media&token=f66ee0cd-98c2-4421-b602-e01b2349b715",
-							name: "Chest",
-							subtitle: "Upper, lower, back",
-							noOfExercises: 4,
-							status: "Active",
-						},
-					]}
+					dataSource={
+						props.campaignListing ?? []
+						// {
+						// 	id: 0,
+						// 	workoutImage:
+						// 		"https://firebasestorage.googleapis.com/v0/b/stride-gym.appspot.com/o/files%2FRectangle%2030.png?alt=media&token=f66ee0cd-98c2-4421-b602-e01b2349b715",
+						// 	name: "Chest",
+						// 	subtitle: "Upper, lower, back",
+						// 	noOfExercises: 4,
+						// 	status: "Active",
+						// },
+					}
 					// scroll={{
 					// 	x: 1300,
 					// }}

@@ -1,98 +1,65 @@
 import React from "react";
-import Typography from "../../../Components/Typography";
-import { endpoints } from "../../../Helpers/dbConfig";
+import {
+	deleteExercise,
+	deleteProgram,
+	deleteWorkout,
+} from "../../../Helpers/firebase";
 import { notification } from "antd";
-import { apiDeleteRequest } from "../../../Helpers/axiosRequests";
-import CustomButton from "../../../Components/CustomButton";
-import { cancelButton } from "../../CommonStyles";
-import { deleteWorkout } from "../../../Helpers/firebase";
+import SpinnerComponent from "../../../Components/SpinnerComponent";
+
 const DeleteModal = (props) => {
+	//console.log(props.activeCategory)
+
 	const deleteCategory = async () => {
-		// try{
-		// console.log(props.activeCategory)
-		const resp = await deleteWorkout(props.activeCategory);
-		if (resp) {
+		// const resp=await apiDeleteRequest(endpoints.deleteProduct,{
+		// "productId":parseInt(props.activeCategory.productId)
+		// })
+		// if(resp.status===200){
+		setLoading(true);
+		if (await deleteWorkout(props.activeCategory)) {
 			props.successMessage(props.setShowDeleteModal, "delete");
-			return;
+			setLoading(false);
+
+			// }}
 		} else {
 			notification.error({
 				message: `Failed to delete!`,
-				description: `Please try again later`,
+				description: `try again later`,
 				placement: "topRight",
-				duration: 0,
+				duration: 3,
 				onClose: function () {
+					setLoading(false);
 					props.setShowDeleteModal(false);
 				},
 			});
 		}
-		// }
-		// catch(error){
-		//   let errorMessage='Network Error'
-		//   if (error.toString().includes("401")) {
-		//    errorMessage='Authentication Error!';
-		//  }
-		//  else if(error.toString().includes("400")){
-		//    errorMessage='Invalid values';
-		//  }
-		//  else if (error.toString().includes('500')||error.toString().includes("503")){
-		//    errorMessage='Server error';
-		//  }
-		//  notification.error({
-		//    message: `Failed to delete!`,
-		//    description:
-		//      `${errorMessage}`,
-		//    placement:'topRight',
-		//    duration:0,onClose: function(){props.setShowDeleteModal(false)}});
-		// }
 	};
-
+	const [loading, setLoading] = React.useState(false);
+	// React.useEffect(() => {}, []);
 	return (
-		<div
-			style={{
-				maxHeight: 150,
-				borderRadius: 8,
-				height: "100%",
-				paddingLeft: 10,
-				flex: 1,
-				display: "flex",
-				flexDirection: "column",
-			}}
-		>
-			<div>
-				<Typography
-					alignment="center"
-					title={
-						"Are you sure you want to delete " +
-						props.activeCategory.name +
-						" ?"
-					}
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/>
-			</div>
+		<div className="flexCol">
+			<span className="deleteModalHeading">Warning!</span>
+			<span className="deleteDescription">
+				Are you sure you want to delete ({props.activeCategory.name}) ?
+			</span>
 			<br />
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "row",
-					flex: 1,
-					alignItems: "flex-end",
-					justifyContent: "flex-end",
-				}}
-			>
-				<CustomButton
-					large={false}
-					title="Delete!"
-					onClick={() => deleteCategory()}
-				/>
+			<div className="rowCenter">
+				{loading ? (
+					<SpinnerComponent size="large" />
+				) : (
+					<input
+						type={"button"}
+						value={"Yes"}
+						className="deleteBtn"
+						style={{ backgroundColor: "#f94f00" }}
+						onClick={() => deleteCategory()}
+					/>
+				)}
 				<input
 					type={"button"}
-					style={cancelButton}
-					value="Cancel"
-					onClick={() => {
-						props.setShowDeleteModal(false);
-					}}
+					value={"No"}
+					className="cancelBtn"
+					onClick={() => props.setDeleteModal(false)}
 				/>
 			</div>
 		</div>

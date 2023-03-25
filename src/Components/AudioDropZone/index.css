@@ -1,0 +1,36 @@
+.orText{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 17px;
+text-align: center;
+color: #ACACAC;
+}
+.btnPickerTxt{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+line-height: 22px;
+/* identical to box height, or 182% */
+
+
+color: #FFFFFF;
+}
+.btnPicker{
+    display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+/* padding: 4px 14px;
+gap: 10px; */
+outline: none;
+margin-top: 10px;
+border: none;
+width: 75px;
+height: 30px;
+
+background: #356EB1;
+border-radius: 4px;
+}

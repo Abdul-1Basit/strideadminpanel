@@ -15,6 +15,7 @@ import { getAllWorkouts } from "../../Helpers/firebase";
 import { RxCross2 } from "react-icons/rx";
 import { BsCheck } from "react-icons/bs";
 import CustomSmallCard from "../../Components/CustomSmallCard";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutsContainer = (props) => {
 	const [activeCategory, setActiveCategory] = React.useState();
@@ -23,7 +24,7 @@ const WorkoutsContainer = (props) => {
 	const [editModal, setEditModal] = React.useState(false);
 	const [filterItem, setFilterItem] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
-
+	const navigate = useNavigate();
 	const [campaignListing, setCampaignListing] = React.useState([]);
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
@@ -61,6 +62,9 @@ const WorkoutsContainer = (props) => {
 		setCampaignListing(result);
 		console.log("result", result);
 		setLoading(false);
+	};
+	const editThisWorkout = (id) => {
+		navigate("/workouts/edit/" + id);
 	};
 
 	return (
@@ -205,6 +209,7 @@ const WorkoutsContainer = (props) => {
 						loading,
 						setShowDeleteModal,
 						campaignListing,
+						editThisWorkout,
 					}}
 				/>
 			</div>

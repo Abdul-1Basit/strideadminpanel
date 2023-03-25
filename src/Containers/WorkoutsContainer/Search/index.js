@@ -133,7 +133,7 @@ const ProductCategorySearch = (props) => {
 				<div
 					className="newAddButton"
 					onClick={() => {
-						// navigate("/workouts/add");
+						navigate("/workout/add");
 					}}
 				>
 					<MdOutlineAdd

@@ -1,50 +1,62 @@
 import React from "react";
-import CustomButton from "../../../Components/CustomButton";
-import CategorySchema from "../Add/Constants";
-import { Formik, Form } from "formik";
-// import axios from "axios";
-import { Select, Radio, Input, Checkbox, notification, message } from "antd";
-// import { getToken, xApiKey } from "../../Helpers/tokenManagement";
-// import { apiGetRequest } from "../../Helpers/axiosRequests";
-// import { endpoints } from "../../Helpers/dbConfig";
 import Typography from "../../../Components/Typography";
-import Wrapper from "../../../Components/Wrapper";
-import { AiFillDelete } from "react-icons/ai";
-import CustomDropZone from "../../../Components/CustomDropZone";
-import { updateWorkout, uploadImage } from "../../../Helpers/firebase";
+
+import { Input, Row, message, Progress, notification, Col } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import programSchema, { initVals } from "./Constants";
+import { Formik } from "formik";
+import { useNavigate, useParams } from "react-router-dom";
+import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
+import AudioDropZone from "../../../Components/AudioDropZone";
+import { primaryColor } from "../../../Constants";
+import {
+	addWorkout,
+	getAllWorkouts,
+	updateWorkout,
+} from "../../../Helpers/firebase";
+import { SlArrowDown, SlArrowUp } from "react-icons/sl";
+import "./index.css";
+import { AiFillDelete, AiFillEye } from "react-icons/ai";
 const { TextArea } = Input;
+const EditWorkoutContainer = (props) => {
+	let { id } = useParams();
+	const [addingUser, setAddingUser] = React.useState(false);
+	const navigate = useNavigate();
+	const [basicDetailMedia, setBasicDetailMedia] = React.useState(null);
+	const [basicDetailMediaOneError, setBasicDetailMediaError] =
+		React.useState(false);
+	const [noOfExercises, setNoOfExercises] = React.useState(0);
+	const [listOfExercises, setListOfExercises] = React.useState([]);
+	const [progressPercent, setProgressPercent] = React.useState(0);
+	const [activeData, setActiveData] = React.useState(initVals);
+	// const handleSubmit
 
-const { Option } = Select;
-
-const EditCampaign = (props) => {
-	const [fileList, setFileList] = React.useState([]);
-	const [imageError, setImageError] = React.useState(false);
-	const [product, setProduct] = React.useState(
-		props.activeCategory.productId ?? ""
-	);
-	const [productError, setProductError] = React.useState(null);
-	const [prize, setPrize] = React.useState(props.activeCategory.prizeId ?? "");
-	const [prizeError, setPrizeError] = React.useState(null);
-	const [imageRecieved, setImageRecieved] = React.useState(
-		props.activeCategory.image
-	);
-	const addCategoryToList = async (values) => {
-		if (!imageRecieved && fileList.length < 1) {
-			message.error("Please attach an image");
-			setImageError(true);
+	const addProgramToList = async (values) => {
+		if (!basicDetailMedia) {
+			message.error("Please add an Image for Basic Details!");
+			setBasicDetailMediaError(true);
 			return;
 		}
-
-		values.image = imageRecieved ?? (await uploadImage(fileList[0]));
-		values.id = props.activeCategory.id;
+		setBasicDetailMediaError(false);
+		setAddingUser(true);
+		setProgressPercent(25);
+		values.id = activeData.id;
+		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "noimg";
+		values.listOfExercises = listOfExercises;
+		console.log("values", values);
+		// return;
+		setProgressPercent(50);
+		console.log("values", values);
 		if (await updateWorkout(values)) {
+			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Updated!`,
-				description: `${values.name}  has been successfully Updated`,
+				message: `Successfully Added!`,
+				description: `${values.name}  has been successfully added`,
 				placement: "topRight",
-				duration: 3,
+				duration: 2,
 				onClose: function () {
-					props.setEditModal(false);
+					setAddingUser(false);
+					navigate(-1);
 				},
 			});
 			return;
@@ -54,276 +66,489 @@ const EditCampaign = (props) => {
 				description: `Give it a try later.`,
 				placement: "topRight",
 				duration: 2,
-				onClose: function () {},
+				onClose: function () {
+					setAddingUser(false);
+				},
 			});
 		}
 	};
-	const removeImage = (innerIdex) => {
-		let tempList = fileList.filter((item, index) => index !== innerIdex);
-		setFileList(tempList);
+	React.useEffect(() => {
+		if (id) {
+			fetchList();
+		}
+	}, []);
+	async function fetchList() {
+		const workoutList = await getAllWorkouts();
+		let foundData = workoutList.find((itm) => itm.id === id);
+		if (foundData) {
+			setActiveData(foundData);
+		}
+		setBasicDetailMedia(foundData.basicDetailMedia);
+		setListOfExercises(foundData.listOfExercises);
+	}
+	const deleteMe = (id) => {
+		let newDays = [...listOfExercises];
+		newDays = newDays.filter((item) => item.id !== id);
+		setListOfExercises(newDays);
 	};
-	const { name, isActive, targetArea } = props.activeCategory ?? null;
-
+	const changeListing = () => {
+		let oldList = [...listOfExercises];
+		for (let i = 0; i < noOfExercises; i++) {
+			oldList.push({
+				id: oldList.length,
+				name: "",
+				targetArea: "",
+				instructions: "",
+				video: "",
+				audio: "",
+			});
+		}
+		setListOfExercises(oldList);
+	};
+	const setToAll = (id) => {
+		let newDays = [...listOfExercises];
+		let selectedItem = newDays.find((item) => item.id === id);
+		newDays.forEach((item) => {
+			item.name = selectedItem.name;
+			item.instructions = selectedItem.instructions;
+			item.targetArea = selectedItem.targetArea;
+			item.video = selectedItem.video;
+			item.audio = selectedItem.audio;
+		});
+		setListOfExercises(newDays);
+	};
 	return (
-		<div style={{ width: "100%", maxWidth: 390 }}>
-			<Formik
-				initialValues={{
-					name,
-					targetArea,
-					isActive,
-				}}
-				validationSchema={CategorySchema}
-				onSubmit={addCategoryToList}
-				enableReinitialize
-			>
-				{({
-					errors,
-					isSubmitting,
-					touched,
-					values,
-					handleChange,
-					handleBlur,
-					handleSubmit,
-				}) => (
-					<Form>
-						<Wrapper
-							type="rowSpaced"
-							marginTop={10}
-							marginBottom={49}
-							w={"100%"}
-						>
-							<Typography
-								alignment="left"
-								title="Edit campaign"
-								fontFamily="Gilroy-Bold"
-								color="#0F172A"
-								type="Heading"
-							/>
+		<Formik
+			initialValues={activeData}
+			validationSchema={programSchema}
+			onSubmit={addProgramToList}
+			enableReinitialize
+		>
+			{({
+				errors,
 
-							<img
-								src={"/Union.png"}
-								alt="Close icon"
-								onClick={() => props.setEditModal(false)}
-								style={{ width: 20, height: 20, cursor: "pointer" }}
-							/>
-						</Wrapper>
-						{/**Sub Category Image */}
-						<div className="fieldDiv">
-							<Wrapper type="rowStart" marginBottom={8}>
-								<Typography
-									alignment="left"
-									title="Image"
-									fontFamily="Gilroy-Medium"
-									color="#0F172A"
-									type="label"
-								/>
-								<Typography
-									alignment="left"
-									title="*"
-									fontFamily="Gilroy-Medium"
-									color="#E1552F"
-									type="label"
-								/>
-							</Wrapper>
-							{imageRecieved ? (
-								<div
-									style={{
-										display: "flex",
-										flexDirection: "row",
-										alignItems: "center",
-										justifyContent: "space-between",
-										border: "1px solid black",
-									}}
-								>
-									<img
-										src={imageRecieved ?? "/noImage.png"}
-										style={{ height: 80, width: 40, objectFit: "contain" }}
-									/>
-									<AiFillDelete
-										onClick={() => {
-											setImageRecieved(null);
+				touched,
+				values,
+				handleChange,
+				handleBlur,
+				handleSubmit,
+			}) => (
+				<div className="containerForAdd">
+					<div className="rowing">
+						<div />
+						{addingUser ? (
+							<Progress type="circle" percent={progressPercent} />
+						) : (
+							<div className="rowing">
+								<span className="duplicateBtn">Duplicate Workout</span>
+								<span className="draftBtn">Save as draft</span>
+								<span className="savebtn" onClick={handleSubmit}>
+									Save
+								</span>
+							</div>
+						)}
+					</div>
+					<div className="cardAdditionBlog">
+						<Row>
+							<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+								<span className="tableTitle">Basic Detail</span>
+							</Col>
+							<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+								<span className="tableTitle">Upload a Media</span>
+							</Col>
+						</Row>
+						<div className="barVertical" />
+						<div>
+							<Row>
+								<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+									<div className="colStart">
+										<div className="flexStart mb30">
+											<span className="addBlogInputLabel">WORKOUT NAME</span>
+											<div style={{ marginTop: 10 }}>
+												<input
+													className="addBlogInput inputText"
+													type={"text"}
+													name="name"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													value={values.name}
+												/>
+												{errors.name && touched.name ? (
+													<Typography
+														alignment="left"
+														title={errors.name}
+														fontFamily="Gilroy-Medium"
+														color="red"
+														type="label"
+													/>
+												) : (
+													""
+												)}
+											</div>
+										</div>
+										<div className="flexStart mb30">
+											<span className="addBlogInputLabel">SUBTITLE</span>
+											<div style={{ marginTop: 10 }}>
+												<input
+													className="addBlogInput inputText"
+													type={"text"}
+													name="subtitle"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													value={values.subtitle}
+												/>
+												{errors.subtitle && touched.subtitle ? (
+													<Typography
+														alignment="left"
+														title={errors.subtitle}
+														fontFamily="Gilroy-Medium"
+														color="red"
+														type="label"
+													/>
+												) : (
+													""
+												)}
+											</div>
+										</div>
+									</div>
+								</Col>
+								<div>
+									<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "flex-start",
+												alignItems: "center",
+											}}
+										>
+											{basicDetailMedia ? (
+												<div
+													style={{
+														display: "flex",
+														justifyContent: "center",
+														alignItems: "center",
+													}}
+												>
+													<img
+														src={basicDetailMedia}
+														alt="UserImage"
+														style={{
+															width: 156,
+															height: 156,
+															borderRadius: "50%",
+														}}
+													/>
+													<div
+														className="centerAligner"
+														style={{
+															width: 15,
+															height: 15,
+															borderRadius: "50%",
+															backgroundColor: "#fff",
+															marginLeft: -10,
+															marginTop: -20,
+															boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+															cursor: "pointer",
+															border: "1px solid #000",
+														}}
+														onClick={() => setBasicDetailMedia("")}
+													>
+														<CloseOutlined
+															style={{ fontSize: 8, color: primaryColor }}
+														/>
+													</div>
+												</div>
+											) : (
+												<EmployeeDropZone
+													{...{
+														setImageUrl: setBasicDetailMedia,
+														small: false,
+													}}
+												/>
+											)}
+											{basicDetailMediaOneError && (
+												<Typography
+													alignment="left"
+													title={"Please add an image"}
+													fontFamily="Gilroy-Medium"
+													color="red"
+													type="label"
+												/>
+											)}
+										</div>
+									</Col>
+								</div>
+							</Row>
+						</div>
+						<div className="alignMeStart">
+							<span className="tableTitle">Exercises</span>{" "}
+							<span className="secondTitle">No. of Exercises</span>
+							<div className="rowing ">
+								<div className="daysAdditionBtnDiv">
+									<input
+										type={"number"}
+										// defaultValue={daysNumber}
+										className="inputfont nmbrBtn"
+										placeholder="0"
+										defaultValue={noOfExercises}
+										onChange={(e) => {
+											setNoOfExercises(e.target.value);
 										}}
 									/>
+									<button className="dayssAdditionBtn" onClick={changeListing}>
+										Add
+									</button>
 								</div>
-							) : (
-								<CustomDropZone {...{ fileList, setFileList, setImageError }} />
-							)}
-							{fileList.length > 0 && (
+							</div>
+						</div>
+						<div className="barVertical" />
+						{listOfExercises.map((item, index) => (
+							<ExerciseItem
+								key={index}
+								item={item}
+								deleteMe={deleteMe}
+								setToAll={setToAll}
+							/>
+						))}
+					</div>
+				</div>
+			)}
+		</Formik>
+	);
+};
+
+const ExerciseItem = (props) => {
+	const [visible, setVisible] = React.useState(true);
+	const setVideoValue = (item) => {
+		props.item.video = item;
+	};
+	const setAudioValue = (item) => {
+		props.item.audio = item;
+	};
+	return (
+		<div>
+			<div className="rowing">
+				<div className="alignMeStart">
+					<span
+						className="tableTitle"
+						style={{ fontWeight: 600, color: "#222222" }}
+					>
+						Exercise # 1
+					</span>
+					<span>
+						<AiFillEye
+							size={25}
+							style={{
+								color: "#2DAB22",
+								marginLeft: 15,
+								marginRight: 15,
+							}}
+						/>
+					</span>
+					<span onClick={() => props.deleteMe(props.item.id)}>
+						<AiFillDelete
+							size={22}
+							style={{ color: "#D30E0E", marginRight: 15 }}
+						/>
+					</span>
+					<span
+						className="setToAllText"
+						onClick={() => props.setToAll(props.item.id)}
+					>
+						set to all
+					</span>
+				</div>
+				<span onClick={() => setVisible(!visible)}>
+					{visible ? (
+						<SlArrowUp
+							color={"#D30E0E"}
+							size={22}
+							style={{ fontWeight: "bold" }}
+						/>
+					) : (
+						<SlArrowDown
+							color={"#D30E0E"}
+							size={22}
+							style={{ fontWeight: "bold" }}
+						/>
+					)}
+				</span>
+			</div>
+			{visible && (
+				<div style={{ marginTop: 42 }}>
+					<Row>
+						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+							<div className="flexStart mb30">
+								<span className="addBlogInputLabel">Exercise Name</span>
+								<div style={{ marginTop: 10 }}>
+									<input
+										className="addBlogInput inputText"
+										type={"text"}
+										onChange={(e) => (props.item.name = e.target.value)}
+										value={props.item.name}
+									/>
+								</div>
+							</div>
+							<div className="flexStart mb30">
+								<span className="addBlogInputLabel">Instructions</span>
+								<div style={{ marginTop: 10 }}>
+									<TextArea
+										className="addBlogInput inputText"
+										rows={12}
+										placeholder="Please enter instructions for exercise"
+										onChange={(e) => {
+											// console.log("e", e.target.value);
+											props.item.instructions = e.target.value;
+										}}
+										allowClear
+										defaultValue={props.item.instructions}
+									/>
+								</div>
+							</div>
+						</Col>
+						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+							<div className="flexStart mb30">
+								<span className="addBlogInputLabel">Exercise Video</span>
 								<div
 									style={{
 										display: "flex",
-										alignItems: "flex-start",
 										justifyContent: "flex-start",
-										flexDirection: "column",
+										alignItems: "center",
+										marginTop: 10,
 									}}
 								>
-									{fileList.map((item, index) => {
-										return (
+									{props.item.video ? (
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "center",
+												alignItems: "center",
+											}}
+										>
+											<img
+												src={props.item.video}
+												alt="UserImage"
+												style={{
+													width: 156,
+													height: 156,
+													borderRadius: "50%",
+												}}
+											/>
 											<div
-												key={index}
-												style={{ padding: 5, border: "1px solid black" }}
+												className="centerAligner"
+												style={{
+													width: 15,
+													height: 15,
+													borderRadius: "50%",
+													backgroundColor: "#fff",
+													marginLeft: -10,
+													marginTop: -20,
+													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+													cursor: "pointer",
+													border: "1px solid #000",
+												}}
+												onClick={() => setVideoValue("")}
 											>
-												<span>{JSON.stringify(item)}</span>{" "}
-												<AiFillDelete
-													style={{ color: "red", cursor: "pointer" }}
-													onClick={() => removeImage(index)}
+												<CloseOutlined
+													style={{ fontSize: 8, color: primaryColor }}
 												/>
 											</div>
-										);
-									})}
+										</div>
+									) : (
+										<EmployeeDropZone
+											{...{
+												setImageUrl: setVideoValue,
+												small: false,
+											}}
+										/>
+									)}
 								</div>
-							)}
-							{imageError ? (
-								<Typography
-									alignment="left"
-									title={"Image is required!"}
-									fontFamily="Gilroy-Medium"
-									color="red"
-									type="label"
-								/>
-							) : (
-								""
-							)}
-						</div>
-
-						{/**Name Input */}
-						<div className="fieldDiv">
-							<Wrapper type="rowStart" marginBottom={8}>
-								<Typography
-									alignment="left"
-									title="Name"
-									fontFamily="Gilroy-Medium"
-									color="#0F172A"
-									type="label"
-								/>
-								<Typography
-									alignment="left"
-									title="*"
-									fontFamily="Gilroy-Medium"
-									color="#E1552F"
-									type="label"
-								/>
-							</Wrapper>
-							<input
-								type={"text"}
-								name="name"
-								className="inputStyle"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.name}
-							/>
-							{errors.name && touched.name ? (
-								<Typography
-									alignment="left"
-									title={errors.name}
-									fontFamily="Gilroy-Medium"
-									color="red"
-									type="label"
-								/>
-							) : null}
-						</div>
-						{/* {"Target Area"} */}
-						<div className="fieldDiv">
-							<Wrapper type="rowStart" marginBottom={8}>
-								<Typography
-									alignment="left"
-									title="Target Area"
-									fontFamily="Gilroy-Medium"
-									color="#0F172A"
-									type="label"
-								/>
-								<Typography
-									alignment="left"
-									title="*"
-									fontFamily="Gilroy-Medium"
-									color="#E1552F"
-									type="label"
-								/>
-							</Wrapper>
-							<input
-								type={"text"}
-								name="quantity"
-								className="inputStyle"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.targetArea}
-							/>
-							{errors.targetArea && touched.targetArea ? (
-								<Typography
-									alignment="left"
-									title={errors.targetArea}
-									fontFamily="Gilroy-Medium"
-									color="red"
-									type="label"
-								/>
-							) : null}
-						</div>
-
-						{/**Category Status */}
-						<div className="fieldDiv">
-							<Wrapper type="rowStart" marginBottom={8}>
-								<Typography
-									alignment="left"
-									title="Status"
-									fontFamily="Gilroy-Medium"
-									color="#0F172A"
-									type="label"
-								/>
-							</Wrapper>
-
-							<Radio.Group
-								name="isActive"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.isActive}
-								defaultValue={values.isActive}
-							>
-								<Radio value={1}>
-									<Typography
-										alignment="left"
-										title="Active"
-										fontFamily="Gilroy-Medium"
-										color="#64748B"
-										type="label"
-									/>
-								</Radio>
-								<Radio value={0}>
-									<Typography
-										alignment="left"
-										title="Inactive"
-										fontFamily="Gilroy-Medium"
-										color="#64748B"
-										type="label"
-									/>
-								</Radio>
-							</Radio.Group>
-							{errors.isActive && touched.isActive ? (
-								<Typography
-									alignment="left"
-									title={errors.isActive}
-									fontFamily="Gilroy-Medium"
-									color="red"
-									type="label"
-								/>
-							) : (
-								""
-							)}
-						</div>
-
-						{/**Add Product Button */}
-						<div className="modalButtonStyle">
-							<CustomButton
-								large={true}
-								onClick={() => {
-									handleSubmit();
+							</div>
+							<div className="flexStart mb30">
+								<span className="addBlogInputLabel ">Exercise Audio</span>
+								<div
+									style={{
+										display: "flex",
+										justifyContent: "flex-start",
+										alignItems: "center",
+										marginTop: 10,
+									}}
+								>
+									{props.item.audio ? (
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "center",
+												alignItems: "center",
+											}}
+										>
+											<img
+												src={props.item.audio}
+												alt="UserImage"
+												style={{
+													width: 156,
+													height: 156,
+													borderRadius: "50%",
+												}}
+											/>
+											<div
+												className="centerAligner"
+												style={{
+													width: 15,
+													height: 15,
+													borderRadius: "50%",
+													backgroundColor: "#fff",
+													marginLeft: -10,
+													marginTop: -20,
+													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+													cursor: "pointer",
+													border: "1px solid #000",
+												}}
+												onClick={() => setAudioValue("")}
+											>
+												<CloseOutlined
+													style={{ fontSize: 8, color: primaryColor }}
+												/>
+											</div>
+										</div>
+									) : (
+										<AudioDropZone
+											{...{
+												setImageUrl: setAudioValue,
+												small: false,
+											}}
+										/>
+									)}
+								</div>
+							</div>
+						</Col>
+					</Row>
+					<div className="flexStart mb30" style={{ width: "100%" }}>
+						<span className="addBlogInputLabel">Target Area</span>
+						<div style={{ marginTop: 10 }}>
+							<TextArea
+								className="inputText textAreaGrey"
+								rows={4}
+								cols={20}
+								placeholder="Please enter instructions for exercise"
+								onChange={(e) => {
+									props.item.targetArea = e.target.value;
 								}}
-								title="Update"
+								value={props.item.targetArea}
+
+								// allowClear
+								// style={{
+								// 	width: "85%",
+								// 	backgroundColor: "#F4F4F4",
+								// 	borderRadius: 8,
+								// }}
 							/>
 						</div>
-					</Form>
-				)}
-			</Formik>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
-export default EditCampaign;
+
+export default EditWorkoutContainer;

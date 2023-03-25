@@ -28,6 +28,8 @@ import AddBlog from "../Pages/Blogs/AddBog";
 import EditBlog from "../Pages/Blogs/EditBlog";
 import AddProgram from "../Pages/Programs/AddProgram";
 import EditProgram from "../Pages/Programs/EditProgram";
+import AddWorkout from "../Pages/Workouts/AddWorkout";
+import EditWorkout from "../Pages/Workouts/EditWorkout";
 export default function StrideRoutes() {
 	return (
 		<BrowserRouter>
@@ -74,6 +76,22 @@ export default function StrideRoutes() {
 					element={
 						<AuthenticateRoute>
 							<Workouts />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/workout/add"
+					element={
+						<AuthenticateRoute>
+							<AddWorkout />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/workouts/edit/:id"
+					element={
+						<AuthenticateRoute>
+							<EditWorkout />
 						</AuthenticateRoute>
 					}
 				/>
