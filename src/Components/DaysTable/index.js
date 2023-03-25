@@ -4,8 +4,9 @@ import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { BsShareFill } from "react-icons/bs";
-import { AiFillEye } from "react-icons/ai";
+// import { BsShareFill } from "react-icons/bs";
+// import { AiFillEye } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
 import Wrapper from "../Wrapper";
 const DaysTable = (props) => {
 	const columns = [
@@ -21,13 +22,9 @@ const DaysTable = (props) => {
 			render: (rowData) => {
 				return (
 					<div
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							alignSelf: "center",
-							width: 100,
-							marginRight: -40,
+						className="dayLabel"
+						onClick={() => {
+							props.viewDetails(rowData.id);
 						}}
 					>
 						<span className="primaryRowLabel">Day {rowData.id + 1}</span>
@@ -110,7 +107,7 @@ const DaysTable = (props) => {
 							props.viewDetails(rowData.id);
 						}}
 					>
-						<AiFillEye color="#2DAB22" size={20} />
+						<BiEdit color="#6BA2E1" size={20} />
 					</div>
 					<div
 						className={"centerAligner mr"}

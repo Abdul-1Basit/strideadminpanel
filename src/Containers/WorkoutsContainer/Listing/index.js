@@ -8,38 +8,37 @@ import { RiDeleteBinLine } from "react-icons/ri";
 const PrizeListing = (props) => {
 	const columns = [
 		{
-			title: "Name",
-			width: 190,
-			fixed: "left",
+			title: "",
+			width: 90,
 			render: (rowData) => {
 				return (
 					<div
 						style={{
-							flexDirection: "row",
 							display: "flex",
 							alignItems: "center",
-							justifyContent: "flex-start",
+							justifyContent: "center",
 						}}
 					>
 						<img
-							src={rowData.image ?? "/noImage.png"}
+							src={rowData.workoutImage ?? "/noImage.png"}
 							style={{
 								height: 40,
 								width: 50,
 								objectFit: "contain",
 								marginRight: 10,
+								cursor: "pointer",
 							}}
 							alt={rowData.name + "workout image"}
 						/>
-						<span>{rowData.name}</span>
 					</div>
 				);
 			},
 		},
 		{
-			title: "Target Area",
+			title: "WORKOUT NAME",
+
 			width: 190,
-			fixed: "left",
+
 			render: (rowData) => {
 				return (
 					<div
@@ -50,12 +49,70 @@ const PrizeListing = (props) => {
 							justifyContent: "flex-start",
 						}}
 					>
-						<span>{rowData.targetArea}</span>
+						<span className="label">{rowData.name}</span>
 					</div>
 				);
 			},
 		},
-
+		{
+			title: "SUBTITLE",
+			width: 190,
+			// fixed: "left",
+			render: (rowData) => {
+				return (
+					<div
+						style={{
+							flexDirection: "row",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "flex-start",
+						}}
+					>
+						<span className="label">{rowData.subtitle}</span>
+					</div>
+				);
+			},
+		},
+		{
+			title: "NO OF EXERCISES",
+			width: 190,
+			// fixed: "left",
+			render: (rowData) => {
+				return (
+					<div
+						style={{
+							flexDirection: "row",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "flex-start",
+						}}
+					>
+						<span className="label">{rowData.noOfExercises}</span>
+					</div>
+				);
+			},
+		},
+		{
+			title: "STATUS",
+			width: 190,
+			// fixed: "left",
+			render: (rowData) => {
+				return (
+					<div
+						className="capsule"
+						style={{
+							backgroundColor:
+								rowData.status === "Active" ? "#5DB135" : "#D30E0E",
+							// : "#E2BB2E",
+						}}
+					>
+						<span className="tableContent" style={{ color: "#fff" }}>
+							{rowData.status}
+						</span>
+					</div>
+				);
+			},
+		},
 		{
 			title: "Action",
 			//key: "operation",
@@ -68,9 +125,9 @@ const PrizeListing = (props) => {
 						<div
 							className={"centerAligner actions"}
 							onClick={() => {
-								props.setActiveCategory(rowData);
-								//console.log(rowData);
-								props.setEditModal(true);
+								// props.setActiveCategory(rowData);
+								// //console.log(rowData);
+								// props.setEditModal(true);
 							}}
 						>
 							<FiEdit color="#0F172A" />
@@ -80,8 +137,8 @@ const PrizeListing = (props) => {
 						<div
 							className={"centerAligner actions"}
 							onClick={() => {
-								props.setActiveCategory(rowData);
-								props.setShowDeleteModal(true);
+								// props.setActiveCategory(rowData);
+								// props.setShowDeleteModal(true);
 							}}
 						>
 							<RiDeleteBinLine color="#EF4444" />
@@ -116,10 +173,20 @@ const PrizeListing = (props) => {
 				<Table
 					// rowSelection
 					columns={columns}
-					dataSource={props.campaignListing}
-					scroll={{
-						x: 1300,
-					}}
+					dataSource={[
+						{
+							id: 0,
+							workoutImage:
+								"https://firebasestorage.googleapis.com/v0/b/stride-gym.appspot.com/o/files%2FRectangle%2030.png?alt=media&token=f66ee0cd-98c2-4421-b602-e01b2349b715",
+							name: "Chest",
+							subtitle: "Upper, lower, back",
+							noOfExercises: 4,
+							status: "Active",
+						},
+					]}
+					// scroll={{
+					// 	x: 1300,
+					// }}
 				/>
 			)}
 		</div>

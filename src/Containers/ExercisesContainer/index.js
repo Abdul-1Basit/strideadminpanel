@@ -126,7 +126,7 @@ const ExercisesContainer = (props) => {
 							icon={
 								<img src="/Icon2.png" style={{ width: 38.75, height: 35.23 }} />
 							}
-							heading="Total Employees"
+							heading="Total Exercises"
 							// headingCount="120"
 							subHeading="50"
 							type=""
@@ -140,7 +140,7 @@ const ExercisesContainer = (props) => {
 									style={{ width: 38.75, height: 35.23, color: "#2DAB22" }}
 								/>
 							}
-							heading="Active"
+							heading="Active Exercises"
 							// headingCount="120"
 							subHeading="35"
 							type=""
@@ -154,7 +154,7 @@ const ExercisesContainer = (props) => {
 									style={{ width: 38.75, height: 35.23, color: "#D30E0E" }}
 								/>
 							}
-							heading="Total Employees"
+							heading="Pending Exercises"
 							// headingCount="120"
 							subHeading="50"
 							type=""

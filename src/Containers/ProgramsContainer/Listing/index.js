@@ -148,9 +148,9 @@ const PrizeListing = (props) => {
 					<div
 						className={"centerAligner"}
 						onClick={() => {
-							props.setActiveCategory(rowData);
-							//console.log(rowData);
-							props.setEditModal(true);
+							// props.setActiveCategory(rowData);
+							// //console.log(rowData);
+							// props.setEditModal(true);
 						}}
 						style={{ marginRight: 10, cursor: "pointer" }}
 					>
@@ -161,7 +161,7 @@ const PrizeListing = (props) => {
 						onClick={() => {
 							props.editThisProgram(rowData.id);
 							//console.log(rowData);
-							props.setEditModal(true);
+							// props.setEditModal(true);
 						}}
 						style={{ marginRight: 10, cursor: "pointer" }}
 					>
@@ -180,8 +180,8 @@ const PrizeListing = (props) => {
 					<div
 						className={"centerAligner"}
 						onClick={() => {
-							props.setActiveCategory(rowData);
-							props.setShowDeleteModal(true);
+							// props.setActiveCategory(rowData);
+							// props.setShowDeleteModal(true);
 						}}
 						style={{ marginRight: 10, cursor: "pointer" }}
 					>

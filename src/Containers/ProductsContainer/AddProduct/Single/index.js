@@ -154,7 +154,7 @@ const SingleProductEntry = (props) => {
 									{/**Product quantity */}
 									<div className="fieldDiv">
 										<Wrapper type="rowStart" marginBottom={8}>
-											<span className="inputLabel">Number of Items</span>
+											<span className="inputLabel">Inventory quantity</span>
 										</Wrapper>
 										<input
 											type={"number"}
@@ -179,10 +179,10 @@ const SingleProductEntry = (props) => {
 									</div>
 								</div>
 								<div className="rowing">
-									{errors.productName && touched.productName && (
+									{errors.noOfItems && touched.noOfItems && (
 										<Typography
 											alignment="left"
-											title={errors.productName}
+											title={errors.noOfItems}
 											fontFamily="Gilroy-Medium"
 											color="red"
 											type="label"

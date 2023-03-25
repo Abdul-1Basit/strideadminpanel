@@ -32,7 +32,7 @@ const DeleteModal = (props) => {
 		<div className="flexCol">
 			<span className="deleteModalHeading">Warning!</span>
 			<span className="deleteDescription">
-				Are you sure you want to delete ({props.activeCategory.id}) ?
+				Are you sure you want to delete ({props.activeCategory.productName}) ?
 			</span>
 			<br />
 			<div className="rowCenter">

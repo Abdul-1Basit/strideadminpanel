@@ -81,7 +81,7 @@ const Clone = (props) => {
 						<span className="reviews">({reviews})</span>
 					</div>
 					<div style={{ paddingBottom: 16 }}>
-						<span className="totalItems">{noOfItems}</span>
+						<span className="totalItems">{noOfItems} Items in Stock</span>
 					</div>
 					<div>
 						<span className="price">$&nbsp;{unitPrice}</span>

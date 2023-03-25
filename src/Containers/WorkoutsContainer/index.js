@@ -12,6 +12,9 @@ import {
 	ModalStyle,
 } from "../CommonStyles";
 import { getAllWorkouts } from "../../Helpers/firebase";
+import { RxCross2 } from "react-icons/rx";
+import { BsCheck } from "react-icons/bs";
+import CustomSmallCard from "../../Components/CustomSmallCard";
 
 const WorkoutsContainer = (props) => {
 	const [activeCategory, setActiveCategory] = React.useState();
@@ -61,7 +64,14 @@ const WorkoutsContainer = (props) => {
 	};
 
 	return (
-		<div style={{ height: "100%", backgroundColor: "#E5E5E5", paddingTop: 52 }}>
+		<div
+			style={{
+				height: "100%",
+				paddingTop: 52,
+				paddingLeft: 40,
+				paddingRight: 40,
+			}}
+		>
 			<div style={{ display: "flex", width: "100%" }}>
 				<Modal
 					visible={addModal}
@@ -119,7 +129,66 @@ const WorkoutsContainer = (props) => {
 					}
 				</Modal>
 			</div>
-			<div style={{ marginLeft: 40, marginRight: 40 }}>
+			<div
+				className="rowing"
+				style={{
+					marginBottom: 25,
+					// opacity: deleteModal || addModal || editModal ? 0.6 : 1,
+				}}
+			>
+				<CustomSmallCard
+					textColor="#fff"
+					primaryColor="#F94F00"
+					secondaryColor="rgba(255, 255, 255, 0.16)"
+					icon={
+						<img src="/Icon2.png" style={{ width: 38.75, height: 35.23 }} />
+					}
+					heading="Total Workouts"
+					// headingCount="120"
+					subHeading="50"
+					type=""
+				/>
+				<CustomSmallCard
+					textColor="#2DAB22"
+					primaryColor="rgba(33, 201, 18, 0.08)"
+					secondaryColor="rgba(45, 171, 34, 0.16)"
+					icon={
+						<BsCheck
+							style={{ width: 38.75, height: 35.23, color: "#2DAB22" }}
+						/>
+					}
+					heading="Active Workouts"
+					// headingCount="120"
+					subHeading="35"
+					type=""
+				/>
+				<CustomSmallCard
+					textColor="#D30E0E"
+					primaryColor="rgba(211, 14, 14, 0.08)"
+					secondaryColor="rgba(211, 14, 14, 0.16)"
+					icon={
+						<RxCross2
+							style={{ width: 38.75, height: 35.23, color: "#D30E0E" }}
+						/>
+					}
+					heading="Pending Workouts"
+					// headingCount="120"
+					subHeading="50"
+					type=""
+				/>
+			</div>
+			<div
+				style={{
+					width: "100%",
+					// backgroundColor: "#E5E5E5",
+					background: "#FFFFFF",
+					boxShadow: "0px 0px 16px rgba(0, 0, 0, 0.16)",
+					borderRadius: 20,
+					paddingTop: 20,
+					opacity: showDeleteModal ? 0.5 : 1,
+					WebkitFilter: showDeleteModal ? "grayscale(1)" : "none",
+				}}
+			>
 				<ProductCategorySearch
 					{...{
 						setAddModal,

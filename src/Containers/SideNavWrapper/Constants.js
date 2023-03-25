@@ -37,7 +37,7 @@ export const listOfNavs = {
 			itemLogo: <FaBoxOpen size={25} />,
 			navLink: "/users",
 			backgroundColor: "#1e293b",
-			content: "",
+			content: "you can manage data related to app users",
 		},
 
 		{
@@ -53,21 +53,21 @@ export const listOfNavs = {
 			itemLogo: <GiPerson size={23} />,
 			navLink: "/programs",
 			backgroundColor: "#1e293b",
-			content: "",
+			content: "Manage programs here",
 		},
 		{
 			itemName: "Workouts",
 			itemLogo: <GiWeightLiftingUp size={23} />,
 			navLink: "/workouts",
 			backgroundColor: "#1e293b",
-			content: "",
+			content: "Manage workout here",
 		},
 		{
 			itemName: "Exercises",
 			itemLogo: <FaDumbbell size={23} />,
 			navLink: "/exercises",
 			backgroundColor: "#1e293b",
-			content: "",
+			content: "Manage exercises here",
 		},
 		{
 			itemName: "Affiliates",

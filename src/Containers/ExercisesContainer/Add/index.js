@@ -113,7 +113,7 @@ const AddProductCategory = (props) => {
 							<div className="rowFlexCenter mb30">
 								{/**Name Input */}
 								<div className="flexStart mb30 mr72">
-									<span className="addBlogInputLabel">PROGRAM NAME</span>
+									<span className="addBlogInputLabel">EXERCISE NAME</span>
 									<div style={{ marginTop: 10 }}>
 										<input
 											type={"text"}

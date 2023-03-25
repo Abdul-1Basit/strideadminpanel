@@ -17,3 +17,15 @@ text-align: center;
 .mr{
     margin-right: 15px;
 }
+.dayLabel{
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 50px;
+        margin-right: -40px;
+        border-bottom: 1px solid #F94F00;
+            cursor: pointer;
+    
+}

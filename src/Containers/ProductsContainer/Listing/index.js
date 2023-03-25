@@ -158,7 +158,7 @@ const ProductListing = (props) => {
 			width: 60,
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign" w={100}>
-					<Tooltip placement="topLeft" title={"Clone"}>
+					<Tooltip placement="topLeft" title={"View"}>
 						<div
 							style={{ cursor: "pointer" }}
 							onClick={() => {

@@ -9,6 +9,8 @@ import {
 	message,
 	Progress,
 	notification,
+	Row,
+	Col,
 } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import programSchema, { initVals } from "./Constants";
@@ -29,6 +31,10 @@ const EditProgramContainer = (props) => {
 	const navigate = useNavigate();
 	let { id } = useParams();
 	const [addingUser, setAddingUser] = React.useState(false);
+
+	const [basicDetailMedia, setBasicDetailMedia] = React.useState(null);
+	const [basicDetailMediaOneError, setBasicDetailMediaError] =
+		React.useState(false);
 	const [overviewMediaOne, setOverviewMediaOne] = React.useState(null);
 	const [overviewMediaOneError, setOverviewMediaOneError] =
 		React.useState(false);
@@ -56,6 +62,7 @@ const EditProgramContainer = (props) => {
 			tempvals.difficultyLevel = foundProgram.difficultyLevel;
 			tempvals.scheduleDescription = foundProgram.scheduleDescription;
 			tempvals.overviewDescription = foundProgram.overviewDescription;
+			setBasicDetailMedia(foundProgram.basicDetailMedia);
 			setDays(foundProgram.days);
 			setOverviewMediaOne(foundProgram.overviewMediaOne);
 			setOverviewMediaTwo(foundProgram.overviewMediaTwo);
@@ -82,10 +89,17 @@ const EditProgramContainer = (props) => {
 			setScheduleMediaError(true);
 			return;
 		}
+		if (!basicDetailMedia) {
+			message.error("Please add an Image for Basic Details!");
+			setBasicDetailMediaError(true);
+			return;
+		}
+		setBasicDetailMediaError(false);
 		setScheduleMediaError(false);
 		setProgressPercent(25);
 		values.id = id;
 		values.days = days;
+		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "noimg";
 		values.overviewMediaOne = overviewMediaOne ? overviewMediaOne : "noimg";
 		values.overviewMediaTwo = overviewMediaTwo ? overviewMediaTwo : "noimg";
 		values.scheduleImage = scheduleMedia ? scheduleMedia : "noimg";
@@ -94,8 +108,8 @@ const EditProgramContainer = (props) => {
 		if (await updateProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Added!`,
-				description: `${values.name}  has been successfully added`,
+				message: `Successfully Updated!`,
+				description: `${values.name}  has been successfully updated`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {
@@ -106,7 +120,7 @@ const EditProgramContainer = (props) => {
 			return;
 		} else {
 			notification.error({
-				message: `Failed to add!`,
+				message: `Failed to update!`,
 				description: `Give it a try later.`,
 				placement: "topRight",
 				duration: 2,
@@ -125,7 +139,7 @@ const EditProgramContainer = (props) => {
 		newDays = newDays.filter((item) => item.id !== id);
 		setDays(newDays);
 	};
-	return activeScreen === 0 ? (
+	return (
 		<Formik
 			initialValues={newinitVals}
 			validationSchema={programSchema}
@@ -140,210 +154,235 @@ const EditProgramContainer = (props) => {
 				handleChange,
 				handleBlur,
 				handleSubmit,
-			}) => (
-				<div className="containerForAdd">
-					<div className="rowing">
-						<div />
-						{addingUser ? (
-							<Progress type="circle" percent={progressPercent} />
-						) : (
-							<div className="rowing">
-								<span className="duplicateBtn">Duplicate Program</span>
-								<span className="draftBtn" onClick={() => navigate(-1)}>
-									Cancel
-								</span>
-								<span className="savebtn" onClick={handleSubmit}>
-									Update
-								</span>
-							</div>
-						)}
-					</div>
-					<div className="cardAdditionBlog">
-						<span className="tableTitle">Basic Detail</span>
-						<div className="barVertical" />
-						<div className="rowingStart">
-							<div className="mr500">
-								<div className="flexStart mb30">
-									<span className="addBlogInputLabel">PROGRAM NAME</span>
-									<div style={{ marginTop: 10 }}>
-										<input
-											className="addBlogInput inputText"
-											type={"text"}
-											name="name"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.name}
-										/>
-										{errors.name && touched.name ? (
-											<Typography
-												alignment="left"
-												title={errors.name}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : (
-											""
-										)}
-									</div>
+			}) =>
+				activeScreen === 0 ? (
+					<div className="containerForAdd">
+						<div className="rowing">
+							<div />
+							{addingUser ? (
+								<Progress type="circle" percent={progressPercent} />
+							) : (
+								<div className="rowing">
+									<span className="duplicateBtn">Duplicate Program</span>
+									<span className="draftBtn">Save as draft</span>
+									<span className="savebtn" onClick={handleSubmit}>
+										Save
+									</span>
 								</div>
-								<div className="flexStart mb30">
-									<span className="addBlogInputLabel">SUBTITLE</span>
-									<div style={{ marginTop: 10 }}>
-										<input
-											className="addBlogInput inputText"
-											type={"text"}
-											name="subTitle"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.subTitle}
-										/>
-										{errors.subTitle && touched.subTitle ? (
-											<Typography
-												alignment="left"
-												title={errors.subTitle}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : (
-											""
-										)}
-									</div>
-								</div>
-							</div>
-							<div>
-								<div className="flexStart mb30">
-									<span className="addBlogInputLabel">DIFFICULTY</span>
-									<div style={{ marginTop: 10 }}>
-										<select
-											name="difficultyLevel"
-											id="category"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.difficultyLevel}
-											className="addBlogInput inputText"
-										>
-											<option value="default" selected={true} disabled={true}>
-												Select Exercise
-											</option>
-											<option value="Beginner">Beginner</option>
-											<option value="Advanced">Advanced</option>
-											<option value="Intermediate">Intermediate</option>
-											<option value="BeastMode">Beast Mode</option>
-										</select>
-									</div>
-								</div>
-								<div className="flexStart mb30">
-									<span className="addBlogInputLabel">STATUS</span>
-									<div style={{ marginTop: 10 }}>
-										<Radio.Group
-											name="status"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.status}
-											defaultValue={values.status}
-										>
-											<Radio value={"Active"}>
-												<Typography
-													alignment="left"
-													title="Active"
-													fontFamily="Gilroy-Medium"
-													color="#64748B"
-													type="label"
-												/>
-											</Radio>
-											<Radio value={"Inactive"}>
-												<Typography
-													alignment="left"
-													title="Inactive"
-													fontFamily="Gilroy-Medium"
-													color="#64748B"
-													type="label"
-												/>
-											</Radio>
-										</Radio.Group>
-										{errors.status && touched.status ? (
-											<Typography
-												alignment="left"
-												title={errors.status}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : (
-											""
-										)}
-									</div>
-								</div>
-							</div>
+							)}
 						</div>
-						<span className="tableTitle">Overview</span>
-						<div className="barVertical" />
-						<div className="greyCard ">
-							<div className="flexStart mb30">
-								<span className="tableTitle" style={{ color: "#000000" }}>
-									Step 1 (Upload media)
-								</span>
-								<div
-									className="barVertical"
-									style={{
-										border: "1px solid gray",
-										width: 800,
-									}}
-								/>
-								<div>
-									<div
-										style={{
-											display: "flex",
-											justifyContent: "flex-start",
-											alignItems: "center",
-										}}
-									>
-										{overviewMediaOne ? (
-											<div
-												style={{
-													display: "flex",
-													justifyContent: "center",
-													alignItems: "center",
-												}}
-											>
-												<img
-													src={overviewMediaOne}
-													alt="UserImage"
-													style={{
-														width: 156,
-														height: 156,
-														borderRadius: "50%",
-													}}
-												/>
-												<div
-													className="centerAligner"
-													style={{
-														width: 15,
-														height: 15,
-														borderRadius: "50%",
-														backgroundColor: "#fff",
-														marginLeft: -10,
-														marginTop: -20,
-														boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-														cursor: "pointer",
-														border: "1px solid #000",
-													}}
-													onClick={() => setOverviewMediaOne("")}
-												>
-													<CloseOutlined
-														style={{ fontSize: 8, color: primaryColor }}
+						<div className="cardAdditionBlog">
+							<span className="tableTitle">Basic Detail</span>
+							<div className="barVertical" />
+							<div>
+								<Row>
+									<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+										<div className="colStart">
+											<div className="flexStart mb30">
+												<span className="addBlogInputLabel">PROGRAM NAME</span>
+												<div style={{ marginTop: 10 }}>
+													<input
+														className="addBlogInput inputText"
+														type={"text"}
+														name="name"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values.name}
 													/>
+													{errors.name && touched.name ? (
+														<Typography
+															alignment="left"
+															title={errors.name}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													) : (
+														""
+													)}
 												</div>
 											</div>
-										) : (
-											<EmployeeDropZone
-												{...{ setImageUrl: setOverviewMediaOne, small: false }}
+											<div className="flexStart mb30">
+												<span className="addBlogInputLabel">SUBTITLE</span>
+												<div style={{ marginTop: 10 }}>
+													<input
+														className="addBlogInput inputText"
+														type={"text"}
+														name="subTitle"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values.subTitle}
+													/>
+													{errors.subTitle && touched.subTitle ? (
+														<Typography
+															alignment="left"
+															title={errors.subTitle}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													) : (
+														""
+													)}
+												</div>
+											</div>
+										</div>
+									</Col>
+									<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+										<div className="colStart">
+											<div className="flexStart mb30">
+												<span className="addBlogInputLabel">DIFFICULTY</span>
+												<div style={{ marginTop: 10 }}>
+													<Radio.Group
+														name="difficultyLevel"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values.difficultyLevel}
+														defaultValue={values.difficultyLevel}
+													>
+														<Row>
+															<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+																<Radio value={"Beginner"}>
+																	<span className="radioBtnCustomized">
+																		Beginner
+																	</span>
+																</Radio>
+															</Col>
+															<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+																<Radio value={"Advanced"}>
+																	<span className="radioBtnCustomized">
+																		Advanced
+																	</span>
+																</Radio>
+															</Col>
+															<Col xs={24} sm={24} md={24} lg={24} xl={24}>
+																<div style={{ margin: 16 }} />
+															</Col>
+															<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+																<Radio value={"Intermediate"}>
+																	<span className="radioBtnCustomized">
+																		Intermediate
+																	</span>
+																</Radio>
+															</Col>
+															<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+																<Radio value={"BeastMode"}>
+																	<span className="radioBtnCustomized">
+																		Beast Mode
+																	</span>
+																</Radio>
+															</Col>
+														</Row>
+													</Radio.Group>
+													{errors.difficultyLevel && touched.difficultyLevel ? (
+														<Typography
+															alignment="left"
+															title={errors.difficultyLevel}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													) : (
+														""
+													)}
+												</div>
+											</div>
+											<div className="flexStart mb30">
+												<span className="addBlogInputLabel">STATUS</span>
+												<div style={{ marginTop: 10 }}>
+													<select
+														name="status"
+														id="category"
+														onChange={handleChange}
+														onBlur={handleBlur}
+														value={values.status}
+														className="addBlogInput inputText"
+														style={{
+															background:
+																values.status === "Active"
+																	? "#5DB135"
+																	: values.status === "Pending"
+																	? "#E2BB2E"
+																	: "#F4F4F4",
+															color: "#fff",
+															paddingRight: 50,
+															borderRight: "16px solid transparent",
+														}}
+													>
+														<option value="" selected={true} disabled={true}>
+															Select Status
+														</option>
+														<option value="Active">Active</option>
+														<option value="Pending">Pending</option>
+													</select>
+													{errors.status && touched.status ? (
+														<Typography
+															alignment="left"
+															title={errors.status}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													) : (
+														<></>
+													)}
+												</div>
+											</div>
+										</div>
+									</Col>
+								</Row>
+							</div>
+							<div>
+								<div
+									style={{
+										display: "flex",
+										justifyContent: "flex-start",
+										alignItems: "center",
+									}}
+								>
+									{basicDetailMedia ? (
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "center",
+												alignItems: "center",
+											}}
+										>
+											<img
+												src={basicDetailMedia}
+												alt="UserImage"
+												style={{
+													width: 156,
+													height: 156,
+													borderRadius: "50%",
+												}}
 											/>
-										)}
-									</div>
-									{overviewMediaOneError && (
+											<div
+												className="centerAligner"
+												style={{
+													width: 15,
+													height: 15,
+													borderRadius: "50%",
+													backgroundColor: "#fff",
+													marginLeft: -10,
+													marginTop: -20,
+													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+													cursor: "pointer",
+													border: "1px solid #000",
+												}}
+												onClick={() => setBasicDetailMedia("")}
+											>
+												<CloseOutlined
+													style={{ fontSize: 8, color: primaryColor }}
+												/>
+											</div>
+										</div>
+									) : (
+										<EmployeeDropZone
+											{...{ setImageUrl: setBasicDetailMedia, small: false }}
+										/>
+									)}
+									{basicDetailMediaOneError && (
 										<Typography
 											alignment="left"
 											title={"Please add an image"}
@@ -354,116 +393,21 @@ const EditProgramContainer = (props) => {
 									)}
 								</div>
 							</div>
-							<div className="flexStart mb30">
-								<span className="tableTitle" style={{ color: "#000000" }}>
-									Step 2 (Add text)
-								</span>
-								<div
-									className="barVertical"
-									style={{
-										border: "1px solid gray",
-										width: 800,
-									}}
-								/>
-								<div style={{ marginTop: 10 }}>
-									<TextArea
-										rows={4}
-										placeholder="Enter Description"
-										maxLength={1000}
-										showCount
-										className="overViewDescription"
-										name="overviewDescription"
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.overviewDescription}
-									/>
-									{errors.overviewDescription && touched.overviewDescription ? (
-										<Typography
-											alignment="left"
-											title={errors.overviewDescription}
-											fontFamily="Gilroy-Medium"
-											color="red"
-											type="label"
-										/>
-									) : (
-										""
-									)}
-								</div>
-							</div>
-							<div className="flexStart mb30">
-								<span className="tableTitle" style={{ color: "#000000" }}>
-									Step 3 (media - optional)
-								</span>
-								<div
-									className="barVertical"
-									style={{
-										border: "1px solid gray",
-										width: 800,
-									}}
-								/>
-								<div>
+							<div style={{ margin: 40 }} />
+							<span className="tableTitle">Overview</span>
+							<div className="barVertical" />
+							<div className="greyCard ">
+								<div className="flexStart mb30">
+									<span className="tableTitle" style={{ color: "#000000" }}>
+										Step 1 (Upload media)
+									</span>
 									<div
+										className="barVertical"
 										style={{
-											display: "flex",
-											justifyContent: "flex-start",
-											alignItems: "center",
+											border: "1px solid gray",
+											width: 800,
 										}}
-									>
-										{overviewMediaTwo ? (
-											<div
-												style={{
-													display: "flex",
-													justifyContent: "center",
-													alignItems: "center",
-												}}
-											>
-												<img
-													src={overviewMediaTwo}
-													alt="UserImage"
-													style={{
-														width: 156,
-														height: 156,
-														borderRadius: "50%",
-													}}
-												/>
-												<div
-													className="centerAligner"
-													style={{
-														width: 15,
-														height: 15,
-														borderRadius: "50%",
-														backgroundColor: "#fff",
-														marginLeft: -10,
-														marginTop: -20,
-														boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-														cursor: "pointer",
-														border: "1px solid #000",
-													}}
-													onClick={() => setOverviewMediaTwo("")}
-												>
-													<CloseOutlined
-														style={{ fontSize: 8, color: primaryColor }}
-													/>
-												</div>
-											</div>
-										) : (
-											<EmployeeDropZone
-												{...{ setImageUrl: setOverviewMediaTwo, small: false }}
-											/>
-										)}
-									</div>
-								</div>
-							</div>
-						</div>
-						<br /> <br /> <br />
-						<span className="tableTitle" style={{ marginTop: 30 }}>
-							Schedule
-						</span>
-						<div className="barVertical" />
-						<div className="rowFlexStart">
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel">DIFFICULTY</span>
-								<div style={{ marginTop: 10 }}>
+									/>
 									<div>
 										<div
 											style={{
@@ -472,7 +416,7 @@ const EditProgramContainer = (props) => {
 												alignItems: "center",
 											}}
 										>
-											{scheduleMedia ? (
+											{overviewMediaOne ? (
 												<div
 													style={{
 														display: "flex",
@@ -481,7 +425,7 @@ const EditProgramContainer = (props) => {
 													}}
 												>
 													<img
-														src={scheduleMedia}
+														src={overviewMediaOne}
 														alt="UserImage"
 														style={{
 															width: 156,
@@ -502,7 +446,7 @@ const EditProgramContainer = (props) => {
 															cursor: "pointer",
 															border: "1px solid #000",
 														}}
-														onClick={() => setScheduleMedia("")}
+														onClick={() => setOverviewMediaOne("")}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -511,11 +455,14 @@ const EditProgramContainer = (props) => {
 												</div>
 											) : (
 												<EmployeeDropZone
-													{...{ setImageUrl: setScheduleMedia, small: false }}
+													{...{
+														setImageUrl: setOverviewMediaOne,
+														small: false,
+													}}
 												/>
 											)}
 										</div>
-										{scheduleMediaError && (
+										{overviewMediaOneError && (
 											<Typography
 												alignment="left"
 												title={"Please add an image"}
@@ -526,81 +473,286 @@ const EditProgramContainer = (props) => {
 										)}
 									</div>
 								</div>
-							</div>
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel">DESCRIPTION</span>
-								<div style={{ marginTop: 10 }}>
-									<TextArea
-										rows={4}
-										placeholder="Schedule Description"
-										maxLength={1000}
-										showCount
-										className="scheduleDescription"
-										name="scheduleDescription"
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.scheduleDescription}
+								<div className="flexStart mb30">
+									<span className="tableTitle" style={{ color: "#000000" }}>
+										Step 2 (Overview text)
+									</span>
+									<div
+										className="barVertical"
+										style={{
+											border: "1px solid gray",
+											width: 800,
+										}}
 									/>
-									{errors.scheduleDescription && touched.scheduleDescription ? (
-										<Typography
-											alignment="left"
-											title={errors.scheduleDescription}
-											fontFamily="Gilroy-Medium"
-											color="red"
-											type="label"
+									<div style={{ marginTop: 10 }}>
+										<TextArea
+											rows={4}
+											placeholder="Enter Description"
+											maxLength={250}
+											showCount
+											className="addBlogInput overViewDescription"
+											name="overviewDescription"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.overviewDescription}
+											style={{
+												width: 700,
+												height: 650,
+											}}
 										/>
-									) : (
-										""
-									)}
+										{errors.overviewDescription &&
+										touched.overviewDescription ? (
+											<Typography
+												alignment="left"
+												title={errors.overviewDescription}
+												fontFamily="Gilroy-Medium"
+												color="red"
+												type="label"
+											/>
+										) : (
+											""
+										)}
+									</div>
+								</div>
+								<div className="flexStart mb30">
+									<span className="tableTitle" style={{ color: "#000000" }}>
+										Step 3 (media - optional)
+									</span>
+									<div
+										className="barVertical"
+										style={{
+											border: "1px solid gray",
+											width: 800,
+										}}
+									/>
+									<div>
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "flex-start",
+												alignItems: "center",
+											}}
+										>
+											{overviewMediaTwo ? (
+												<div
+													style={{
+														display: "flex",
+														justifyContent: "center",
+														alignItems: "center",
+													}}
+												>
+													<img
+														src={overviewMediaTwo}
+														alt="UserImage"
+														style={{
+															width: 156,
+															height: 156,
+															borderRadius: "50%",
+														}}
+													/>
+													<div
+														className="centerAligner"
+														style={{
+															width: 15,
+															height: 15,
+															borderRadius: "50%",
+															backgroundColor: "#fff",
+															marginLeft: -10,
+															marginTop: -20,
+															boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+															cursor: "pointer",
+															border: "1px solid #000",
+														}}
+														onClick={() => setOverviewMediaTwo("")}
+													>
+														<CloseOutlined
+															style={{ fontSize: 8, color: primaryColor }}
+														/>
+													</div>
+												</div>
+											) : (
+												<EmployeeDropZone
+													{...{
+														setImageUrl: setOverviewMediaTwo,
+														small: false,
+													}}
+												/>
+											)}
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div className="flexEndd mb30">
-							<span className="oOfDays">No. of Days</span>
-							<div className="daysAdditionBtnDiv">
-								<InputNumber
-									min={1}
-									max={30}
-									// defaultValue={daysNumber}
-									onChange={setDaysNumber}
+							<br /> <br /> <br />
+							<span className="tableTitle" style={{ marginTop: 30 }}>
+								Schedule
+							</span>
+							<div className="barVertical" />
+							<div>
+								<Row>
+									<Col xs={24} sm={24} md={24} lg={10} xl={10}>
+										<div className="flexStart mb30">
+											<span className="addBlogInputLabel">DIFFICULTY</span>
+											<div style={{ marginTop: 10 }}>
+												<div>
+													<div
+														style={{
+															display: "flex",
+															justifyContent: "flex-start",
+															alignItems: "center",
+														}}
+													>
+														{scheduleMedia ? (
+															<div
+																style={{
+																	display: "flex",
+																	justifyContent: "center",
+																	alignItems: "center",
+																}}
+															>
+																<img
+																	src={scheduleMedia}
+																	alt="UserImage"
+																	style={{
+																		width: 156,
+																		height: 156,
+																		borderRadius: "50%",
+																	}}
+																/>
+																<div
+																	className="centerAligner"
+																	style={{
+																		width: 15,
+																		height: 15,
+																		borderRadius: "50%",
+																		backgroundColor: "#fff",
+																		marginLeft: -10,
+																		marginTop: -20,
+																		boxShadow:
+																			"rgba(0, 0, 0, 0.24) 0px 3px 8px",
+																		cursor: "pointer",
+																		border: "1px solid #000",
+																	}}
+																	onClick={() => setScheduleMedia("")}
+																>
+																	<CloseOutlined
+																		style={{ fontSize: 8, color: primaryColor }}
+																	/>
+																</div>
+															</div>
+														) : (
+															<EmployeeDropZone
+																{...{
+																	setImageUrl: setScheduleMedia,
+																	small: false,
+																}}
+															/>
+														)}
+													</div>
+													{scheduleMediaError && (
+														<Typography
+															alignment="left"
+															title={"Please add an image"}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													)}
+												</div>
+											</div>
+										</div>
+									</Col>
+									<Col xs={24} sm={24} md={24} lg={14} xl={14}>
+										<div className="flexStart mb30">
+											<span className="addBlogInputLabel">DESCRIPTION</span>
+											<div style={{ marginTop: 10, width: 500 }}>
+												<TextArea
+													rows={4}
+													placeholder="Schedule Description"
+													maxLength={250}
+													showCount
+													// className="scheduleDescription"
+													// className="addBlogInput"
+													name="scheduleDescription"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													value={values.scheduleDescription}
+													style={{
+														width: 500,
+														height: 400,
+														display: "flex",
+													}}
+												/>
+												{errors.scheduleDescription &&
+												touched.scheduleDescription ? (
+													<Typography
+														alignment="left"
+														title={errors.scheduleDescription}
+														fontFamily="Gilroy-Medium"
+														color="red"
+														type="label"
+													/>
+												) : (
+													""
+												)}
+											</div>
+										</div>
+									</Col>
+								</Row>
+							</div>
+							<br />
+							<div
+								className="rowing"
+								style={{ paddingLeft: 10, paddingRight: 10 }}
+							>
+								<span className="oOfDays">Program Duration</span>
+								<div className="flexEndd mb30">
+									<span className="oOfDays">No. of Days</span>
+									<div className="daysAdditionBtnDiv">
+										<input
+											type={"number"}
+											// defaultValue={daysNumber}
+											className="inputfont nmbrBtn"
+											onChange={(e) => setDaysNumber(e.target.value)}
+										/>
+										<button
+											className="dayssAdditionBtn"
+											onClick={() => {
+												let tempDays = [...days];
+												for (let i = 0; i < daysNumber; i++) {
+													tempDays.push({
+														id: days.length + i,
+														warmpup: [],
+														workout: [],
+														cooldown: [],
+													});
+												}
+												setDays(tempDays);
+											}}
+										>
+											Add
+										</button>
+									</div>
+								</div>
+							</div>
+							<div>
+								<DaysTable
+									data={days}
+									deleteMe={deleteMe}
+									viewDetails={viewDetails}
 								/>
-								<button
-									className="dayssAdditionBtn"
-									onClick={() => {
-										let tempDays = [...days];
-										for (let i = 0; i < daysNumber; i++) {
-											tempDays.push({
-												id: days.length + i,
-												warmpup: [],
-												workout: [],
-												cooldown: [],
-											});
-										}
-										setDays(tempDays);
-									}}
-								>
-									Add
-								</button>
 							</div>
 						</div>
-						<div>
-							<DaysTable
-								data={days}
-								deleteMe={deleteMe}
-								viewDetails={viewDetails}
-							/>
-						</div>
 					</div>
-				</div>
-			)}
+				) : (
+					<DayEdit
+						days={days}
+						setDays={setDays}
+						setActiveScreen={setActiveScreen}
+						activeItemIndex={activeItemIndex}
+					/>
+				)
+			}
 		</Formik>
-	) : (
-		<DayEdit
-			days={days}
-			setDays={setDays}
-			setActiveScreen={setActiveScreen}
-			activeItemIndex={activeItemIndex}
-		/>
 	);
 };
 

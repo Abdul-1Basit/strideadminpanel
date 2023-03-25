@@ -742,6 +742,7 @@ const addProgram = async (Program) => {
 		overviewMediaOne,
 		overviewMediaTwo,
 		scheduleImage,
+		basicDetailMedia,
 	} = Program;
 	//console.log("capmpig", campaign);
 	try {
@@ -756,6 +757,7 @@ const addProgram = async (Program) => {
 			overviewMediaOne,
 			overviewMediaTwo,
 			scheduleImage,
+			basicDetailMedia,
 		});
 		return true;
 	} catch (err) {
@@ -785,6 +787,7 @@ const updateProgram = async (program) => {
 		overviewMediaOne,
 		overviewMediaTwo,
 		scheduleImage,
+		basicDetailMedia,
 	} = program;
 
 	try {
@@ -801,6 +804,7 @@ const updateProgram = async (program) => {
 			overviewMediaOne,
 			overviewMediaTwo,
 			scheduleImage,
+			basicDetailMedia,
 		});
 		return true;
 	} catch (err) {

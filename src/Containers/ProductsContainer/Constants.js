@@ -10,9 +10,9 @@ const ProductSchema = Yup.object().shape({
 		.max(1000, "Too Long!")
 		.required("Description is required"),
 	isActive: Yup.boolean().notRequired(),
-	unitPrice: Yup.number("Sell Price must be a number")
-		.positive("Sell Price must be greater than 0")
-		.required("Sell Price is required"),
+	unitPrice: Yup.number("Product Price must be a number")
+		.positive("Product Price must be greater than 0")
+		.required("Product Price is required"),
 	reviews: Yup.number().nullable(),
 	ratings: Yup.number().nullable(),
 	noOfItems: Yup.number("Total Items must be a number").notRequired(),

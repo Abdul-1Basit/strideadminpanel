@@ -4,14 +4,16 @@ import Wrapper from "../../../Components/Wrapper";
 import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
-import { RiDeleteBinLine } from "react-icons/ri";
+// import { RiDeleteBinLine } from "react-icons/ri";
+import { AiTwotoneDelete } from "react-icons/ai";
+import { FaRegEdit } from "react-icons/fa";
 const PrizeListing = (props) => {
 	const columns = [
 		{
 			title: "EXERCISE NAME",
 			render: (rowData) => {
 				return (
-					<div>
+					<div style={{ width: 160 }}>
 						<span className="label">{rowData.name}</span>
 					</div>
 				);
@@ -21,7 +23,7 @@ const PrizeListing = (props) => {
 			title: "CATEGORY",
 			render: (rowData) => {
 				return (
-					<div>
+					<div style={{ width: 140 }}>
 						<span className="label">{rowData.category}</span>
 					</div>
 				);
@@ -38,6 +40,7 @@ const PrizeListing = (props) => {
 								rowData.isActive.toLowerCase() === "active"
 									? "#5DB135"
 									: "#D30E0E",
+							width: 140,
 						}}
 					>
 						<span className="label" style={{ color: "#fff" }}>
@@ -57,25 +60,25 @@ const PrizeListing = (props) => {
 				<Wrapper type="rowEvenAlign">
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
-							className={"centerAligner actions"}
+							className={"centerAligner"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								//console.log(rowData);
 								props.setEditModal(true);
 							}}
 						>
-							<FiEdit color="#0F172A" />
+							<FaRegEdit color="#6BA2E1" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							className={"centerAligner actions"}
+							className={"centerAligner"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);
 							}}
 						>
-							<RiDeleteBinLine color="#EF4444" />
+							<AiTwotoneDelete color="#EF4444" size={20} />
 						</div>
 					</Tooltip>
 				</Wrapper>
@@ -108,9 +111,9 @@ const PrizeListing = (props) => {
 					// rowSelection
 					columns={columns}
 					dataSource={props.campaignListing}
-					scroll={{
-						x: 1300,
-					}}
+					// scroll={{
+					// 	x: 1300,
+					// }}
 				/>
 			)}
 		</div>

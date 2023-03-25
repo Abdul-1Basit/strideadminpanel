@@ -2,7 +2,13 @@ import React from "react";
 import "./index.css";
 export default function CustomSmallCard(props) {
 	return (
-		<div className="customCrd" style={{ backgroundColor: props.primaryColor }}>
+		<div
+			className="customCrd"
+			style={{
+				backgroundColor: props.primaryColor,
+				width: window.screen.width <= 1200 ? 280 : 330,
+			}}
+		>
 			<div
 				className="iconCircle"
 				style={{ backgroundColor: props.secondaryColor }}

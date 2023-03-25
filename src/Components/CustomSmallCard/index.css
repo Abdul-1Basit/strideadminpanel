@@ -1,5 +1,7 @@
 .customCrd{
-    width: 330px;
+
+    width: 100%;
+    max-width:330px;
     height: 127px;
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.16);
     border-radius: 26.5323px;
