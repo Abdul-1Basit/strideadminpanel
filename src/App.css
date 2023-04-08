@@ -730,6 +730,13 @@ border-radius: 8px;
       flex-direction: row;
       width: 100%;
     }
+    .rowingStart{
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      flex-direction: row;
+      width: 100%;
+    }
     .modalHeadingAdd{
       font-family: 'Montserrat';
 font-style: normal;

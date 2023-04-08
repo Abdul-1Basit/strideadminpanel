@@ -51,7 +51,7 @@ const DeleteModal = (props) => {
 					type={"button"}
 					value={"No"}
 					className="cancelBtn"
-					onClick={() => props.setDeleteModal(false)}
+					onClick={() => props.setShowDeleteModal(false)}
 				/>
 			</div>
 		</div>

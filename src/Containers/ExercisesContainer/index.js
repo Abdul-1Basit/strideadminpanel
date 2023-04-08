@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, notification } from "antd";
 import ProductCategorySearch from "./Search";
 import AddProductCategory from "./Add";
-import EditCampaign from "./Edit";
+// import EditCampaign from "./Edit";
 import DeleteModal from "./Delete";
 import CustomSmallCard from "../../Components/CustomSmallCard";
 import { BsCheck } from "react-icons/bs";
@@ -15,12 +15,14 @@ import {
 	ModalStyle,
 } from "../CommonStyles";
 import { getAllExercises } from "../../Helpers/firebase";
+import { useNavigate } from "react-router-dom";
 
 const ExercisesContainer = (props) => {
+	const navigate = useNavigate();
 	const [activeCategory, setActiveCategory] = React.useState();
 	const [addModal, setAddModal] = React.useState(false);
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
-	const [editModal, setEditModal] = React.useState(false);
+	// const [editModal, setEditModal] = React.useState(false);
 	const [filterItem, setFilterItem] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
 
@@ -54,10 +56,10 @@ const ExercisesContainer = (props) => {
 	};
 	React.useEffect(() => {
 		getWorkouts();
-		console.log(" add modal", addModal.toString());
-		console.log(" editmodal", editModal.toString());
-		console.log(" delete", showDeleteModal.toString());
-	}, [editModal, showDeleteModal, addModal]);
+		// console.log(" add modal", addModal.toString());
+		// console.log(" editmodal", editModal.toString());
+		// console.log(" delete", showDeleteModal.toString());
+	}, [showDeleteModal, addModal]);
 	const getWorkouts = async () => {
 		setLoading(true);
 		let result = await getAllExercises();
@@ -65,7 +67,9 @@ const ExercisesContainer = (props) => {
 		console.log("result", result);
 		setLoading(false);
 	};
-
+	const editThisProgram = (id) => {
+		navigate("/exercises/edit/" + id);
+	};
 	return (
 		<div
 			style={{
@@ -77,7 +81,7 @@ const ExercisesContainer = (props) => {
 		>
 			{addModal && <AddProductCategory {...{ setAddModal, successMessage }} />}
 
-			{editModal && (
+			{/* {editModal && (
 				<EditCampaign
 					{...{
 						setEditModal,
@@ -86,7 +90,7 @@ const ExercisesContainer = (props) => {
 						successMessage,
 					}}
 				/>
-			)}
+			)} */}
 
 			<Modal
 				visible={showDeleteModal}
@@ -110,13 +114,13 @@ const ExercisesContainer = (props) => {
 					/>
 				}
 			</Modal>
-			{!addModal && !editModal && !showDeleteModal && (
+			{!addModal && !showDeleteModal && (
 				<div>
 					<div
 						className="rowing"
 						style={{
 							marginBottom: 25,
-							opacity: showDeleteModal || addModal || editModal ? 0.6 : 1,
+							opacity: showDeleteModal || addModal ? 0.6 : 1,
 						}}
 					>
 						<CustomSmallCard
@@ -170,11 +174,9 @@ const ExercisesContainer = (props) => {
 							boxShadow: " 0px 0px 16px rgba(0, 0, 0, 0.16)",
 							borderRadius: 20,
 							paddingTop: 20,
-							opacity: addModal || editModal || showDeleteModal ? 0.5 : 1,
+							opacity: addModal || showDeleteModal ? 0.5 : 1,
 							WebkitFilter:
-								addModal || editModal || showDeleteModal
-									? "grayscale(1)"
-									: "none",
+								addModal || showDeleteModal ? "grayscale(1)" : "none",
 						}}
 					>
 						<ProductCategorySearch
@@ -187,12 +189,12 @@ const ExercisesContainer = (props) => {
 
 						<ProductCategoryListing
 							{...{
-								setEditModal,
 								setAddModal,
 								setActiveCategory,
 								loading,
 								setShowDeleteModal,
 								campaignListing,
+								editThisProgram,
 							}}
 						/>
 					</div>

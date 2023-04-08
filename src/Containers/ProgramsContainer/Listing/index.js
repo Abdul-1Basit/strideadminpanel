@@ -6,7 +6,8 @@ import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { BsShareFill } from "react-icons/bs";
-import { AiFillEye } from "react-icons/ai";
+// import { AiFillEye } from "react-icons/ai";
+import { FaClone } from "react-icons/fa";
 const PrizeListing = (props) => {
 	// name,
 	// subTitle,
@@ -53,11 +54,15 @@ const PrizeListing = (props) => {
 			render: (rowData) => {
 				return (
 					<div
-						style={{
-							flexDirection: "row",
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "flex-start",
+						// style={{
+						// 	flexDirection: "row",
+						// 	display: "flex",
+						// 	alignItems: "center",
+						// 	justifyContent: "flex-start",
+						// }}
+						className="rowStart pNameUnderline"
+						onClick={() => {
+							props.viewThisProgram(rowData.id);
 						}}
 					>
 						<span className="label">{rowData.name}</span>
@@ -139,22 +144,20 @@ const PrizeListing = (props) => {
 		},
 		{
 			title: "Action",
-			//key: "operation",
 			fixed: "right",
 			width: 120,
-			//render: () =>
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
 					<div
 						className={"centerAligner"}
 						onClick={() => {
-							// props.setActiveCategory(rowData);
-							// //console.log(rowData);
+							props.cloneThisProgram(rowData.id);
+							//console.log(rowData);
 							// props.setEditModal(true);
 						}}
 						style={{ marginRight: 10, cursor: "pointer" }}
 					>
-						<AiFillEye color="#2DAB22" size={20} />
+						<FaClone color="#2DAB22" size={20} />
 					</div>
 					<div
 						className={"centerAligner"}
@@ -199,6 +202,15 @@ const PrizeListing = (props) => {
 			spin
 		/>
 	);
+	// const sortedList = () => {
+	// 	if (!props.sortBy) {
+	// 		return props.programList;
+	// 	}
+	// 	let newList = props.programList;
+	// 	if (props.sortBy) {
+	// 		 newList=newList.sort((a,b)=>a.id-b.id)
+	// 	}
+	// };
 	return (
 		<div style={{ width: "100%", backgroundColor: "#E5E5E5" }}>
 			{props.loading ? (

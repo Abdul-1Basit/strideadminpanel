@@ -308,14 +308,19 @@ const deleteWorkout = async (workout) => {
 //----------------------------------------------------
 //-----------Exercises-----------------------
 const addExercise = async (Exercise) => {
-	let { name, category, img, isActive } = Exercise;
+	let { name, category, status, instructions, targetArea, img, audio, video } =
+		Exercise;
 	console.log("values", Exercise);
 	try {
 		await addDoc(collection(db, "exercises"), {
 			name,
 			category,
+			status,
+			instructions,
+			targetArea,
 			img,
-			isActive,
+			audio,
+			video,
 		});
 		return true;
 	} catch (err) {
@@ -334,7 +339,8 @@ const getAllExercises = async () => {
 	return newData;
 };
 const updateExercise = async (workout) => {
-	let { name, category, img, isActive } = workout;
+	let { name, category, status, instructions, targetArea, img, audio, video } =
+		workout;
 
 	try {
 		//console.log("roze", prize.id);
@@ -342,8 +348,12 @@ const updateExercise = async (workout) => {
 		await updateDoc(prodRef, {
 			name,
 			category,
+			status,
+			instructions,
+			targetArea,
 			img,
-			isActive,
+			audio,
+			video,
 		});
 		// console.log("campign", campaign);
 		return true;

@@ -36,15 +36,16 @@ const PrizeListing = (props) => {
 					<div
 						className="exerciseStatusCapsule"
 						style={{
-							backgroundColor:
-								rowData.isActive.toLowerCase() === "active"
-									? "#5DB135"
-									: "#D30E0E",
+							backgroundColor: "#5DB135",
+							// rowData.status.toLowerCase() === "active"
+							// 	? "#5DB135"
+							// 	:
+							// "#D30E0E",
 							width: 140,
 						}}
 					>
 						<span className="label" style={{ color: "#fff" }}>
-							{rowData.isActive ? rowData.isActive.toString() : "Active"}
+							{rowData.status ? rowData.status.toString() : "Active"}
 						</span>
 					</div>
 				);
@@ -62,9 +63,9 @@ const PrizeListing = (props) => {
 						<div
 							className={"centerAligner"}
 							onClick={() => {
-								props.setActiveCategory(rowData);
+								// props.setActiveCategory(rowData);
 								//console.log(rowData);
-								props.setEditModal(true);
+								props.editThisProgram(rowData.id);
 							}}
 						>
 							<FaRegEdit color="#6BA2E1" size={20} />

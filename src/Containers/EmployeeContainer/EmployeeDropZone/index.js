@@ -6,7 +6,7 @@ import { uploadImage } from "../../../Helpers/firebase";
 import SpinnerComponent from "../../../Components/SpinnerComponent";
 import { IoMdAdd } from "react-icons/io";
 import "./index.css";
-function EmployeeDropZone({ setImageUrl, small = false }) {
+function EmployeeDropZone({ setImageUrl, small = false, shortWidth = false }) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const onDrop = async (acceptedFiles) => {
 		setIsLoading(true);
@@ -20,11 +20,18 @@ function EmployeeDropZone({ setImageUrl, small = false }) {
 	return isLoading ? (
 		<SpinnerComponent size="small" />
 	) : (
-		<div {...getRootProps()} className="dropZoneDiv">
+		<div
+			{...getRootProps()}
+			className="dropZoneDiv"
+			style={{ width: shortWidth ? 240 : 298 }}
+		>
 			{isDragActive ? (
 				!small && <p>Drop the files here ...</p>
 			) : (
-				<div className="colCenteral drpzn" style={{ width: 298, height: 258 }}>
+				<div
+					className="colCenteral drpzn"
+					style={{ width: shortWidth ? 240 : 298, height: 258 }}
+				>
 					<input {...getInputProps()} />
 					<p //style={{ fontSize: small ? 8 : 14 }}
 						className="newTextForPicker"

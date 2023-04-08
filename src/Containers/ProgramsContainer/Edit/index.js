@@ -163,7 +163,17 @@ const EditProgramContainer = (props) => {
 								<Progress type="circle" percent={progressPercent} />
 							) : (
 								<div className="rowing">
-									<span className="duplicateBtn">Duplicate Program</span>
+									{/* <span
+											className="duplicateBtn"
+										>Duplicate Program</span> */}
+									<span
+										// className="duplicateBtn"
+										className="draftBtn"
+										style={{ backgroundColor: "#7D7D7D" }}
+										onClick={() => navigate(-1)}
+									>
+										Cancel
+									</span>
 									<span className="draftBtn">Save as draft</span>
 									<span className="savebtn" onClick={handleSubmit}>
 										Save

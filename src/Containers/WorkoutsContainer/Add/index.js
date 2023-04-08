@@ -252,7 +252,7 @@ const AddWorkoutContainer = (props) => {
 							<span className="tableTitle">Exercises</span>{" "}
 							<span className="secondTitle">No. of Exercises</span>
 							<div className="rowing ">
-								<div className="daysAdditionBtnDiv">
+								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
 										type={"number"}
 										// defaultValue={daysNumber}
@@ -262,6 +262,7 @@ const AddWorkoutContainer = (props) => {
 										onChange={(e) => {
 											setNoOfExercises(e.target.value);
 										}}
+										style={{ width: 50 }}
 									/>
 									<button className="dayssAdditionBtn" onClick={changeListing}>
 										Add

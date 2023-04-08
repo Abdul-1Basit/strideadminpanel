@@ -21,6 +21,7 @@ const Programs = (props) => {
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
 	// const [editModal, setEditModal] = React.useState(false);
 	const [filterItem, setFilterItem] = React.useState("");
+	const [sortBy, setSortBy] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
 	const navigate = useNavigate();
 	const [programList, setProgramList] = React.useState([]);
@@ -64,6 +65,12 @@ const Programs = (props) => {
 	};
 	const editThisProgram = (id) => {
 		navigate("/programs/edit/" + id);
+	};
+	const cloneThisProgram = (id) => {
+		navigate("/programs/clone/" + id);
+	};
+	const viewThisProgram = (id) => {
+		navigate("/programs/view/" + id);
 	};
 	return (
 		<div
@@ -184,6 +191,7 @@ const Programs = (props) => {
 					{...{
 						filterItem,
 						setFilterItem,
+						setSortBy,
 					}}
 				/>
 
@@ -194,6 +202,9 @@ const Programs = (props) => {
 						loading,
 						setShowDeleteModal,
 						programList,
+						cloneThisProgram,
+						viewThisProgram,
+						sortBy,
 					}}
 				/>
 			</div>

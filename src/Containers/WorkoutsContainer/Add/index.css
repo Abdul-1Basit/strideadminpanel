@@ -38,7 +38,7 @@ text-align: center;
 color: #222222;
 }
 .nmbrBtn{
-    width: 40px;
+    width: 60px;
     height: 35px;
     outline: none;
     border: none;
@@ -208,7 +208,7 @@ margin-right: 25px;
 flex-direction: row;
 align-items: center;
 padding: 18px 16px;
-width: 130.2px;
+width: 180.2px;
 height: 58px;
 background: #F4F4F4;
 border-radius: 8px;

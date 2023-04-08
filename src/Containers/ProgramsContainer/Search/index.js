@@ -109,6 +109,10 @@ const ProductCategorySearch = (props) => {
 					id="cars"
 					className="newSelect"
 					style={{ marginRight: 5, marginLeft: 5 }}
+					onChange={(e) => {
+						// console.log("eee", e.target.value);
+						props.setSortBy(e.target.value);
+					}}
 				>
 					<option value="volvo" disabled={true} selected={true}>
 						Sort By

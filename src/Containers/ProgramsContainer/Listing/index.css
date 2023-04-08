@@ -19,3 +19,8 @@ color: #9C9C9C;
     justify-content: center;
     display: flex;
 }
+.pNameUnderline{
+    text-decoration-line: underline;
+color: #F94F00;
+cursor: pointer;
+  }

@@ -6,7 +6,6 @@ import { InputNumber, Modal } from "antd";
 // import { primaryColor } from "../../../../Constants";
 // import { RiDeleteBackFill } from "react-icons/ri";
 // import { GrAdd } from "react-icons/gr";
-import Select from "react-select";
 import { RxCross2, RxCross1 } from "react-icons/rx";
 import { IoMdAdd } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
@@ -29,7 +28,7 @@ export default function DayEdit(props) {
 	const [workout, setWorkout] = React.useState(
 		props.days[props.activeItemIndex].workout ?? []
 	);
-	const [listOfCategories, setListOfCategories] = React.useState([]);
+
 	const [cooldownCounter, setCoolDownCounter] = React.useState(1);
 	const [cooldownOpen, setCoolDownOpen] = React.useState(true);
 	const [cooldown, setCoolDown] = React.useState(
@@ -59,7 +58,7 @@ export default function DayEdit(props) {
 		let item = warmup[index]; //.find((itm, idex) => idex === index);
 		let newArr = [...warmup];
 		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
+			innerItem.name = item.name;
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
@@ -75,7 +74,7 @@ export default function DayEdit(props) {
 		let item = workout[index]; //.find((itm, idex) => idex === index);
 		let newArr = [...workout];
 		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
+			innerItem.name = item.name;
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
@@ -91,7 +90,7 @@ export default function DayEdit(props) {
 		let item = cooldown[index]; //.find((itm, idex) => idex === index);
 		let newArr = [...cooldown];
 		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
+			innerItem.name = item.name;
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
@@ -156,41 +155,14 @@ export default function DayEdit(props) {
 		if (refreshMe) {
 			setRefereshMe(false);
 		}
-		if (listOfCategories.length === 0) fetchExercises();
 	}, [refreshMe]);
-	const fetchExercises = async () => {
-		const listOfExes = await getAllExercises();
-		let categoryList = [];
-		let listOfExercisez = [];
-		let prevCatogries = [];
-
-		// listOfExes.forEach((item) => {
-		// 	if (categoryList.findIndex((lIndex) => lIndex === item.category) < 0) {
-		// 		categoryList.push(item.category);
-		// 	}
-		// });
-		// categoryList.forEach((itemOne) => {
-		listOfExes.forEach((itemTwo) => {
-			// if (itemOne === itemTwo.category) {
-			listOfExercisez.push(itemTwo.name);
-			// }
-		});
-		// prevCatogries.push({
-		// 	categoryName: itemOne,
-		// 	listOfExercises: listOfExercisez,
-		// });
-		// listOfExercisez = [];
-		// });
-		setListOfCategories(listOfExercisez);
-		console.log("list ofexercises", listOfExercisez);
-	};
 	return (
 		<div className="containerForAdd">
-			{/* <AddModal
+			<AddModal
 				visible={visible}
 				setVisible={setVisible}
 				addFollowing={addFollowing}
-			/> */}
+			/>
 			<div className="rowing">
 				<div />
 				{/* {addingUser ? (
@@ -224,16 +196,6 @@ export default function DayEdit(props) {
 				{/* )} */}
 			</div>
 			<div className="cardAdditionBlog">
-				{/* <div>
-					<span className="tableTitle">
-						Edit
-						<br />
-						<span style={{ color: "#000", fontWeight: 300 }}>
-							Day {props.activeItemIndex + 1}
-						</span>
-					</span>
-				</div>
-				<br /> */}
 				<div className="firstIteration">
 					<div className="rowing">
 						<div
@@ -256,17 +218,15 @@ export default function DayEdit(props) {
 								</span>
 							</div>
 							<div className="rowing ">
-								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
+								<div className="daysAdditionBtnDiv">
 									<input
 										type={"number"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
 										// defaultValue={daysNumber}
-										style={{ width: 50 }}
-										value={warmupCounter}
 										onChange={(e) => {
-											if (e.target.value > -1) setWarmupCounter(e.target.value);
+											setWarmupCounter(e.target.value);
 										}}
 									/>
 									<button
@@ -294,6 +254,28 @@ export default function DayEdit(props) {
 								</div>
 							</div>
 						</div>
+						<div className="rowing">
+							<span
+								className="addfromCategories"
+								onClick={() => {
+									setVisible(true);
+									setActiveType("warmup");
+									console.log("clicked");
+								}}
+							>
+								Add from categories
+							</span>
+							<span
+								onClick={() => setWarmupOpen(!warmupOpen)}
+								style={{ cursor: "pointer" }}
+							>
+								{warmupOpen ? (
+									<IoIosArrowUp color={"#F94F00"} size={25} />
+								) : (
+									<IoIosArrowDown color={"#F94F00"} size={25} />
+								)}
+							</span>
+						</div>
 					</div>
 					<div className="barVertical" />
 					{warmupOpen && (
@@ -302,7 +284,6 @@ export default function DayEdit(props) {
 								{warmup.length > 0 &&
 									warmup.map((item, index) => (
 										<ExerciseItem
-											listOfCategories={listOfCategories}
 											item={item}
 											index={index}
 											deleteMe={deleteMeFromWarmup}
@@ -310,6 +291,7 @@ export default function DayEdit(props) {
 										/>
 									))}
 							</div>
+							<br />
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
@@ -360,7 +342,7 @@ export default function DayEdit(props) {
 								</span>
 							</div>
 							<div className="rowing ">
-								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
+								<div className="daysAdditionBtnDiv">
 									<input
 										type={"number"}
 										// defaultValue={daysNumber}
@@ -368,12 +350,9 @@ export default function DayEdit(props) {
 										placeholder="0"
 										// defaultValue={daysNumber}
 										// onChange={setWorkoutCounter}
-										style={{ width: 50 }}
-										value={workoutCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setWorkoutCounter(e.target.value);
-											// console.log("worokout counter value", e.target.value);
+											setWorkoutCounter(e.target.value);
+											console.log("worokout counter value", e.target.value);
 										}}
 										// className=""
 									/>
@@ -402,6 +381,28 @@ export default function DayEdit(props) {
 								</div>
 							</div>
 						</div>
+						<div className="rowing">
+							<span
+								className="addfromCategories"
+								onClick={() => {
+									setVisible(true);
+									setActiveType("workout");
+									// console.log("clicked");
+								}}
+							>
+								Add from categories
+							</span>
+							<span
+								onClick={() => setWorkoutOpen(!workoutOpen)}
+								style={{ cursor: "pointer" }}
+							>
+								{workoutOpen ? (
+									<IoIosArrowUp color={"#F94F00"} size={25} />
+								) : (
+									<IoIosArrowDown color={"#F94F00"} size={25} />
+								)}
+							</span>
+						</div>
 					</div>
 					<div className="barVertical" />
 					{workoutOpen && (
@@ -410,7 +411,6 @@ export default function DayEdit(props) {
 								{workout.length > 0 &&
 									workout.map((item, index) => (
 										<ExerciseItem
-											listOfCategories={listOfCategories}
 											item={item}
 											index={index}
 											deleteMe={deleteMeFromWorkout}
@@ -418,6 +418,7 @@ export default function DayEdit(props) {
 										/>
 									))}
 							</div>
+							<br />
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
@@ -468,7 +469,7 @@ export default function DayEdit(props) {
 								</span>
 							</div>
 							<div className="rowing ">
-								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
+								<div className="daysAdditionBtnDiv">
 									<input
 										type={"number"}
 										// defaultValue={daysNumber}
@@ -476,11 +477,8 @@ export default function DayEdit(props) {
 										placeholder="0"
 										// defaultValue={daysNumber}
 										// onChange={setCoolDownCounter}
-										style={{ width: 50 }}
-										value={cooldownCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setCoolDownCounter(e.target.value);
+											setCoolDownCounter(e.target.value);
 										}}
 									/>
 									<button
@@ -508,6 +506,28 @@ export default function DayEdit(props) {
 								</div>
 							</div>
 						</div>
+						<div className="rowing">
+							<span
+								className="addfromCategories"
+								onClick={() => {
+									setVisible(true);
+									setActiveType("cooldown");
+									console.log("clicked");
+								}}
+							>
+								Add from categories
+							</span>
+							<span
+								onClick={() => setCoolDownOpen(!cooldownOpen)}
+								style={{ cursor: "pointer" }}
+							>
+								{cooldownOpen ? (
+									<IoIosArrowUp color={"#F94F00"} size={25} />
+								) : (
+									<IoIosArrowDown color={"#F94F00"} size={25} />
+								)}
+							</span>
+						</div>
 					</div>
 					<div className="barVertical" />
 					{cooldownOpen && (
@@ -516,7 +536,6 @@ export default function DayEdit(props) {
 								{cooldown.length > 0 &&
 									cooldown.map((item, index) => (
 										<ExerciseItem
-											listOfCategories={listOfCategories}
 											item={item}
 											index={index}
 											deleteMe={deleteMeFromCoolDown}
@@ -524,6 +543,7 @@ export default function DayEdit(props) {
 										/>
 									))}
 							</div>
+							<br />
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
@@ -556,13 +576,7 @@ export default function DayEdit(props) {
 		</div>
 	);
 }
-const ExerciseItem = ({
-	listOfCategories,
-	item,
-	index,
-	deleteMe,
-	setToAll,
-}) => {
+const ExerciseItem = ({ item, index, deleteMe, setToAll }) => {
 	return (
 		<div style={{ marginBottom: 0 }}>
 			<div className="rowing">
@@ -582,28 +596,14 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="addBlogInputLabel">EXERCISE NAME</span>
 					<div style={{ marginTop: 10 }}>
-						<Select
-							defaultValue={item.name}
+						<input
+							className="addBlogInput inputText"
+							type={"text"}
 							onChange={(e) => {
-								console.log("value", e.value);
-								item.name = e.value;
+								item.name = e.target.value;
 							}}
-							styles={{
-								control: (baseStyles, state) => ({
-									...baseStyles,
-									// padding: "18px 24px",
-									width: 314,
-									height: 58,
-									background: "#F4F4F4",
-									borderRadius: 8,
-								}),
-							}}
-							options={listOfCategories.map((itm) => {
-								return {
-									value: itm,
-									label: itm,
-								};
-							})}
+							defaultValue={item.name}
+							// placeholder={item.name}
 						/>
 					</div>
 				</div>
@@ -613,9 +613,7 @@ const ExerciseItem = ({
 						<InputNumber
 							type={"number"}
 							onChange={(e) => {
-								if (e > -1) {
-									item.reps = e;
-								}
+								item.reps = e;
 							}}
 							placeholder={item.reps}
 							// defaultValue={item.reps}
@@ -630,9 +628,7 @@ const ExerciseItem = ({
 							min={1}
 							maxLength={20}
 							onChange={(val) => {
-								if (val > -1) {
-									item.sets = val;
-								}
+								item.sets = val;
 							}}
 							placeholder={item.sets}
 							className="inputNumberProgram inputText"
@@ -646,9 +642,7 @@ const ExerciseItem = ({
 							min={1}
 							maxLength={1000}
 							onChange={(val) => {
-								if (val > -1) {
-									item.weight = val;
-								}
+								item.weight = val;
 							}}
 							placeholder={item.weight}
 							className="inputNumberProgram inputText"
@@ -663,9 +657,7 @@ const ExerciseItem = ({
 							min={1}
 							maxLength={100000}
 							onChange={(val) => {
-								if (val > -1) {
-									item.time = val;
-								}
+								item.time = val;
 							}}
 							placeholder={item.time}
 							className="inputNumberProgram inputText"
@@ -680,9 +672,7 @@ const ExerciseItem = ({
 							min={1}
 							maxLength={100000}
 							onChange={(val) => {
-								if (val > -1) {
-									item.rest = val;
-								}
+								item.rest = val;
 							}}
 							placeholder={item.rest}
 							className="inputNumberProgram inputText"
@@ -852,65 +842,4 @@ const CustomCollapsible = (props) => {
 			)}
 		</div>
 	);
-};
-
-const SearchInput = (props) => {
-	let oldData = ["Alpha", "Beta", "Gama", "Theta"];
-	const [data, setData] = React.useState(oldData);
-	const [value, setValue] = React.useState("");
-	const handleSearch = (newValue) => {
-		if (newValue) {
-			fetch(newValue, setData);
-		} else {
-			setData([]);
-		}
-	};
-	const handleChange = (newValue) => {
-		setValue(newValue);
-	};
-	return (
-		<Select
-			showSearch
-			value={value}
-			placeholder={props.placeholder}
-			style={props.style}
-			defaultActiveFirstOption={false}
-			showArrow={false}
-			filterOption={false}
-			onSearch={handleSearch}
-			onChange={handleChange}
-			notFoundContent={null}
-			options={(data || []).map((d) => ({
-				value: d,
-				label: d,
-			}))}
-		/>
-	);
-};
-const fetch = (value, callback) => {
-	callback(
-		["Alpha", "Beta", "Gama", "Theta"].filter((item) => item.includes(value))
-	);
-	// if (timeout) {
-	//   clearTimeout(timeout);
-	//   timeout = null;
-	// }
-	// currentValue = value;
-	// const fake = () => {
-	//   const str = qs.stringify({
-	// 	code: 'utf-8',
-	// 	q: value,
-	//   });
-	//   jsonp(`https://suggest.taobao.com/sug?${str}`)
-	// 	.then((response) => response.json())
-	// 	.then((d) => {
-	// 	  if (currentValue === value) {
-	// 		const { result } = d;
-	// 		const data = result.map((item) => ({
-	// 		  value: item[0],
-	// 		  text: item[0],
-	// 		}));
-	// 		callback(data);
-	// 	  }
-	// 	});
 };

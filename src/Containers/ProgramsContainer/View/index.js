@@ -1,31 +1,37 @@
 import React from "react";
 import Typography from "../../../Components/Typography";
-
+import "./index.css";
 import {
 	Input,
 	Radio,
-	Row,
+	// Select,
 	InputNumber,
 	message,
 	Progress,
 	notification,
+	Row,
 	Col,
 } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import programSchema, { initVals } from "./Constants";
 // import SpinnerComponent from "../../../Components/SpinnerComponent";
 import { Formik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
 import DayEdit from "./DayEdit";
-import { addProgram } from "../../../Helpers/firebase";
-import "./index.css";
+import {
+	addProgram,
+	getAllPrograms,
+	updateProgram,
+} from "../../../Helpers/firebase";
 const { TextArea } = Input;
-const AddProgramContainer = (props) => {
-	const [addingUser, setAddingUser] = React.useState(false);
+const ViewProgramContainer = (props) => {
 	const navigate = useNavigate();
+	let { id } = useParams();
+	const [addingUser, setAddingUser] = React.useState(false);
+
 	const [basicDetailMedia, setBasicDetailMedia] = React.useState(null);
 	const [basicDetailMediaOneError, setBasicDetailMediaError] =
 		React.useState(false);
@@ -40,8 +46,30 @@ const AddProgramContainer = (props) => {
 	const [activeScreen, setActiveScreen] = React.useState(0);
 	const [activeItemIndex, setActiveItemIndex] = React.useState(-1);
 	const [progressPercent, setProgressPercent] = React.useState(0);
-	const [api, contextHolder] = notification.useNotification();
+	const [newinitVals, setNewinitVals] = React.useState(initVals);
 	// const handleSubmit
+	React.useEffect(() => {
+		getDetails();
+	}, []);
+	const getDetails = async () => {
+		let programsList = await getAllPrograms();
+		let foundProgram = programsList.find((itm) => itm.id === id);
+		if (foundProgram) {
+			let tempvals = { ...newinitVals };
+			tempvals.name = foundProgram.name;
+			tempvals.subTitle = foundProgram.subTitle;
+			tempvals.status = foundProgram.status;
+			tempvals.difficultyLevel = foundProgram.difficultyLevel;
+			tempvals.scheduleDescription = foundProgram.scheduleDescription;
+			tempvals.overviewDescription = foundProgram.overviewDescription;
+			setBasicDetailMedia(foundProgram.basicDetailMedia);
+			setDays(foundProgram.days);
+			setOverviewMediaOne(foundProgram.overviewMediaOne);
+			setOverviewMediaTwo(foundProgram.overviewMediaTwo);
+			setScheduleMedia(foundProgram.scheduleImage);
+			setNewinitVals(tempvals);
+		}
+	};
 
 	const addProgramToList = async (values) => {
 		// name: "",
@@ -69,6 +97,7 @@ const AddProgramContainer = (props) => {
 		setBasicDetailMediaError(false);
 		setScheduleMediaError(false);
 		setProgressPercent(25);
+		values.id = id;
 		values.days = days;
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "noimg";
 		values.overviewMediaOne = overviewMediaOne ? overviewMediaOne : "noimg";
@@ -76,11 +105,11 @@ const AddProgramContainer = (props) => {
 		values.scheduleImage = scheduleMedia ? scheduleMedia : "noimg";
 		setProgressPercent(50);
 		console.log("values", values);
-		if (await addProgram(values)) {
+		if (await updateProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Added!`,
-				description: `${values.name}  has been successfully added`,
+				message: `Successfully Updated!`,
+				description: `${values.name}  has been successfully updated`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {
@@ -91,7 +120,7 @@ const AddProgramContainer = (props) => {
 			return;
 		} else {
 			notification.error({
-				message: `Failed to add!`,
+				message: `Failed to update!`,
 				description: `Give it a try later.`,
 				placement: "topRight",
 				duration: 2,
@@ -112,41 +141,43 @@ const AddProgramContainer = (props) => {
 	};
 	return (
 		<Formik
-			initialValues={initVals}
+			initialValues={newinitVals}
 			validationSchema={programSchema}
 			onSubmit={addProgramToList}
 			enableReinitialize
 		>
-			{({ errors, touched, values, handleChange, handleBlur, handleSubmit }) =>
+			{({
+				errors,
+
+				touched,
+				values,
+				handleChange,
+				handleBlur,
+				handleSubmit,
+			}) =>
 				activeScreen === 0 ? (
 					<div className="containerForAdd">
-						{contextHolder}
 						<div className="rowing">
 							<div />
 							{addingUser ? (
 								<Progress type="circle" percent={progressPercent} />
 							) : (
 								<div className="rowing">
-									<span className="duplicateBtn">Duplicate Program</span>
-									<span className="draftBtn">Save as draft</span>
+									{/* <span
+											className="duplicateBtn"
+										>Duplicate Program</span> */}
 									<span
-										className="savebtn"
-										onClick={() => {
-											handleSubmit();
-											// if (errors) {
-											// 	console.log("errors", errors);
-											// 	api.error({
-											// 		message: "Please fill all relevant fields",
-											// 		description: "Some fields are empty!",
-											// 		onClick: () => {
-											// 			console.log("Notification Clicked!");
-											// 		},
-											// 	});
-											// }
-										}}
+										// className="duplicateBtn"
+										className="draftBtn"
+										style={{ backgroundColor: "#7D7D7D" }}
+										onClick={() => navigate(-1)}
 									>
-										Save
+										Back
 									</span>
+									{/* <span className="draftBtn">Save as draft</span>
+									<span className="savebtn" onClick={handleSubmit}>
+										Save
+									</span> */}
 								</div>
 							)}
 						</div>
@@ -167,6 +198,7 @@ const AddProgramContainer = (props) => {
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values.name}
+														disabled
 													/>
 													{errors.name && touched.name ? (
 														<Typography
@@ -191,6 +223,7 @@ const AddProgramContainer = (props) => {
 														onChange={handleChange}
 														onBlur={handleBlur}
 														value={values.subTitle}
+														disabled
 													/>
 													{errors.subTitle && touched.subTitle ? (
 														<Typography
@@ -218,6 +251,7 @@ const AddProgramContainer = (props) => {
 														onBlur={handleBlur}
 														value={values.difficultyLevel}
 														defaultValue={values.difficultyLevel}
+														disabled
 													>
 														<Row>
 															<Col xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -253,18 +287,18 @@ const AddProgramContainer = (props) => {
 															</Col>
 														</Row>
 													</Radio.Group>
+													{errors.difficultyLevel && touched.difficultyLevel ? (
+														<Typography
+															alignment="left"
+															title={errors.difficultyLevel}
+															fontFamily="Gilroy-Medium"
+															color="red"
+															type="label"
+														/>
+													) : (
+														""
+													)}
 												</div>
-												{errors.difficultyLevel && touched.difficultyLevel ? (
-													<Typography
-														alignment="left"
-														title={errors.difficultyLevel}
-														fontFamily="Gilroy-Medium"
-														color="red"
-														type="label"
-													/>
-												) : (
-													""
-												)}
 											</div>
 											<div className="flexStart mb30">
 												<span className="addBlogInputLabel">STATUS</span>
@@ -283,14 +317,11 @@ const AddProgramContainer = (props) => {
 																	: values.status === "Pending"
 																	? "#E2BB2E"
 																	: "#F4F4F4",
-															color:
-																values.status === "Active" ||
-																values.status === "Pending"
-																	? "#fff"
-																	: "#000000",
+															color: "#fff",
 															paddingRight: 50,
 															borderRight: "16px solid transparent",
 														}}
+														disabled
 													>
 														<option value="" selected={true} disabled={true}>
 															Select Status
@@ -320,12 +351,9 @@ const AddProgramContainer = (props) => {
 									style={{
 										display: "flex",
 										justifyContent: "flex-start",
-										alignItems: "flex-start",
-										flexDirection: "column",
+										alignItems: "center",
 									}}
 								>
-									{" "}
-									<span className="addBlogInputLabel">PROGRAM IMAGE</span>
 									{basicDetailMedia ? (
 										<div
 											style={{
@@ -356,7 +384,7 @@ const AddProgramContainer = (props) => {
 													cursor: "pointer",
 													border: "1px solid #000",
 												}}
-												onClick={() => setBasicDetailMedia("")}
+												// onClick={() => setBasicDetailMedia("")}
 											>
 												<CloseOutlined
 													style={{ fontSize: 8, color: primaryColor }}
@@ -432,7 +460,7 @@ const AddProgramContainer = (props) => {
 															cursor: "pointer",
 															border: "1px solid #000",
 														}}
-														onClick={() => setOverviewMediaOne("")}
+														// onClick={() => setOverviewMediaOne("")}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -474,7 +502,7 @@ const AddProgramContainer = (props) => {
 										<TextArea
 											rows={4}
 											placeholder="Enter Description"
-											maxLength={500}
+											maxLength={250}
 											showCount
 											className="addBlogInput overViewDescription"
 											name="overviewDescription"
@@ -485,6 +513,7 @@ const AddProgramContainer = (props) => {
 												width: 700,
 												height: 650,
 											}}
+											disabled
 										/>
 										{errors.overviewDescription &&
 										touched.overviewDescription ? (
@@ -549,7 +578,7 @@ const AddProgramContainer = (props) => {
 															cursor: "pointer",
 															border: "1px solid #000",
 														}}
-														onClick={() => setOverviewMediaTwo("")}
+														// onClick={() => setOverviewMediaTwo("")}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -618,7 +647,7 @@ const AddProgramContainer = (props) => {
 																		cursor: "pointer",
 																		border: "1px solid #000",
 																	}}
-																	onClick={() => setScheduleMedia("")}
+																	// onClick={() => setScheduleMedia("")}
 																>
 																	<CloseOutlined
 																		style={{ fontSize: 8, color: primaryColor }}
@@ -654,7 +683,7 @@ const AddProgramContainer = (props) => {
 												<TextArea
 													rows={4}
 													placeholder="Schedule Description"
-													maxLength={500}
+													maxLength={250}
 													showCount
 													// className="scheduleDescription"
 													// className="addBlogInput"
@@ -667,6 +696,7 @@ const AddProgramContainer = (props) => {
 														height: 400,
 														display: "flex",
 													}}
+													disabled
 												/>
 												{errors.scheduleDescription &&
 												touched.scheduleDescription ? (
@@ -693,16 +723,12 @@ const AddProgramContainer = (props) => {
 								<span className="oOfDays">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
-									<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
+									<div className="daysAdditionBtnDiv">
 										<input
 											type={"number"}
 											// defaultValue={daysNumber}
 											className="inputfont nmbrBtn"
-											onChange={(e) => {
-												if (e.target.value > -1) setDaysNumber(e.target.value);
-											}}
-											style={{ width: 50 }}
-											value={daysNumber}
+											onChange={(e) => setDaysNumber(e.target.value)}
 										/>
 										<button
 											className="dayssAdditionBtn"
@@ -718,6 +744,7 @@ const AddProgramContainer = (props) => {
 												}
 												setDays(tempDays);
 											}}
+											disabled
 										>
 											Add
 										</button>
@@ -729,6 +756,7 @@ const AddProgramContainer = (props) => {
 									data={days}
 									deleteMe={deleteMe}
 									viewDetails={viewDetails}
+									disabledOption={true}
 								/>
 							</div>
 						</div>
@@ -746,4 +774,4 @@ const AddProgramContainer = (props) => {
 	);
 };
 
-export default AddProgramContainer;
+export default ViewProgramContainer;

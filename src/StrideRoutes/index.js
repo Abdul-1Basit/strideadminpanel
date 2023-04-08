@@ -30,6 +30,9 @@ import AddProgram from "../Pages/Programs/AddProgram";
 import EditProgram from "../Pages/Programs/EditProgram";
 import AddWorkout from "../Pages/Workouts/AddWorkout";
 import EditWorkout from "../Pages/Workouts/EditWorkout";
+import CloneProgram from "../Pages/Programs/CloneProgram";
+import ViewProgram from "../Pages/Programs/CloneProgram copy";
+import EditExercise from "../Pages/Exercises/EditExercise";
 export default function StrideRoutes() {
 	return (
 		<BrowserRouter>
@@ -68,6 +71,14 @@ export default function StrideRoutes() {
 					element={
 						<AuthenticateRoute>
 							<Exercises />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/exercises/edit/:id"
+					element={
+						<AuthenticateRoute>
+							<EditExercise />
 						</AuthenticateRoute>
 					}
 				/>
@@ -164,6 +175,22 @@ export default function StrideRoutes() {
 					element={
 						<AuthenticateRoute>
 							<EditProgram />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/programs/clone/:id"
+					element={
+						<AuthenticateRoute>
+							<CloneProgram />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/programs/view/:id"
+					element={
+						<AuthenticateRoute>
+							<ViewProgram />
 						</AuthenticateRoute>
 					}
 				/>

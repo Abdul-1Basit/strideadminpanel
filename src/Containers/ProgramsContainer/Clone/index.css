@@ -208,7 +208,7 @@ margin-right: 25px;
 flex-direction: row;
 align-items: center;
 padding: 18px 16px;
-width: 150.2px;
+width: 130.2px;
 height: 58px;
 background: #F4F4F4;
 border-radius: 8px;
@@ -275,7 +275,7 @@ color: #F94F00;
 
 }
 .marginVertical50{
-    margin-top: 40px;
+    margin-top: 50px;
     margin-bottom: 50px;
 }
 .additionForNewWarmup{
@@ -289,7 +289,6 @@ background: #F4F4F4;
 border-radius: 50px;
 cursor: pointer;
 color: #F94F00;
-margin-top: 40px;
 
 }
 .radioBtnCustomized{
@@ -451,10 +450,3 @@ font-size: 18px;
 line-height: 22px;
 color: #FFFFFF;
 }
-.ant-select-selection {
-    background-color: green;
-  }
-  .firstIteration{
-    margin-bottom: 50px;
-  }
-

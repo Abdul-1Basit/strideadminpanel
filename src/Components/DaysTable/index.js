@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip, Table, Spin } from "antd";
-import { FiEdit } from "react-icons/fi";
+// import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -102,20 +102,27 @@ const DaysTable = (props) => {
 			render: (rowData) => (
 				<div className="aligningCenter">
 					<div
-						className={"centerAligner mr"}
+						className={"centerAligner mr iconPointer"}
 						onClick={() => {
+							// props.viewDetails(rowData.id);
 							props.viewDetails(rowData.id);
 						}}
 					>
-						<BiEdit color="#6BA2E1" size={20} />
+						<Tooltip title="Edit">
+							<BiEdit color="#6BA2E1" size={20} />
+						</Tooltip>
 					</div>
 					<div
-						className={"centerAligner mr"}
+						className={"centerAligner mr iconPointer"}
 						onClick={() => {
-							props.deleteMe(rowData.id);
+							props.disabledOption
+								? console.log("disabled")
+								: props.deleteMe(rowData.id);
 						}}
 					>
-						<RiDeleteBinLine color="#EF4444" size={20} />
+						<Tooltip title="Delete">
+							<RiDeleteBinLine color="#EF4444" size={20} />
+						</Tooltip>
 					</div>
 				</div>
 			),
