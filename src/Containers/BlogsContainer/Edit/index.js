@@ -97,7 +97,7 @@ const EditBlogContainer = (props) => {
 							<SpinnerComponent size={"small"} />
 						) : (
 							<div className="rowing">
-								<span className="draftBtn" onPress={() => navigate(-1)}>
+								<span className="draftBtn" onClick={() => navigate(-1)}>
 									Cancel
 								</span>
 								<span className="savebtn" onClick={handleSubmit}>
@@ -143,41 +143,35 @@ const EditBlogContainer = (props) => {
 								<div className="flexStart mb30">
 									<span className="addBlogInputLabel">Status</span>
 									<div className="flexStart" style={{ marginTop: 10 }}>
-										<Select
-											showSearch
-											// className="addBlogInput"
-											placeholder="Select status"
-											optionFilterProp="children"
-											size="large"
-											defaultValue={retrievedBlog ? retrievedBlog.status : ""}
-											onChange={(val) => {
-												values.status = val;
-											}}
+										<select
+											name="status"
+											id="category"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.status}
+											className="addBlogInput inputText"
 											style={{
-												width: 416,
-												// backgroundColor:
-												// 	values.status === "Active"
-												// 		? "#5DB135"
-												// 		: values.status === "Inactive"
-												// 		? "#E2BB2E"
-												// 		: "#fff",
+												background:
+													values.status === "Active"
+														? "#5DB135"
+														: values.status === "Pending"
+														? "#E2BB2E"
+														: "#F4F4F4",
+												color:
+													values.status === "Active" ||
+													values.status === "Pending"
+														? "#fff"
+														: "#000000",
+												paddingRight: 50,
+												borderRight: "16px solid transparent",
 											}}
-											filterOption={(input, option) =>
-												(option?.label ?? "")
-													.toLowerCase()
-													.includes(input.toLowerCase())
-											}
-											options={[
-												{
-													value: "Active",
-													label: "Active",
-												},
-												{
-													value: "Inactive",
-													label: "Inactive",
-												},
-											]}
-										/>
+										>
+											<option value="" selected={true} disabled={true}>
+												Select Status
+											</option>
+											<option value="Active">Active</option>
+											<option value="Pending">Pending</option>
+										</select>
 										{errors.status && touched.status ? (
 											<Typography
 												alignment="left"

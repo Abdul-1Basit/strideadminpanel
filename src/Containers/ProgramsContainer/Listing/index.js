@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Spin } from "antd";
+import { Table, Spin, Tooltip } from "antd";
 import Wrapper from "../../../Components/Wrapper";
 import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -65,7 +65,9 @@ const PrizeListing = (props) => {
 							props.viewThisProgram(rowData.id);
 						}}
 					>
-						<span className="label">{rowData.name}</span>
+						<Tooltip placement="top" title={"View"}>
+							<span className="label">{rowData.name}</span>
+						</Tooltip>
 					</div>
 				);
 			},
@@ -148,48 +150,56 @@ const PrizeListing = (props) => {
 			width: 120,
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
-					<div
-						className={"centerAligner"}
-						onClick={() => {
-							props.cloneThisProgram(rowData.id);
-							//console.log(rowData);
-							// props.setEditModal(true);
-						}}
-						style={{ marginRight: 10, cursor: "pointer" }}
-					>
-						<FaClone color="#2DAB22" size={20} />
-					</div>
-					<div
-						className={"centerAligner"}
-						onClick={() => {
-							props.editThisProgram(rowData.id);
-							//console.log(rowData);
-							// props.setEditModal(true);
-						}}
-						style={{ marginRight: 10, cursor: "pointer" }}
-					>
-						<FiEdit color="#0F172A" size={20} />
-					</div>
-					<div
-						className={"centerAligner"}
-						onClick={() => {
-							props.setActiveCategory(rowData);
-							props.setShowDeleteModal(true);
-						}}
-						style={{ marginRight: 10, cursor: "pointer" }}
-					>
-						<RiDeleteBinLine color="#EF4444" size={20} />
-					</div>
-					<div
-						className={"centerAligner"}
-						onClick={() => {
-							// props.setActiveCategory(rowData);
-							// props.setShowDeleteModal(true);
-						}}
-						style={{ marginRight: 10, cursor: "pointer" }}
-					>
-						<BsShareFill color="#7D7D7D" size={20} />
-					</div>
+					<Tooltip placement="topRight" title={"Clone"}>
+						<div
+							className={"centerAligner"}
+							onClick={() => {
+								props.cloneThisProgram(rowData.id);
+								//console.log(rowData);
+								// props.setEditModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<FaClone color="#2DAB22" size={20} />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Edit"}>
+						<div
+							className={"centerAligner"}
+							onClick={() => {
+								props.editThisProgram(rowData.id);
+								//console.log(rowData);
+								// props.setEditModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<FiEdit color="#0F172A" size={20} />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Delete"}>
+						<div
+							className={"centerAligner"}
+							onClick={() => {
+								props.setActiveCategory(rowData);
+								props.setShowDeleteModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<RiDeleteBinLine color="#EF4444" size={20} />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Share"}>
+						<div
+							className={"centerAligner"}
+							onClick={() => {
+								// props.setActiveCategory(rowData);
+								// props.setShowDeleteModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<BsShareFill color="#7D7D7D" size={20} />
+						</div>
+					</Tooltip>
 				</Wrapper>
 			),
 		},

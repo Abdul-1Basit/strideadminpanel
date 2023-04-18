@@ -104,5 +104,21 @@ export const listOfNavs = {
 			backgroundColor: "#1e293b",
 			content: "Manage your blogs here",
 		},
+
+		{
+			itemName: "Onboarding Screen",
+			itemLogo: <FaBloggerB size={23} />,
+			navLink: "/onboardingsetting",
+			backgroundColor: "#1e293b",
+			content: "Update Onboarding screens",
+		},
+
+		{
+			itemName: "Request Consultation",
+			itemLogo: <FaBloggerB size={23} />,
+			navLink: "/reqconsultation",
+			backgroundColor: "#1e293b",
+			content: "Manage requests here",
+		},
 	],
 };

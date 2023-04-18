@@ -345,9 +345,9 @@ const CloneProgramContainer = (props) => {
 												src={basicDetailMedia}
 												alt="UserImage"
 												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
+													width: 250,
+													height: 250,
+													borderRadius: 6,
 												}}
 											/>
 											<div
@@ -421,9 +421,9 @@ const CloneProgramContainer = (props) => {
 														src={overviewMediaOne}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -481,7 +481,7 @@ const CloneProgramContainer = (props) => {
 										<TextArea
 											rows={4}
 											placeholder="Enter Description"
-											maxLength={250}
+											maxLength={5000000000000000000000000000}
 											showCount
 											className="addBlogInput overViewDescription"
 											name="overviewDescription"
@@ -490,7 +490,7 @@ const CloneProgramContainer = (props) => {
 											value={values.overviewDescription}
 											style={{
 												width: 700,
-												height: 650,
+												height: 400,
 											}}
 										/>
 										{errors.overviewDescription &&
@@ -538,9 +538,9 @@ const CloneProgramContainer = (props) => {
 														src={overviewMediaTwo}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -590,7 +590,7 @@ const CloneProgramContainer = (props) => {
 													<div
 														style={{
 															display: "flex",
-															justifyContent: "flex-start",
+															justifyContent: "center",
 															alignItems: "center",
 														}}
 													>
@@ -606,9 +606,9 @@ const CloneProgramContainer = (props) => {
 																	src={scheduleMedia}
 																	alt="UserImage"
 																	style={{
-																		width: 156,
-																		height: 156,
-																		borderRadius: "50%",
+																		width: 250,
+																		height: 250,
+																		borderRadius: 6,
 																	}}
 																/>
 																<div
@@ -661,7 +661,7 @@ const CloneProgramContainer = (props) => {
 												<TextArea
 													rows={4}
 													placeholder="Schedule Description"
-													maxLength={250}
+													maxLength={500}
 													showCount
 													// className="scheduleDescription"
 													// className="addBlogInput"
@@ -697,7 +697,7 @@ const CloneProgramContainer = (props) => {
 								className="rowing"
 								style={{ paddingLeft: 10, paddingRight: 10 }}
 							>
-								<span className="oOfDays">Program Duration</span>
+								<span className="tableTitle">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
 									<div className="daysAdditionBtnDiv">
@@ -714,7 +714,7 @@ const CloneProgramContainer = (props) => {
 												for (let i = 0; i < daysNumber; i++) {
 													tempDays.push({
 														id: days.length + i,
-														warmpup: [],
+														warmup: [],
 														workout: [],
 														cooldown: [],
 													});

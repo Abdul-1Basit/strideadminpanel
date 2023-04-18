@@ -6,12 +6,16 @@ import { apiDeleteRequest } from "../../../Helpers/axiosRequests";
 import CustomButton from "../../../Components/CustomButton";
 import { cancelButton } from "../../CommonStyles";
 import { deleteBlog, deleteWorkout } from "../../../Helpers/firebase";
+import SpinnerComponent from "../../../Components/SpinnerComponent";
 const DeleteModal = (props) => {
+	const [loading, setLoading] = React.useState(false);
 	const deleteCategory = async () => {
 		// try{
 		// console.log(props.activeCategory)
+		setLoading(true);
 		const resp = await deleteBlog(props.activeCategory);
 		if (resp) {
+			setLoading(false);
 			props.successMessage(props.setShowDeleteModal, "delete");
 			return;
 		} else {
@@ -47,52 +51,29 @@ const DeleteModal = (props) => {
 	};
 
 	return (
-		<div
-			style={{
-				maxHeight: 150,
-				borderRadius: 8,
-				height: "100%",
-				paddingLeft: 10,
-				flex: 1,
-				display: "flex",
-				flexDirection: "column",
-			}}
-		>
-			<div>
-				<Typography
-					alignment="center"
-					title={
-						"Are you sure you want to delete " +
-						props.activeCategory.name +
-						" ?"
-					}
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/>
-			</div>
+		<div className="flexCol">
+			<span className="deleteModalHeading">Warning!</span>
+			<span className="deleteDescription">
+				Are you sure you want to delete ({props.activeCategory.name}) ?
+			</span>
 			<br />
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "row",
-					flex: 1,
-					alignItems: "flex-end",
-					justifyContent: "flex-end",
-				}}
-			>
-				<CustomButton
-					large={false}
-					title="Delete!"
-					onClick={() => deleteCategory()}
-				/>
+			<div className="rowCenter">
+				{loading ? (
+					<SpinnerComponent size="large" />
+				) : (
+					<input
+						type={"button"}
+						value={"Yes"}
+						className="deleteBtn"
+						style={{ backgroundColor: "#f94f00" }}
+						onClick={() => deleteCategory()}
+					/>
+				)}
 				<input
 					type={"button"}
-					style={cancelButton}
-					value="Cancel"
-					onClick={() => {
-						props.setShowDeleteModal(false);
-					}}
+					value={"No"}
+					className="cancelBtn"
+					onClick={() => props.setShowDeleteModal(false)}
 				/>
 			</div>
 		</div>

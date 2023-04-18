@@ -251,13 +251,13 @@ const deletePrize = async (id) => {
 
 //-----------Workouts-----------------------
 const addWorkout = async (Workout) => {
-	let { name, subtitle, basicDetailMedia, listOfExercises } = Workout;
+	let { name, subtitle, basicDetailMedia, exercises } = Workout;
 	try {
 		await addDoc(collection(db, "workouts"), {
 			name,
 			subtitle,
 			basicDetailMedia,
-			listOfExercises,
+			exercises,
 		});
 		return true;
 	} catch (err) {
@@ -276,7 +276,7 @@ const getAllWorkouts = async () => {
 	return newData;
 };
 const updateWorkout = async (workout) => {
-	let { name, subtitle, basicDetailMedia, listOfExercises } = workout;
+	let { name, subtitle, basicDetailMedia, exercises } = workout;
 
 	try {
 		//console.log("roze", prize.id);
@@ -285,7 +285,7 @@ const updateWorkout = async (workout) => {
 			name,
 			subtitle,
 			basicDetailMedia,
-			listOfExercises,
+			exercises,
 		});
 		// console.log("campign", campaign);
 		return true;
@@ -835,7 +835,59 @@ const deleteProgram = async (program) => {
 	}
 };
 //----------------------------------------------------
+//--------------------OnboardingManagement----------
+const getOnboarding = async (workout) => {
+	const querySnapshot = await getDocs(collection(db, "onboarding"));
+	let newData = [];
+	querySnapshot.forEach((doc) => {
+		let temp = doc.data();
+		temp.id = doc.id;
+		newData.push(temp);
+	});
+	return newData;
+};
+const updateOnboarding = async (onboarding) => {
+	const {
+		titleOne,
+		descriptionOne,
+		titleTwo,
+		descriptionTwo,
+		mediaOne,
+		mediaTwo,
+	} = onboarding;
 
+	try {
+		if (!onboarding.id) {
+			await addDoc(collection(db, "onboarding"), {
+				titleOne,
+				descriptionOne,
+				titleTwo,
+				descriptionTwo,
+				mediaOne,
+				mediaTwo,
+			});
+			return true;
+		}
+
+		const prodRef = await doc(db, "onboarding", onboarding.id);
+		await updateDoc(prodRef, {
+			titleOne,
+			descriptionOne,
+			titleTwo,
+			descriptionTwo,
+			mediaOne,
+			mediaTwo,
+		});
+		return true;
+	} catch (err) {
+		console.log("err", err);
+
+		console.log("err", err.message);
+		return false;
+	}
+};
+
+// --------------------------------------------------
 //-----------ImageManagement-----------------------
 const addImageToCarousel = async (Image) => {
 	try {
@@ -987,4 +1039,6 @@ export {
 	getAllPrograms,
 	updateProgram,
 	deleteProgram,
+	getOnboarding,
+	updateOnboarding,
 };

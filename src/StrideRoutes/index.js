@@ -33,6 +33,8 @@ import EditWorkout from "../Pages/Workouts/EditWorkout";
 import CloneProgram from "../Pages/Programs/CloneProgram";
 import ViewProgram from "../Pages/Programs/CloneProgram copy";
 import EditExercise from "../Pages/Exercises/EditExercise";
+import Onboarding from "../Pages/Onboarding";
+import ReqConsultation from "../Pages/ReqConsultation";
 export default function StrideRoutes() {
 	return (
 		<BrowserRouter>
@@ -49,7 +51,6 @@ export default function StrideRoutes() {
 						/>
 					);
 				})} */}
-
 				<Route
 					path="/users"
 					element={
@@ -82,6 +83,23 @@ export default function StrideRoutes() {
 						</AuthenticateRoute>
 					}
 				/>
+				<Route
+					path="/onboardingsetting"
+					element={
+						<AuthenticateRoute>
+							<Onboarding />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/reqconsultation"
+					element={
+						<AuthenticateRoute>
+							<ReqConsultation />
+						</AuthenticateRoute>
+					}
+				/>
+				ReqConsultation
 				<Route
 					path="/workouts"
 					element={

@@ -105,36 +105,48 @@ const PrizeListing = (props) => {
 			//render: () =>
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
-					<div
-						onClick={() => {
-							// navigate("/add");
-						}}
-					>
-						<AiFillEye color="#2DAB22" size={20} />
-					</div>
-					<div
-						onClick={() => {
-							navigate("/blogs/edit/" + rowData.id);
-						}}
-					>
-						<FiEdit color="#0F172A" size={20} />
-					</div>
-					<div
-						onClick={() => {
-							props.setActiveCategory(rowData);
-							props.setShowDeleteModal(true);
-						}}
-					>
-						<RiDeleteBinLine color="#EF4444" size={20} />
-					</div>
-					<div
-						onClick={() => {
-							props.setActiveCategory(rowData);
-							props.setShowDeleteModal(true);
-						}}
-					>
-						<BsShareFill color="#7D7D7D" size={20} />
-					</div>
+					{/* <Tooltip placement="topRight" title={"View"}>
+						<div
+							onClick={() => {
+								// navigate("/add");
+							}}
+							style={{ cursor: "pointer" }}
+						>
+							<AiFillEye color="#2DAB22" size={20} />
+						</div>
+					</Tooltip> */}
+					<Tooltip placement="topRight" title={"Edit"}>
+						<div
+							onClick={() => {
+								navigate("/blogs/edit/" + rowData.id);
+							}}
+							style={{ cursor: "pointer" }}
+						>
+							<FiEdit color="#0F172A" size={20} />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Delete"}>
+						<div
+							onClick={() => {
+								props.setActiveCategory(rowData);
+								props.setShowDeleteModal(true);
+							}}
+							style={{ cursor: "pointer" }}
+						>
+							<RiDeleteBinLine color="#EF4444" size={20} />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Share"}>
+						<div
+							onClick={() => {
+								props.setActiveCategory(rowData);
+								props.setShowDeleteModal(true);
+							}}
+							style={{ cursor: "pointer" }}
+						>
+							<BsShareFill color="#7D7D7D" size={20} />
+						</div>
+					</Tooltip>
 				</Wrapper>
 			),
 		},

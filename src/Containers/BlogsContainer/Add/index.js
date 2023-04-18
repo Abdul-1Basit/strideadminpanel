@@ -77,7 +77,13 @@ const AddBlogContainer = (props) => {
 							<SpinnerComponent size={"small"} />
 						) : (
 							<div className="rowing">
-								<span className="draftBtn">Save as draft</span>
+								<span
+									className="draftBtn"
+									style={{ backgroundColor: "#7D7D7D" }}
+									onClick={() => navigate(-1)}
+								>
+									Cancel
+								</span>
 								<span className="savebtn" onClick={handleSubmit}>
 									Save
 								</span>
@@ -120,7 +126,49 @@ const AddBlogContainer = (props) => {
 								</div>
 								<div className="flexStart mb30">
 									<span className="addBlogInputLabel">Status</span>
-									<div className="flexStart" style={{ marginTop: 10 }}>
+									<div style={{ marginTop: 10 }}>
+										<select
+											name="status"
+											id="category"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.status}
+											className="addBlogInput inputText"
+											style={{
+												background:
+													values.status === "Active"
+														? "#5DB135"
+														: values.status === "Pending"
+														? "#E2BB2E"
+														: "#F4F4F4",
+												color:
+													values.status === "Active" ||
+													values.status === "Pending"
+														? "#fff"
+														: "#000000",
+												paddingRight: 50,
+												borderRight: "16px solid transparent",
+											}}
+										>
+											<option value="" selected={true} disabled={true}>
+												Select Status
+											</option>
+											<option value="Active">Active</option>
+											<option value="Pending">Pending</option>
+										</select>
+										{errors.status && touched.status ? (
+											<Typography
+												alignment="left"
+												title={errors.status}
+												fontFamily="Gilroy-Medium"
+												color="red"
+												type="label"
+											/>
+										) : (
+											<></>
+										)}
+									</div>
+									{/* <div className="flexStart" style={{ marginTop: 10 }}>
 										<Select
 											showSearch
 											// className="addBlogInput"
@@ -166,7 +214,7 @@ const AddBlogContainer = (props) => {
 										) : (
 											""
 										)}
-									</div>
+									</div> */}
 								</div>
 							</div>
 							<div>

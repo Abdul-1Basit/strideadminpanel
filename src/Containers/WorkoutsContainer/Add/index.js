@@ -1,29 +1,30 @@
 import React from "react";
 import Typography from "../../../Components/Typography";
 
-import { Input, Row, message, Progress, notification, Col } from "antd";
+import { Row, message, Progress, notification, Col } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import programSchema, { initVals } from "./Constants";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
-import AudioDropZone from "../../../Components/AudioDropZone";
 import { primaryColor } from "../../../Constants";
 import { addWorkout } from "../../../Helpers/firebase";
-import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import "./index.css";
-import { AiFillDelete, AiFillEye } from "react-icons/ai";
-const { TextArea } = Input;
+import DayEdit from "./DayEdit";
 const AddWorkoutContainer = (props) => {
 	const [addingUser, setAddingUser] = React.useState(false);
 	const navigate = useNavigate();
 	const [basicDetailMedia, setBasicDetailMedia] = React.useState(null);
 	const [basicDetailMediaOneError, setBasicDetailMediaError] =
 		React.useState(false);
-	const [noOfExercises, setNoOfExercises] = React.useState(0);
-	const [listOfExercises, setListOfExercises] = React.useState([]);
 	const [progressPercent, setProgressPercent] = React.useState(0);
-
+	const [data, setData] = React.useState({
+		id: 0,
+		warmup: [],
+		workout: [],
+		cooldown: [],
+	});
+	const [prompted, setPrompted] = React.useState(false);
 	// const handleSubmit
 
 	const addProgramToList = async (values) => {
@@ -33,10 +34,26 @@ const AddWorkoutContainer = (props) => {
 			return;
 		}
 		setBasicDetailMediaError(false);
+		if (
+			!prompted &&
+			data.warmup.length === 0 &&
+			data.workout.length === 0 &&
+			data.cooldown.length === 0
+		) {
+			setPrompted(true);
+			notification.warning({
+				message: `Save all changes made to workout!`,
+				description: `If you have made any changes to exercises please save them first!`,
+				placement: "topRight",
+				duration: 2,
+				onClose: function () {},
+			});
+			return;
+		}
 		setAddingUser(true);
 		setProgressPercent(25);
-		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "noimg";
-		values.listOfExercises = listOfExercises;
+		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "";
+		values.exercises = data;
 		setProgressPercent(50);
 		console.log("values", values);
 		if (await addWorkout(values)) {
@@ -65,25 +82,6 @@ const AddWorkoutContainer = (props) => {
 		}
 	};
 
-	const deleteMe = (id) => {
-		let newDays = [...listOfExercises];
-		newDays = newDays.filter((item) => item.id !== id);
-		setListOfExercises(newDays);
-	};
-	const changeListing = () => {
-		let oldList = [...listOfExercises];
-		for (let i = 0; i < noOfExercises; i++) {
-			oldList.push({
-				id: oldList.length,
-				targetArea: "",
-				instructions: "",
-				targetArea: "",
-				video: "",
-				audio: "",
-			});
-		}
-		setListOfExercises(oldList);
-	};
 	return (
 		<Formik
 			initialValues={initVals}
@@ -107,8 +105,15 @@ const AddWorkoutContainer = (props) => {
 							<Progress type="circle" percent={progressPercent} />
 						) : (
 							<div className="rowing">
-								<span className="duplicateBtn">Duplicate Workout</span>
-								<span className="draftBtn">Save as draft</span>
+								{/* <span className="duplicateBtn">Duplicate Workout</span>
+								<span className="draftBtn">Save as draft</span> */}
+								<span
+									className="draftBtn"
+									style={{ backgroundColor: "#7D7D7D" }}
+									onClick={() => navigate(-1)}
+								>
+									Cancel
+								</span>
 								<span className="savebtn" onClick={handleSubmit}>
 									Save
 								</span>
@@ -117,7 +122,7 @@ const AddWorkoutContainer = (props) => {
 					</div>
 
 					<div className="cardAdditionBlog">
-						<Row>
+						<Row style={{ paddingLeft: 47 }}>
 							<Col xs={24} sm={24} md={24} lg={12} xl={12}>
 								<span className="tableTitle">Basic Detail</span>
 							</Col>
@@ -126,7 +131,7 @@ const AddWorkoutContainer = (props) => {
 							</Col>
 						</Row>
 						<div className="barVertical" />
-						<div>
+						<div style={{ paddingLeft: 47 }}>
 							<Row>
 								<Col xs={24} sm={24} md={24} lg={12} xl={12}>
 									<div className="colStart">
@@ -248,7 +253,9 @@ const AddWorkoutContainer = (props) => {
 								</div>
 							</Row>
 						</div>
-						<div className="alignMeStart">
+						<br />
+						<br /> <br />
+						{/* <div className="alignMeStart">
 							<span className="tableTitle">Exercises</span>{" "}
 							<span className="secondTitle">No. of Exercises</span>
 							<div className="rowing ">
@@ -269,11 +276,12 @@ const AddWorkoutContainer = (props) => {
 									</button>
 								</div>
 							</div>
-						</div>
-						<div className="barVertical" />
-						{listOfExercises.map((item, index) => (
+						</div> */}
+						{/* <div className="barVertical" /> */}
+						{/* {listOfExercises.map((item, index) => (
 							<ExerciseItem key={index} item={item} deleteMe={deleteMe} />
-						))}
+						))} */}
+						<DayEdit {...{ data, setData, prompted }} />
 					</div>
 				</div>
 			)}
@@ -281,231 +289,231 @@ const AddWorkoutContainer = (props) => {
 	);
 };
 
-const ExerciseItem = (props) => {
-	const [visible, setVisible] = React.useState(true);
-	const setVideoValue = (item) => {
-		props.item.video = item;
-	};
-	const setAudioValue = (item) => {
-		props.item.audio = item;
-	};
-	return (
-		<div>
-			<div className="rowing">
-				<div className="alignMeStart">
-					<span
-						className="tableTitle"
-						style={{ fontWeight: 600, color: "#222222" }}
-					>
-						Exercise # 1
-					</span>
-					<span>
-						<AiFillEye
-							size={25}
-							style={{
-								color: "#2DAB22",
-								marginLeft: 15,
-								marginRight: 15,
-							}}
-						/>
-					</span>
-					<span onClick={() => props.deleteMe(props.item.id)}>
-						<AiFillDelete
-							size={22}
-							style={{ color: "#D30E0E", marginRight: 15 }}
-						/>
-					</span>
-					<span className="setToAllText">set to all</span>
-				</div>
-				<span onClick={() => setVisible(!visible)}>
-					{visible ? (
-						<SlArrowUp
-							color={"#D30E0E"}
-							size={22}
-							style={{ fontWeight: "bold" }}
-						/>
-					) : (
-						<SlArrowDown
-							color={"#D30E0E"}
-							size={22}
-							style={{ fontWeight: "bold" }}
-						/>
-					)}
-				</span>
-			</div>
-			{visible && (
-				<div style={{ marginTop: 42 }}>
-					<Row>
-						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel">Exercise Name</span>
-								<div style={{ marginTop: 10 }}>
-									<input
-										className="addBlogInput inputText"
-										type={"text"}
-										onChange={(e) => {
-											props.item.name = e.target.value;
-										}}
-										// value={props.item.name}
-									/>
-								</div>
-							</div>
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel">Instructions</span>
-								<div style={{ marginTop: 10 }}>
-									<TextArea
-										className="addBlogInput inputText"
-										rows={12}
-										placeholder="Please enter instructions for exercise"
-										onChange={(e) => {
-											props.item.instructions = e.target.value;
-										}}
-										allowClear
-									/>
-								</div>
-							</div>
-						</Col>
-						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel">Exercise Video</span>
-								<div
-									style={{
-										display: "flex",
-										justifyContent: "flex-start",
-										alignItems: "center",
-										marginTop: 10,
-									}}
-								>
-									{props.item.video ? (
-										<div
-											style={{
-												display: "flex",
-												justifyContent: "center",
-												alignItems: "center",
-											}}
-										>
-											<img
-												src={props.item.video}
-												alt="UserImage"
-												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
-												}}
-											/>
-											<div
-												className="centerAligner"
-												style={{
-													width: 15,
-													height: 15,
-													borderRadius: "50%",
-													backgroundColor: "#fff",
-													marginLeft: -10,
-													marginTop: -20,
-													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-													cursor: "pointer",
-													border: "1px solid #000",
-												}}
-												onClick={() => setVideoValue("")}
-											>
-												<CloseOutlined
-													style={{ fontSize: 8, color: primaryColor }}
-												/>
-											</div>
-										</div>
-									) : (
-										<EmployeeDropZone
-											{...{
-												setImageUrl: setVideoValue,
-												small: false,
-											}}
-										/>
-									)}
-								</div>
-							</div>
-							<div className="flexStart mb30">
-								<span className="addBlogInputLabel ">Exercise Audio</span>
-								<div
-									style={{
-										display: "flex",
-										justifyContent: "flex-start",
-										alignItems: "center",
-										marginTop: 10,
-									}}
-								>
-									{props.item.audio ? (
-										<div
-											style={{
-												display: "flex",
-												justifyContent: "center",
-												alignItems: "center",
-											}}
-										>
-											<img
-												src={props.item.audio}
-												alt="UserImage"
-												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
-												}}
-											/>
-											<div
-												className="centerAligner"
-												style={{
-													width: 15,
-													height: 15,
-													borderRadius: "50%",
-													backgroundColor: "#fff",
-													marginLeft: -10,
-													marginTop: -20,
-													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-													cursor: "pointer",
-													border: "1px solid #000",
-												}}
-												onClick={() => setAudioValue("")}
-											>
-												<CloseOutlined
-													style={{ fontSize: 8, color: primaryColor }}
-												/>
-											</div>
-										</div>
-									) : (
-										<AudioDropZone
-											{...{
-												setImageUrl: setAudioValue,
-												small: false,
-											}}
-										/>
-									)}
-								</div>
-							</div>
-						</Col>
-					</Row>
-					<div className="flexStart mb30" style={{ width: "100%" }}>
-						<span className="addBlogInputLabel">Target Area</span>
-						<div style={{ marginTop: 10 }}>
-							<TextArea
-								className="inputText textAreaGrey"
-								rows={4}
-								cols={20}
-								placeholder="Please enter Target Area"
-								onChange={(e) => {
-									props.item.targetArea = e.target.value;
-								}}
-								// allowClear
-								// style={{
-								// 	width: "85%",
-								// 	backgroundColor: "#F4F4F4",
-								// 	borderRadius: 8,
-								// }}
-							/>
-						</div>
-					</div>
-				</div>
-			)}
-		</div>
-	);
-};
+// const ExerciseItem = (props) => {
+// 	const [visible, setVisible] = React.useState(true);
+// 	const setVideoValue = (item) => {
+// 		props.item.video = item;
+// 	};
+// 	const setAudioValue = (item) => {
+// 		props.item.audio = item;
+// 	};
+// 	return (
+// 		<div>
+// 			<div className="rowing">
+// 				<div className="alignMeStart">
+// 					<span
+// 						className="tableTitle"
+// 						style={{ fontWeight: 600, color: "#222222" }}
+// 					>
+// 						Exercise # 1
+// 					</span>
+// 					<span>
+// 						<AiFillEye
+// 							size={25}
+// 							style={{
+// 								color: "#2DAB22",
+// 								marginLeft: 15,
+// 								marginRight: 15,
+// 							}}
+// 						/>
+// 					</span>
+// 					<span onClick={() => props.deleteMe(props.item.id)}>
+// 						<AiFillDelete
+// 							size={22}
+// 							style={{ color: "#D30E0E", marginRight: 15 }}
+// 						/>
+// 					</span>
+// 					<span className="setToAllText">set to all</span>
+// 				</div>
+// 				<span onClick={() => setVisible(!visible)}>
+// 					{visible ? (
+// 						<SlArrowUp
+// 							color={"#D30E0E"}
+// 							size={22}
+// 							style={{ fontWeight: "bold" }}
+// 						/>
+// 					) : (
+// 						<SlArrowDown
+// 							color={"#D30E0E"}
+// 							size={22}
+// 							style={{ fontWeight: "bold" }}
+// 						/>
+// 					)}
+// 				</span>
+// 			</div>
+// 			{visible && (
+// 				<div style={{ marginTop: 42 }}>
+// 					<Row>
+// 						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+// 							<div className="flexStart mb30">
+// 								<span className="addBlogInputLabel">Exercise Name</span>
+// 								<div style={{ marginTop: 10 }}>
+// 									<input
+// 										className="addBlogInput inputText"
+// 										type={"text"}
+// 										onChange={(e) => {
+// 											props.item.name = e.target.value;
+// 										}}
+// 										// value={props.item.name}
+// 									/>
+// 								</div>
+// 							</div>
+// 							<div className="flexStart mb30">
+// 								<span className="addBlogInputLabel">Instructions</span>
+// 								<div style={{ marginTop: 10 }}>
+// 									<TextArea
+// 										className="addBlogInput inputText"
+// 										rows={12}
+// 										placeholder="Please enter instructions for exercise"
+// 										onChange={(e) => {
+// 											props.item.instructions = e.target.value;
+// 										}}
+// 										allowClear
+// 									/>
+// 								</div>
+// 							</div>
+// 						</Col>
+// 						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+// 							<div className="flexStart mb30">
+// 								<span className="addBlogInputLabel">Exercise Video</span>
+// 								<div
+// 									style={{
+// 										display: "flex",
+// 										justifyContent: "flex-start",
+// 										alignItems: "center",
+// 										marginTop: 10,
+// 									}}
+// 								>
+// 									{props.item.video ? (
+// 										<div
+// 											style={{
+// 												display: "flex",
+// 												justifyContent: "center",
+// 												alignItems: "center",
+// 											}}
+// 										>
+// 											<img
+// 												src={props.item.video}
+// 												alt="UserImage"
+// 												style={{
+// 													width: 156,
+// 													height: 156,
+// 													borderRadius: "50%",
+// 												}}
+// 											/>
+// 											<div
+// 												className="centerAligner"
+// 												style={{
+// 													width: 15,
+// 													height: 15,
+// 													borderRadius: "50%",
+// 													backgroundColor: "#fff",
+// 													marginLeft: -10,
+// 													marginTop: -20,
+// 													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+// 													cursor: "pointer",
+// 													border: "1px solid #000",
+// 												}}
+// 												onClick={() => setVideoValue("")}
+// 											>
+// 												<CloseOutlined
+// 													style={{ fontSize: 8, color: primaryColor }}
+// 												/>
+// 											</div>
+// 										</div>
+// 									) : (
+// 										<EmployeeDropZone
+// 											{...{
+// 												setImageUrl: setVideoValue,
+// 												small: false,
+// 											}}
+// 										/>
+// 									)}
+// 								</div>
+// 							</div>
+// 							<div className="flexStart mb30">
+// 								<span className="addBlogInputLabel ">Exercise Audio</span>
+// 								<div
+// 									style={{
+// 										display: "flex",
+// 										justifyContent: "flex-start",
+// 										alignItems: "center",
+// 										marginTop: 10,
+// 									}}
+// 								>
+// 									{props.item.audio ? (
+// 										<div
+// 											style={{
+// 												display: "flex",
+// 												justifyContent: "center",
+// 												alignItems: "center",
+// 											}}
+// 										>
+// 											<img
+// 												src={props.item.audio}
+// 												alt="UserImage"
+// 												style={{
+// 													width: 156,
+// 													height: 156,
+// 													borderRadius: "50%",
+// 												}}
+// 											/>
+// 											<div
+// 												className="centerAligner"
+// 												style={{
+// 													width: 15,
+// 													height: 15,
+// 													borderRadius: "50%",
+// 													backgroundColor: "#fff",
+// 													marginLeft: -10,
+// 													marginTop: -20,
+// 													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+// 													cursor: "pointer",
+// 													border: "1px solid #000",
+// 												}}
+// 												onClick={() => setAudioValue("")}
+// 											>
+// 												<CloseOutlined
+// 													style={{ fontSize: 8, color: primaryColor }}
+// 												/>
+// 											</div>
+// 										</div>
+// 									) : (
+// 										<AudioDropZone
+// 											{...{
+// 												setImageUrl: setAudioValue,
+// 												small: false,
+// 											}}
+// 										/>
+// 									)}
+// 								</div>
+// 							</div>
+// 						</Col>
+// 					</Row>
+// 					<div className="flexStart mb30" style={{ width: "100%" }}>
+// 						<span className="addBlogInputLabel">Target Area</span>
+// 						<div style={{ marginTop: 10 }}>
+// 							<TextArea
+// 								className="inputText textAreaGrey"
+// 								rows={4}
+// 								cols={20}
+// 								placeholder="Please enter Target Area"
+// 								onChange={(e) => {
+// 									props.item.targetArea = e.target.value;
+// 								}}
+// 								// allowClear
+// 								// style={{
+// 								// 	width: "85%",
+// 								// 	backgroundColor: "#F4F4F4",
+// 								// 	borderRadius: 8,
+// 								// }}
+// 							/>
+// 						</div>
+// 					</div>
+// 				</div>
+// 			)}
+// 		</div>
+// 	);
+// };
 
 export default AddWorkoutContainer;

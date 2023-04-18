@@ -1046,3 +1046,24 @@ text-decoration-line: underline;
 color: #F94F00;
 cursor: pointer;
 }
+.mediaSettings{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin-left: -10px;
+    margin-top: -20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+    border: 1px solid #000;
+  
+}
+.userImgStyling{
+    width: 250px;
+    height: 250px;
+    border-radius: 6;
+  
+}
+.mt10{
+  margin-top: 10px;
+}

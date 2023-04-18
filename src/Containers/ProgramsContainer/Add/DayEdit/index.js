@@ -583,9 +583,9 @@ const ExerciseItem = ({
 					<span className="addBlogInputLabel">EXERCISE NAME</span>
 					<div style={{ marginTop: 10 }}>
 						<Select
+							defaultInputValue={item.name}
 							defaultValue={item.name}
 							onChange={(e) => {
-								console.log("value", e.value);
 								item.name = e.value;
 							}}
 							styles={{
@@ -612,14 +612,16 @@ const ExerciseItem = ({
 					<div style={{ marginTop: 10 }}>
 						<InputNumber
 							type={"number"}
+							min={0}
 							onChange={(e) => {
 								if (e > -1) {
 									item.reps = e;
 								}
 							}}
+							// value={item.reps}
 							placeholder={item.reps}
 							// defaultValue={item.reps}
-							className="inputNumberProgram inputText"
+							className="inputNumberProgram inputText newNumber"
 						/>
 					</div>
 				</div>
@@ -627,7 +629,7 @@ const ExerciseItem = ({
 					<span className="addBlogInputLabel">Sets</span>
 					<div style={{ marginTop: 10 }}>
 						<InputNumber
-							min={1}
+							min={0}
 							maxLength={20}
 							onChange={(val) => {
 								if (val > -1) {
@@ -643,7 +645,7 @@ const ExerciseItem = ({
 					<span className="addBlogInputLabel">Weights</span>
 					<div style={{ marginTop: 10 }} className="colCenteral">
 						<InputNumber
-							min={1}
+							min={0}
 							maxLength={1000}
 							onChange={(val) => {
 								if (val > -1) {
@@ -660,7 +662,7 @@ const ExerciseItem = ({
 					<span className="addBlogInputLabel">Time</span>
 					<div style={{ marginTop: 10 }} className="colCenteral">
 						<InputNumber
-							min={1}
+							min={0}
 							maxLength={100000}
 							onChange={(val) => {
 								if (val > -1) {
@@ -677,7 +679,7 @@ const ExerciseItem = ({
 					<span className="addBlogInputLabel">Rest</span>
 					<div style={{ marginTop: 10 }} className="colCenteral">
 						<InputNumber
-							min={1}
+							min={0}
 							maxLength={100000}
 							onChange={(val) => {
 								if (val > -1) {
@@ -687,6 +689,7 @@ const ExerciseItem = ({
 							placeholder={item.rest}
 							className="inputNumberProgram inputText"
 						/>
+						<span>(sec)</span>
 					</div>
 				</div>
 			</div>

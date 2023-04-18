@@ -458,3 +458,9 @@ color: #FFFFFF;
     margin-bottom: 50px;
   }
 
+  .newNumberinput::-webkit-inner-spin-button, 
+  .newNumberinput::-webkit-outer-spin-button {  
+  
+     opacity: 1;
+  
+  }

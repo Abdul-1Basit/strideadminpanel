@@ -102,7 +102,7 @@ const BlogsContainer = (props) => {
 						}}
 					/>
 				</Modal>
-
+*/}
 				<Modal
 					visible={showDeleteModal}
 					title=""
@@ -124,7 +124,7 @@ const BlogsContainer = (props) => {
 							}}
 						/>
 					}
-				</Modal> */}
+				</Modal>
 			</div>
 			<div
 				className="rowing"

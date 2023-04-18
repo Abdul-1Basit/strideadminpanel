@@ -127,8 +127,14 @@ const AddProgramContainer = (props) => {
 								<Progress type="circle" percent={progressPercent} />
 							) : (
 								<div className="rowing">
-									<span className="duplicateBtn">Duplicate Program</span>
-									<span className="draftBtn">Save as draft</span>
+									{/* <span className="duplicateBtn">Duplicate Program</span> */}
+									<span
+										className="draftBtn"
+										style={{ backgroundColor: "#7D7D7D" }}
+										onClick={() => navigate(-1)}
+									>
+										Cancel
+									</span>
 									<span
 										className="savebtn"
 										onClick={() => {
@@ -338,9 +344,9 @@ const AddProgramContainer = (props) => {
 												src={basicDetailMedia}
 												alt="UserImage"
 												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
+													width: 250,
+													height: 250,
+													borderRadius: 6,
 												}}
 											/>
 											<div
@@ -414,9 +420,9 @@ const AddProgramContainer = (props) => {
 														src={overviewMediaOne}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -531,9 +537,9 @@ const AddProgramContainer = (props) => {
 														src={overviewMediaTwo}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -599,9 +605,9 @@ const AddProgramContainer = (props) => {
 																	src={scheduleMedia}
 																	alt="UserImage"
 																	style={{
-																		width: 156,
-																		height: 156,
-																		borderRadius: "50%",
+																		width: 250,
+																		height: 250,
+																		borderRadius: 6,
 																	}}
 																/>
 																<div
@@ -690,7 +696,7 @@ const AddProgramContainer = (props) => {
 								className="rowing"
 								style={{ paddingLeft: 10, paddingRight: 10 }}
 							>
-								<span className="oOfDays">Program Duration</span>
+								<span className="tableTitle">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
 									<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
@@ -711,7 +717,7 @@ const AddProgramContainer = (props) => {
 												for (let i = 0; i < daysNumber; i++) {
 													tempDays.push({
 														id: days.length + i,
-														warmpup: [],
+														warmup: [],
 														workout: [],
 														cooldown: [],
 													});

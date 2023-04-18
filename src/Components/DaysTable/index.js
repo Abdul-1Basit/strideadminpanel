@@ -33,7 +33,7 @@ const DaysTable = (props) => {
 			},
 		},
 		{
-			title: "WARMUP",
+			title: "WARM UP",
 			width: 190,
 			align: "center",
 			render: (rowData) => {

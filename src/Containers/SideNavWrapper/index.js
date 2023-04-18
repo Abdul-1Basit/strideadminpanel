@@ -103,7 +103,7 @@ const SideNavWrapper = (props) => {
 							>
 								<img
 									src={"/logo192.png"}
-									alt="Classy Small Logo"
+									alt="Stride Gym Small Logo"
 									onClick={() => navigateToDashboard()}
 									style={{
 										width: "100%",
@@ -123,7 +123,7 @@ const SideNavWrapper = (props) => {
 								<img
 									src={"/newUrl.png"}
 									onClick={() => navigateToDashboard()}
-									alt="Classy Logo"
+									alt="Stride Gym Logo"
 									style={{
 										width: "100%",
 										maxWidth: 180,

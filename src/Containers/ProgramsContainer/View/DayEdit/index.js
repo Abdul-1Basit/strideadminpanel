@@ -677,6 +677,7 @@ const ExerciseItem = ({ item, index, deleteMe, setToAll }) => {
 							placeholder={item.rest}
 							className="inputNumberProgram inputText"
 						/>
+						<span>(sec)</span>
 					</div>
 				</div>
 			</div>

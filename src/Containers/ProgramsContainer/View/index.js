@@ -366,9 +366,9 @@ const ViewProgramContainer = (props) => {
 												src={basicDetailMedia}
 												alt="UserImage"
 												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
+													width: 250,
+													height: 250,
+													borderRadius: 6,
 												}}
 											/>
 											<div
@@ -442,9 +442,9 @@ const ViewProgramContainer = (props) => {
 														src={overviewMediaOne}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -560,9 +560,9 @@ const ViewProgramContainer = (props) => {
 														src={overviewMediaTwo}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -628,9 +628,9 @@ const ViewProgramContainer = (props) => {
 																	src={scheduleMedia}
 																	alt="UserImage"
 																	style={{
-																		width: 156,
-																		height: 156,
-																		borderRadius: "50%",
+																		width: 250,
+																		height: 250,
+																		borderRadius: 6,
 																	}}
 																/>
 																<div

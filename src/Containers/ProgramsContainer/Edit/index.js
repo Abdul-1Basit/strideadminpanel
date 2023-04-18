@@ -362,9 +362,9 @@ const EditProgramContainer = (props) => {
 												src={basicDetailMedia}
 												alt="UserImage"
 												style={{
-													width: 156,
-													height: 156,
-													borderRadius: "50%",
+													width: 250,
+													height: 250,
+													borderRadius: 6,
 												}}
 											/>
 											<div
@@ -438,9 +438,9 @@ const EditProgramContainer = (props) => {
 														src={overviewMediaOne}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -498,7 +498,7 @@ const EditProgramContainer = (props) => {
 										<TextArea
 											rows={4}
 											placeholder="Enter Description"
-											maxLength={250}
+											maxLength={500}
 											showCount
 											className="addBlogInput overViewDescription"
 											name="overviewDescription"
@@ -555,9 +555,9 @@ const EditProgramContainer = (props) => {
 														src={overviewMediaTwo}
 														alt="UserImage"
 														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
+															width: 250,
+															height: 250,
+															borderRadius: 6,
 														}}
 													/>
 													<div
@@ -599,7 +599,18 @@ const EditProgramContainer = (props) => {
 							<div className="barVertical" />
 							<div>
 								<Row>
-									<Col xs={24} sm={24} md={24} lg={10} xl={10}>
+									<Col
+										xs={24}
+										sm={24}
+										md={24}
+										lg={10}
+										xl={10}
+										style={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "left",
+										}}
+									>
 										<div className="flexStart mb30">
 											<span className="addBlogInputLabel">DIFFICULTY</span>
 											<div style={{ marginTop: 10 }}>
@@ -623,9 +634,9 @@ const EditProgramContainer = (props) => {
 																	src={scheduleMedia}
 																	alt="UserImage"
 																	style={{
-																		width: 156,
-																		height: 156,
-																		borderRadius: "50%",
+																		width: 250,
+																		height: 250,
+																		borderRadius: 6,
 																	}}
 																/>
 																<div
@@ -678,7 +689,7 @@ const EditProgramContainer = (props) => {
 												<TextArea
 													rows={4}
 													placeholder="Schedule Description"
-													maxLength={250}
+													maxLength={500}
 													showCount
 													// className="scheduleDescription"
 													// className="addBlogInput"
@@ -714,7 +725,7 @@ const EditProgramContainer = (props) => {
 								className="rowing"
 								style={{ paddingLeft: 10, paddingRight: 10 }}
 							>
-								<span className="oOfDays">Program Duration</span>
+								<span className="tableTitle">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
 									<div className="daysAdditionBtnDiv">
@@ -731,7 +742,7 @@ const EditProgramContainer = (props) => {
 												for (let i = 0; i < daysNumber; i++) {
 													tempDays.push({
 														id: days.length + i,
-														warmpup: [],
+														warmup: [],
 														workout: [],
 														cooldown: [],
 													});

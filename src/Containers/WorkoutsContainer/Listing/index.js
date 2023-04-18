@@ -87,7 +87,16 @@ const PrizeListing = (props) => {
 							justifyContent: "flex-start",
 						}}
 					>
-						<span className="label">{rowData.listOfExercises.length}</span>
+						<span className="label">
+							{rowData.exercises
+								? rowData.exercises.warmup.length +
+								  " warmup, " +
+								  rowData.exercises.workout.length +
+								  " workout, " +
+								  rowData.exercises.cooldown.length +
+								  " cooldown "
+								: ""}
+						</span>
 					</div>
 				);
 			},
