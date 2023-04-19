@@ -1,20 +1,14 @@
 import * as Yup from "yup";
 const CategorySchema = Yup.object().shape({
-	name: Yup.string()
-		.min(2, "Too Short!")
-		.max(50, "Too Long!")
-		.required("Exercise name is required"),
-	category: Yup.string().required("Category are required"),
-	instructions: Yup.string().required("Instructions are required"),
-	targetArea: Yup.string().required("Target Area are required"),
-	status: Yup.string().required("Status is required"),
+	name: Yup.string().notRequired(),
+	catesubjectgory: Yup.string().notRequired(),
+	description: Yup.string().notRequired(),
+	reply: Yup.string().required("Reply is required"),
 });
 export const initVals = {
-	// subCategoryId:1,
 	name: "",
-	category: "",
-	status: "",
-	instructions: "",
-	targetArea: "",
+	subject: "",
+	description: "",
+	reply: "",
 };
 export default CategorySchema;

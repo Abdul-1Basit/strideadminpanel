@@ -8,3 +8,8 @@ align-items: center;
 height: 25px;
 border-radius: 50px;
 }
+.pNameUnderline{
+    text-decoration-line: underline;
+  color: #F94F00;
+  cursor: pointer;
+  }

@@ -1,28 +1,11 @@
-import {
-	MdSpaceDashboard,
-	// MdShoppingCart,
-	// MdList,
-	// MdDashboardCustomize,
-	// MdSupervisorAccount,
-} from "react-icons/md";
-// import {
-// 	BsFillGiftFill, //, BsImages
-// } from "react-icons/bs";
 import { AiFillHome } from "react-icons/ai";
-import {
-	FaClipboardList,
-	FaBoxOpen,
-	FaBloggerB,
-	FaDumbbell, //FaUsers
-} from "react-icons/fa";
+import { FaBoxOpen, FaBloggerB, FaDumbbell } from "react-icons/fa";
 import { RiMessage2Fill } from "react-icons/ri";
-// import { ImDrawer } from "react-icons/im";
-import { GoProject } from "react-icons/go";
-import { GrYoga } from "react-icons/gr";
 import { FiUsers } from "react-icons/fi";
 import { GiWeightLiftingUp, GiPerson } from "react-icons/gi";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import { TbUnlink } from "react-icons/tb";
+
 export const listOfNavs = {
 	one: [
 		{
@@ -115,7 +98,7 @@ export const listOfNavs = {
 
 		{
 			itemName: "Request Consultation",
-			itemLogo: <FaBloggerB size={23} />,
+			itemLogo: <img src="/iconArrpw.png" style={{ width: 30, height: 30 }} />,
 			navLink: "/reqconsultation",
 			backgroundColor: "#1e293b",
 			content: "Manage requests here",

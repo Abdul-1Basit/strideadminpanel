@@ -1,20 +1,18 @@
 import React from "react";
-import { Tooltip, Table, Spin } from "antd";
-import Wrapper from "../../../Components/Wrapper";
-import { FiEdit } from "react-icons/fi";
+import { Table, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
-// import { RiDeleteBinLine } from "react-icons/ri";
-import { AiTwotoneDelete } from "react-icons/ai";
-import { FaRegEdit } from "react-icons/fa";
 const PrizeListing = (props) => {
 	const columns = [
 		{
 			title: "REQ ID",
 			render: (rowData) => {
 				return (
-					<div style={{ width: 160 }}>
-						<span className="label">{rowData.id}</span>
+					<div
+						style={{ width: 100 }}
+						onClick={() => props.editThisProgram(rowData.id)}
+					>
+						<span className="label pNameUnderline">{rowData.id}</span>
 					</div>
 				);
 			},
@@ -23,7 +21,7 @@ const PrizeListing = (props) => {
 			title: "NAME",
 			render: (rowData) => {
 				return (
-					<div style={{ width: 140 }}>
+					<div style={{ width: 100 }}>
 						<span className="label">{rowData.name}</span>
 					</div>
 				);
@@ -47,13 +45,7 @@ const PrizeListing = (props) => {
 			title: "DESCRIPTION",
 			render: (rowData) => {
 				return (
-					<div
-						style={
-							{
-								// width: 140,
-							}
-						}
-					>
+					<div>
 						<span className="label">{rowData.description}</span>
 					</div>
 				);
@@ -82,18 +74,7 @@ const PrizeListing = (props) => {
 					<Spin indicator={antIcon} />
 				</div>
 			) : (
-				<Table
-					columns={columns}
-					dataSource={[
-						{
-							id: "AX-125",
-							name: "Bernard Walsh",
-							email: "Carmine5@yahoo.com",
-							description:
-								"Assumenda enim dolor et ratione. Sit voluptatem accusantium num Assumenda enim dolor et ratione. Sit voluptatem accusantium num",
-						},
-					]}
-				/>
+				<Table columns={columns} dataSource={props.campaignListing} />
 			)}
 		</div>
 	);

@@ -48,13 +48,6 @@ const ProductCategorySearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				{/* <Typography
-					alignment="left"
-					title="List of Employees"
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/> */}
 				<span className="tableTitle">List of Requests</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">
@@ -78,7 +71,7 @@ const ProductCategorySearch = (props) => {
 							border: "none",
 							paddingLeft: 10,
 						}}
-						placeholder="Search a exercise"
+						placeholder="Search a user"
 						className="searchNewInput"
 					/>
 					<button className="searchIconbtn">

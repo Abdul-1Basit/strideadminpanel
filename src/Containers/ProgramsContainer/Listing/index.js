@@ -160,7 +160,7 @@ const PrizeListing = (props) => {
 							}}
 							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<FaClone color="#2DAB22" size={20} />
+							<img src="/copySign.png" style={{ width: 22, height: 20 }} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Edit"}>
