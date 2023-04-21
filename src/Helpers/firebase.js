@@ -251,13 +251,14 @@ const deletePrize = async (id) => {
 
 //-----------Workouts-----------------------
 const addWorkout = async (Workout) => {
-	let { name, subtitle, basicDetailMedia, exercises } = Workout;
+	let { name, subtitle, basicDetailMedia, exercises, description } = Workout;
 	try {
 		await addDoc(collection(db, "workouts"), {
 			name,
 			subtitle,
 			basicDetailMedia,
 			exercises,
+			description,
 		});
 		return true;
 	} catch (err) {
@@ -276,7 +277,7 @@ const getAllWorkouts = async () => {
 	return newData;
 };
 const updateWorkout = async (workout) => {
-	let { name, subtitle, basicDetailMedia, exercises } = workout;
+	let { name, subtitle, basicDetailMedia, exercises, description } = workout;
 
 	try {
 		//console.log("roze", prize.id);
@@ -286,6 +287,7 @@ const updateWorkout = async (workout) => {
 			subtitle,
 			basicDetailMedia,
 			exercises,
+			description,
 		});
 		// console.log("campign", campaign);
 		return true;

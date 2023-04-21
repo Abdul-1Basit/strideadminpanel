@@ -20,12 +20,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
-import DayEdit from "./DayEdit";
-import {
-	addProgram,
-	getAllPrograms,
-	updateProgram,
-} from "../../../Helpers/firebase";
+import DayEdit from "../Add/DayEdit";
+import { getAllPrograms, updateProgram } from "../../../Helpers/firebase";
 const { TextArea } = Input;
 const ViewProgramContainer = (props) => {
 	const navigate = useNavigate();

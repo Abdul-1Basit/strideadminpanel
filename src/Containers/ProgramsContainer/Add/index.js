@@ -22,6 +22,7 @@ import DaysTable from "../../../Components/DaysTable";
 import DayEdit from "./DayEdit";
 import { addProgram } from "../../../Helpers/firebase";
 import "./index.css";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const { TextArea } = Input;
 const AddProgramContainer = (props) => {
 	const [addingUser, setAddingUser] = React.useState(false);
@@ -288,10 +289,13 @@ const AddProgramContainer = (props) => {
 																	? "#5DB135"
 																	: values.status === "Pending"
 																	? "#E2BB2E"
+																	: values.status === "Draft"
+																	? "#7D7D7D"
 																	: "#F4F4F4",
 															color:
 																values.status === "Active" ||
-																values.status === "Pending"
+																values.status === "Pending" ||
+																values.status === "Draft"
 																	? "#fff"
 																	: "#000000",
 															paddingRight: 50,
@@ -303,6 +307,7 @@ const AddProgramContainer = (props) => {
 														</option>
 														<option value="Active">Active</option>
 														<option value="Pending">Pending</option>
+														<option value="Draft">Draft</option>
 													</select>
 													{errors.status && touched.status ? (
 														<Typography
@@ -701,15 +706,31 @@ const AddProgramContainer = (props) => {
 									<span className="oOfDays">No. of Days</span>
 									<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 										<input
-											type={"number"}
+											type={"text"}
 											// defaultValue={daysNumber}
 											className="inputfont nmbrBtn"
 											onChange={(e) => {
-												if (e.target.value > -1) setDaysNumber(e.target.value);
+												if (parseInt(e.target.value) > -1)
+													setDaysNumber(parseInt(e.target.value));
 											}}
 											style={{ width: 50 }}
 											value={daysNumber}
 										/>
+										<div className="colCenter">
+											<IoIosArrowUp
+												onClick={() => {
+													setDaysNumber((prev) => prev + 1);
+												}}
+												style={{ cursor: "pointer" }}
+											/>
+											<IoIosArrowDown
+												onClick={() => {
+													if (daysNumber !== 0)
+														setDaysNumber((prev) => prev - 1);
+												}}
+												style={{ cursor: "pointer" }}
+											/>
+										</div>
 										<button
 											className="dayssAdditionBtn"
 											onClick={() => {

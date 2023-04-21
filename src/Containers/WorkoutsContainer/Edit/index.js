@@ -1,7 +1,6 @@
 import React from "react";
 import Typography from "../../../Components/Typography";
-
-import { Row, message, Progress, notification, Col } from "antd";
+import { Row, message, Input, Progress, notification, Col } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import programSchema, { initVals } from "./Constants";
 import { Formik } from "formik";
@@ -11,6 +10,8 @@ import { primaryColor } from "../../../Constants";
 import { getAllWorkouts, updateWorkout } from "../../../Helpers/firebase";
 import "./index.css";
 import DayEdit from "./DayEdit";
+const { TextArea } = Input;
+
 const EditWorkoutContainer = (props) => {
 	let { id } = useParams();
 	const [addingUser, setAddingUser] = React.useState(false);
@@ -140,17 +141,17 @@ const EditWorkoutContainer = (props) => {
 
 					<div className="cardAdditionBlog">
 						<Row style={{ paddingLeft: 47 }}>
-							<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+							<Col xs={24} sm={24} md={24} lg={12} xl={13}>
 								<span className="tableTitle">Basic Detail</span>
 							</Col>
-							<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+							<Col xs={24} sm={24} md={24} lg={12} xl={11}>
 								<span className="tableTitle">Upload a Media</span>
 							</Col>
 						</Row>
 						<div className="barVertical" />
 						<div style={{ paddingLeft: 47 }}>
-							<Row>
-								<Col xs={24} sm={24} md={24} lg={12} xl={12}>
+							<Row gutter={16}>
+								<Col xs={24} sm={24} md={24} lg={10} xl={10} xxl={10}>
 									<div className="colStart">
 										<div className="flexStart mb30">
 											<span className="addBlogInputLabel">WORKOUT NAME</span>
@@ -202,79 +203,108 @@ const EditWorkoutContainer = (props) => {
 										</div>
 									</div>
 								</Col>
-								<div>
-									<Col xs={24} sm={24} md={24} lg={12} xl={12}>
-										<div
-											style={{
-												display: "flex",
-												justifyContent: "flex-start",
-												alignItems: "center",
-											}}
-										>
-											{basicDetailMedia ? (
-												<div
+								<Col xs={24} sm={24} md={24} lg={3} xl={3} xxl={2} />
+								<Col xs={24} sm={24} md={24} lg={11} xl={11} xxl={11}>
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "flex-start",
+											alignItems: "center",
+										}}
+									>
+										{basicDetailMedia ? (
+											<div
+												style={{
+													display: "flex",
+													justifyContent: "center",
+													alignItems: "center",
+												}}
+											>
+												<img
+													src={basicDetailMedia}
+													alt="UserImage"
 													style={{
-														display: "flex",
-														justifyContent: "center",
-														alignItems: "center",
+														width: 250,
+														height: 250,
+														borderRadius: 6,
 													}}
+												/>
+												<div
+													className="centerAligner"
+													style={{
+														width: 15,
+														height: 15,
+														borderRadius: "50%",
+														backgroundColor: "#fff",
+														marginLeft: -10,
+														marginTop: -20,
+														boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+														cursor: "pointer",
+														border: "1px solid #000",
+													}}
+													onClick={() => setBasicDetailMedia("")}
 												>
-													<img
-														src={basicDetailMedia}
-														alt="UserImage"
-														style={{
-															width: 156,
-															height: 156,
-															borderRadius: "50%",
-														}}
+													<CloseOutlined
+														style={{ fontSize: 8, color: primaryColor }}
 													/>
-													<div
-														className="centerAligner"
-														style={{
-															width: 15,
-															height: 15,
-															borderRadius: "50%",
-															backgroundColor: "#fff",
-															marginLeft: -10,
-															marginTop: -20,
-															boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-															cursor: "pointer",
-															border: "1px solid #000",
-														}}
-														onClick={() => setBasicDetailMedia("")}
-													>
-														<CloseOutlined
-															style={{ fontSize: 8, color: primaryColor }}
-														/>
-													</div>
 												</div>
-											) : (
-												<EmployeeDropZone
-													{...{
-														setImageUrl: setBasicDetailMedia,
-														small: false,
-													}}
-												/>
-											)}
-											{basicDetailMediaOneError && (
-												<Typography
-													alignment="left"
-													title={"Please add an image"}
-													fontFamily="Gilroy-Medium"
-													color="red"
-													type="label"
-												/>
-											)}
-										</div>
-									</Col>
-								</div>
+											</div>
+										) : (
+											<EmployeeDropZone
+												{...{
+													setImageUrl: setBasicDetailMedia,
+													small: false,
+												}}
+											/>
+										)}
+										{basicDetailMediaOneError && (
+											<Typography
+												alignment="left"
+												title={"Please add an image"}
+												fontFamily="Gilroy-Medium"
+												color="red"
+												type="label"
+											/>
+										)}
+									</div>
+								</Col>
 							</Row>
+						</div>
+						<div className="flexStart mb30" style={{ paddingLeft: 47 }}>
+							<span className="addBlogInputLabel">DESCRIPTION</span>
+							<div style={{ marginTop: 10 }}>
+								<TextArea
+									rows={4}
+									placeholder="Enter Description"
+									maxLength={500}
+									showCount
+									className="addBlogInput overViewDescription"
+									name="description"
+									onChange={handleChange}
+									onBlur={handleBlur}
+									value={values.description}
+									style={{
+										width: 700,
+										height: 600,
+										backgroundColor: "#F4F4F4",
+									}}
+								/>
+								{errors.description && touched.description ? (
+									<Typography
+										alignment="left"
+										title={errors.description}
+										fontFamily="Gilroy-Medium"
+										color="red"
+										type="label"
+									/>
+								) : (
+									""
+								)}
+							</div>
 						</div>
 						<br />
 						<br /> <br />
-						{data && (
-							<DayEdit data={data} setData={setData} prompted={prompted} />
-						)}
+						{data && <DayEdit {...{ data, setData, prompted }} />}
 					</div>
 				</div>
 			)}

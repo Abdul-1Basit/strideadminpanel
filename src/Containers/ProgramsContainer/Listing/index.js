@@ -125,7 +125,7 @@ const PrizeListing = (props) => {
 						className="capsule"
 						style={{
 							backgroundColor:
-								rowData.status === "Active" ? "#5DB135" : "#D30E0E",
+								rowData.status === "Active" ? "#5DB135" :rowData.status==='Draft'?'#7D7D7D' :"#D30E0E",
 							// : "#E2BB2E",
 						}}
 					>

@@ -2,7 +2,7 @@ import React from "react";
 // import SpinnerComponent from "../../../../Components/SpinnerComponent";
 import "../index.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { InputNumber, Modal } from "antd";
+import { Input, InputNumber, Modal } from "antd";
 // import { primaryColor } from "../../../../Constants";
 // import { RiDeleteBackFill } from "react-icons/ri";
 // import { GrAdd } from "react-icons/gr";
@@ -221,19 +221,8 @@ export default function DayEdit(props) {
 						Save
 					</span>
 				</div>
-				{/* )} */}
 			</div>
 			<div className="cardAdditionBlog">
-				{/* <div>
-					<span className="tableTitle">
-						Edit
-						<br />
-						<span style={{ color: "#000", fontWeight: 300 }}>
-							Day {props.activeItemIndex + 1}
-						</span>
-					</span>
-				</div>
-				<br /> */}
 				<div className="firstIteration">
 					<div className="rowing">
 						<div
@@ -258,7 +247,7 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
@@ -266,9 +255,25 @@ export default function DayEdit(props) {
 										style={{ width: 50 }}
 										value={warmupCounter}
 										onChange={(e) => {
-											if (e.target.value > -1) setWarmupCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setWarmupCounter(parseInt(e.target.value));
 										}}
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setWarmupCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (warmupCounter !== 0)
+													setWarmupCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -362,7 +367,7 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
@@ -371,12 +376,27 @@ export default function DayEdit(props) {
 										style={{ width: 50 }}
 										value={workoutCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setWorkoutCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setWorkoutCounter(parseInt(e.target.value));
 											// console.log("worokout counter value", e.target.value);
 										}}
 										// className=""
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setWorkoutCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (workoutCounter !== 0)
+													setWorkoutCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -470,19 +490,36 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
 										// defaultValue={daysNumber}
-										// onChange={setCoolDownCounter}
+										// onChange={setWorkoutCounter}
 										style={{ width: 50 }}
 										value={cooldownCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setCoolDownCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setCoolDownCounter(parseInt(e.target.value));
+											// console.log("worokout counter value", e.target.value);
 										}}
+										// className=""
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setCoolDownCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (cooldownCounter !== 0)
+													setCoolDownCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -628,13 +665,14 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="addBlogInputLabel">Sets</span>
 					<div style={{ marginTop: 10 }}>
-						<InputNumber
-							min={0}
-							maxLength={20}
+						<Input
+							// min={0}
+							// maxLength={20}
 							onChange={(val) => {
-								if (val > -1) {
-									item.sets = val;
-								}
+								// if (val > -1) {
+								// 	item.sets = val;
+								// }
+								item.sets = val.target.value;
 							}}
 							placeholder={item.sets}
 							className="inputNumberProgram inputText"

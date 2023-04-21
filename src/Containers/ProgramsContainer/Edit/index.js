@@ -20,12 +20,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
-import DayEdit from "./DayEdit";
-import {
-	addProgram,
-	getAllPrograms,
-	updateProgram,
-} from "../../../Helpers/firebase";
+import DayEdit from "../Add/DayEdit";
+import { getAllPrograms, updateProgram } from "../../../Helpers/firebase";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const { TextArea } = Input;
 const EditProgramContainer = (props) => {
 	const navigate = useNavigate();
@@ -174,7 +171,7 @@ const EditProgramContainer = (props) => {
 									>
 										Cancel
 									</span>
-									<span className="draftBtn">Save as draft</span>
+									{/* <span className="draftBtn">Save as draft</span> */}
 									<span className="savebtn" onClick={handleSubmit}>
 										Save
 									</span>
@@ -313,8 +310,15 @@ const EditProgramContainer = (props) => {
 																	? "#5DB135"
 																	: values.status === "Pending"
 																	? "#E2BB2E"
+																	: values.status === "Draft"
+																	? "#7D7D7D"
 																	: "#F4F4F4",
-															color: "#fff",
+															color:
+																values.status === "Active" ||
+																values.status === "Pending" ||
+																values.status === "Draft"
+																	? "#fff"
+																	: "#000000",
 															paddingRight: 50,
 															borderRight: "16px solid transparent",
 														}}
@@ -324,6 +328,7 @@ const EditProgramContainer = (props) => {
 														</option>
 														<option value="Active">Active</option>
 														<option value="Pending">Pending</option>
+														<option value="Draft">Draft</option>
 													</select>
 													{errors.status && touched.status ? (
 														<Typography
@@ -730,11 +735,31 @@ const EditProgramContainer = (props) => {
 									<span className="oOfDays">No. of Days</span>
 									<div className="daysAdditionBtnDiv">
 										<input
-											type={"number"}
+											type={"text"}
 											// defaultValue={daysNumber}
 											className="inputfont nmbrBtn"
-											onChange={(e) => setDaysNumber(e.target.value)}
+											onChange={(e) => {
+												if (parseInt(e.target.value) > -1)
+													setDaysNumber(parseInt(e.target.value));
+											}}
+											defaultValue={0}
+											value={daysNumber}
 										/>
+										<div className="colCenter">
+											<IoIosArrowUp
+												onClick={() => {
+													setDaysNumber((prev) => prev + 1);
+												}}
+												style={{ cursor: "pointer" }}
+											/>
+											<IoIosArrowDown
+												onClick={() => {
+													if (daysNumber !== 0)
+														setDaysNumber((prev) => prev - 1);
+												}}
+												style={{ cursor: "pointer" }}
+											/>
+										</div>
 										<button
 											className="dayssAdditionBtn"
 											onClick={() => {

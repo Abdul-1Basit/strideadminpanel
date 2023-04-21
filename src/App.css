@@ -340,6 +340,11 @@ color: #222222;
 outline: none;
 
 }
+.inputButtonSpecific{
+  padding-left: 10px; 
+  outline: none;
+   border: none; 
+}
 
 .sContainerTitle{
   font-family: Montserrat;
