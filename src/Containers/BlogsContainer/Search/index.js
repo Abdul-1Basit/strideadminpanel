@@ -67,28 +67,37 @@ const ProductCategorySearch = (props) => {
 						}}
 						placeholder="Search a user"
 						className="searchNewInput"
+						value={props.searchQuery}
+						onChange={(e) => props.setSearchQuery(e.target.value)}
 					/>
 					<button className="searchIconbtn">
 						<BsSearch size={23} color="#fff" />
 					</button>
 				</div>
 				<div style={{ width: 45 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true}>
+				<select
+					className="newSelect"
+					onChange={(e) => props.setOrderBy(e.target.value)}
+					value={props.orderBy}
+				>
+					<option value="" disabled={true} selected={true}>
 						Sort By
 					</option>
-					<option value="id">Id</option>
+					<option value="dateCreated">Created</option>
 					<option value="name">Name</option>
-				</select>{" "}
+				</select>
 				<div style={{ width: 24 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true} selected={true}>
+				<select
+					className="newSelect"
+					onChange={(e) => props.setFilterBy(e.target.value)}
+					value={props.filterBy}
+				>
+					<option value="" disabled={true} selected={true}>
 						Filter By
 					</option>
-					<option value="id">Id</option>
 					<option value="name">Name</option>
-					<option value="Phone">Phone #</option>
-					<option value="address">Address</option>
+					<option value="description">Description</option>
+					<option value="dateCreated">Created</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<div

@@ -21,8 +21,8 @@ const ProductSearch = (props) => {
 			type="rowSpaced"
 			// marginTop={32}
 			marginBottom={24}
-			marginLeft={30}
-			marginRight={30}
+			marginLeft={0}
+			marginRight={0}
 			width={"100%"}
 			backColor="transparent"
 		>
@@ -52,28 +52,44 @@ const ProductSearch = (props) => {
 						}}
 						placeholder="Search a product"
 						className="searchNewInput"
+						value={props.searchQuery}
+						onChange={(e) => props.setSearchQuery(e.target.value)}
 					/>
 					<button className="searchIconbtn">
 						<BsSearch size={23} color="#fff" />
 					</button>
 				</div>
 				<div style={{ width: 45 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true}>
+				<select
+					name="sortBy"
+					id="cars"
+					className="newSelect"
+					onChange={(e) => {
+						props.setOrderBy(e.target.value);
+					}}
+					value={props.orderBy}
+				>
+					<option value="default" disabled selected>
 						Sort By
 					</option>
 					<option value="id">Id</option>
-					<option value="name">Name</option>
-				</select>{" "}
+					<option value="productName">Name</option>
+				</select>
 				<div style={{ width: 24 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true} selected={true}>
+				<select
+					name="FilterBy"
+					id="cars"
+					className="newSelect"
+					onChange={(e) => {
+						props.setFilterItem(e.target.value);
+					}}
+					value={props.filterItem}
+				>
+					<option value="default" disabled selected>
 						Filter By
 					</option>
 					<option value="id">Id</option>
-					<option value="name">Name</option>
-					<option value="Phone">Phone #</option>
-					<option value="address">Address</option>
+					<option value="productName">Name</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<div

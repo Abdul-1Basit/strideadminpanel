@@ -36,15 +36,21 @@ const customCloneStyles = {
 	},
 };
 const ProductsContainer = (props) => {
-	const [changedFilterItem, setChangedFilterItem] = React.useState(false);
+	// const [changedFilterItem, setChangedFilterItem] = React.useState(false);
 	const [addModal, setAddModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState(-1);
+	const [filterItem, setFilterItem] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchQuery, setSearchQuery] = React.useState("");
 	const [editModal, setEditModal] = React.useState(false);
 	const [activeCategory, setActiveCategory] = React.useState(null);
 	const [deleteModal, setDeleteModal] = React.useState(false);
 	const [cloneModal, setCloneModal] = React.useState(false);
 	const [productsList, setProductsList] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
+	const [topValues, setTopValues] = React.useState({
+		listofProds: 0,
+		outofStock: 0,
+	});
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
 		let subTitle = "";
@@ -80,6 +86,17 @@ const ProductsContainer = (props) => {
 		setLoading(true);
 		const response = await getAllProducts();
 		setProductsList(response);
+		let listofProds = response.length;
+		let outofStock = 0;
+		response.forEach((element) => {
+			if (element.noOfItems <= 20) {
+				outofStock++;
+			}
+		});
+		setTopValues({
+			listofProds,
+			outofStock,
+		});
 		console.log("response", response);
 		setLoading(false);
 	};
@@ -179,7 +196,7 @@ const ProductsContainer = (props) => {
 					icon={<img src="/Icon.png" style={{ width: 38.75, height: 35.23 }} />}
 					heading="Products Listed"
 					// headingCount="120"
-					subHeading="120"
+					subHeading={topValues.listofProds}
 					type=""
 				/>
 				<CustomSmallCard
@@ -192,7 +209,7 @@ const ProductsContainer = (props) => {
 						/>
 					}
 					heading="Products"
-					headingCount="10"
+					headingCount={topValues.outofStock}
 					subHeading="running out of stock"
 					type="productSecond"
 				/>
@@ -245,7 +262,15 @@ const ProductsContainer = (props) => {
 				}}
 			>
 				<ProductSearch
-					{...{ setAddModal, setChangedFilterItem, setFilterItem }}
+					{...{
+						setAddModal,
+						filterItem,
+						setFilterItem,
+						orderBy,
+						setOrderBy,
+						searchQuery,
+						setSearchQuery,
+					}}
 				/>
 				<ProductListing
 					{...{
@@ -256,6 +281,8 @@ const ProductsContainer = (props) => {
 						setCloneModal,
 						loading,
 						productsList,
+						searchQuery,
+						orderBy,
 					}}
 				/>
 			</div>

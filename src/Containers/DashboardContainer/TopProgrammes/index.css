@@ -1,0 +1,51 @@
+.topProgramCard{
+    width: 330px;
+height: 291px;
+background: #F94F00;
+border-radius: 26.5323px;
+padding-left: 24px;
+padding-right: 24px;
+padding-top: 28px;
+margin-top: 24px;
+}
+.topProgramHeading{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 32px;
+letter-spacing: -0.02em;
+color: #FFFFFF;
+}
+.smallTopProgramHeading{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 21px;
+/* identical to box height, or 131% */
+
+letter-spacing: -0.02em;
+
+color: #F8F8F8;
+}
+.marg16{
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+.topProgramText{
+    
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height, or 150% */
+
+letter-spacing: -0.02em;
+
+color: #F8F8F8;
+}
+.mb12{
+    margin-bottom: 12px;
+}

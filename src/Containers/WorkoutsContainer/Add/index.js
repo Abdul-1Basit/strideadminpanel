@@ -25,6 +25,7 @@ const AddWorkoutContainer = (props) => {
 		warmup: [],
 		workout: [],
 		cooldown: [],
+		notes: "",
 	});
 	const [prompted, setPrompted] = React.useState(false);
 	// const handleSubmit
@@ -255,6 +256,8 @@ const AddWorkoutContainer = (props) => {
 							</Row>
 						</div>
 						<div className="flexStart mb30" style={{ paddingLeft: 47 }}>
+							<br />
+							<br />
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10 }}>
 								<TextArea
@@ -268,7 +271,8 @@ const AddWorkoutContainer = (props) => {
 									onBlur={handleBlur}
 									value={values.description}
 									style={{
-										width: 700,
+										width: "100%",
+										display: "flex",
 										height: 600,
 										backgroundColor: "#F4F4F4",
 									}}

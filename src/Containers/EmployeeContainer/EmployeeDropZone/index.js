@@ -6,9 +6,19 @@ import { uploadImage } from "../../../Helpers/firebase";
 import SpinnerComponent from "../../../Components/SpinnerComponent";
 import { IoMdAdd } from "react-icons/io";
 import "./index.css";
-function EmployeeDropZone({ setImageUrl, small = false, shortWidth = false }) {
+function EmployeeDropZone({
+	setImageUrl,
+	small = false,
+	shortWidth = false,
+	setTypeOfMedia = null,
+}) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const onDrop = async (acceptedFiles) => {
+		console.log("icnludes", acceptedFiles[0].type.includes("video"));
+		if (acceptedFiles[0].type.includes("video")) {
+			console.log("setting to true");
+			setTypeOfMedia(true);
+		}
 		setIsLoading(true);
 		let returnUrl = await uploadImage(acceptedFiles[0]);
 		setIsLoading(false);
@@ -38,6 +48,7 @@ function EmployeeDropZone({ setImageUrl, small = false, shortWidth = false }) {
 					>
 						Upload a Video or Image{" "}
 					</p>
+					<span className="imageMesaurement">(Should be 1280 x 800)</span>
 					<div className="plusAddSign">
 						<IoMdAdd color="#fff" size={25} />
 					</div>

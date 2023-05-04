@@ -20,7 +20,7 @@ margin-left: 21px;
     /* padding: 18px 24px; */
 
 display: flex;
-width: 70.2px;
+width: 100.2px;
 height: 58px;
 justify-content: center;
 align-items: center;
@@ -463,4 +463,18 @@ color: #FFFFFF;
   
      opacity: 1;
   
+  }
+  .customInputStyling{
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    padding-bottom: 16px;
+    /* identical to box height */
+    
+    text-align: center;
+
+    
+    color: #4F4F4F;
   }

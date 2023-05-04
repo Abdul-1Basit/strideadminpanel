@@ -20,7 +20,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
-import DayEdit from "../Add/DayEdit";
+import DayEdit from "../Add/DayEdit/index.js";
+import VideoThumbnail from "react-video-thumbnail";
+
 import {
 	addProgram,
 	getAllPrograms,
@@ -48,6 +50,8 @@ const CloneProgramContainer = (props) => {
 	const [activeItemIndex, setActiveItemIndex] = React.useState(-1);
 	const [progressPercent, setProgressPercent] = React.useState(0);
 	const [newinitVals, setNewinitVals] = React.useState(initVals);
+	const [typeOfMedia, setTypeOfMedia] = React.useState(true);
+
 	// const handleSubmit
 	React.useEffect(() => {
 		getDetails();
@@ -103,8 +107,8 @@ const CloneProgramContainer = (props) => {
 		if (await addProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Updated!`,
-				description: `${values.name}  has been successfully updated`,
+				message: `Successfully added your program!`,
+				description: ``, //`${values.name}  has been successfully updated`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {
@@ -426,15 +430,26 @@ const CloneProgramContainer = (props) => {
 														alignItems: "center",
 													}}
 												>
-													<img
-														src={overviewMediaOne}
-														alt="UserImage"
-														style={{
-															width: 250,
-															height: 250,
-															borderRadius: 6,
-														}}
-													/>
+													{typeOfMedia ? (
+														<VideoThumbnail
+															videoUrl={overviewMediaOne}
+															thumbnailHandler={(thumbnail) =>
+																console.log(thumbnail)
+															}
+															width={250}
+															height={250}
+														/>
+													) : (
+														<img
+															src={overviewMediaOne}
+															alt="UserImage"
+															style={{
+																width: 250,
+																height: 250,
+																borderRadius: 6,
+															}}
+														/>
+													)}
 													<div
 														className="centerAligner"
 														style={{
@@ -460,6 +475,7 @@ const CloneProgramContainer = (props) => {
 													{...{
 														setImageUrl: setOverviewMediaOne,
 														small: false,
+														setTypeOfMedia: setTypeOfMedia,
 													}}
 												/>
 											)}
@@ -593,7 +609,7 @@ const CloneProgramContainer = (props) => {
 								<Row>
 									<Col xs={24} sm={24} md={24} lg={10} xl={10}>
 										<div className="flexStart mb30">
-											<span className="addBlogInputLabel">DIFFICULTY</span>
+											<span className="addBlogInputLabel">SCHEDULE IMAGE</span>
 											<div style={{ marginTop: 10 }}>
 												<div>
 													<div
@@ -616,7 +632,8 @@ const CloneProgramContainer = (props) => {
 																	alt="UserImage"
 																	style={{
 																		width: 250,
-																		height: 250,
+																		height: 285,
+
 																		borderRadius: 6,
 																	}}
 																/>
@@ -680,7 +697,7 @@ const CloneProgramContainer = (props) => {
 													value={values.scheduleDescription}
 													style={{
 														width: 500,
-														height: 400,
+														height: 285,
 														display: "flex",
 													}}
 												/>
@@ -717,6 +734,9 @@ const CloneProgramContainer = (props) => {
 											onChange={(e) => {
 												if (parseInt(e.target.value) > -1)
 													setDaysNumber(parseInt(e.target.value));
+												if (!e.target.value) {
+													setDaysNumber(0);
+												}
 											}}
 											value={daysNumber}
 											defaultValue={0}
@@ -749,6 +769,15 @@ const CloneProgramContainer = (props) => {
 													});
 												}
 												setDays(tempDays);
+												notification.success({
+													message: `You have added ${daysNumber} to the program`,
+													description: ``, //`${values.name}  has been successfully updated`,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setDaysNumber(0);
+													},
+												});
 											}}
 										>
 											Add

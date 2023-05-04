@@ -20,8 +20,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
-import DayEdit from "../Add/DayEdit";
+import DayEdit from "../Add/DayEdit/index.js";
 import { getAllPrograms, updateProgram } from "../../../Helpers/firebase";
+import VideoThumbnail from "react-video-thumbnail";
+
 const { TextArea } = Input;
 const ViewProgramContainer = (props) => {
 	const navigate = useNavigate();
@@ -43,6 +45,8 @@ const ViewProgramContainer = (props) => {
 	const [activeItemIndex, setActiveItemIndex] = React.useState(-1);
 	const [progressPercent, setProgressPercent] = React.useState(0);
 	const [newinitVals, setNewinitVals] = React.useState(initVals);
+	const [typeOfMedia, setTypeOfMedia] = React.useState(true);
+
 	// const handleSubmit
 	React.useEffect(() => {
 		getDetails();
@@ -434,15 +438,26 @@ const ViewProgramContainer = (props) => {
 														alignItems: "center",
 													}}
 												>
-													<img
-														src={overviewMediaOne}
-														alt="UserImage"
-														style={{
-															width: 250,
-															height: 250,
-															borderRadius: 6,
-														}}
-													/>
+													{typeOfMedia ? (
+														<VideoThumbnail
+															videoUrl={overviewMediaOne}
+															thumbnailHandler={(thumbnail) =>
+																console.log(thumbnail)
+															}
+															width={250}
+															height={250}
+														/>
+													) : (
+														<img
+															src={overviewMediaOne}
+															alt="UserImage"
+															style={{
+																width: 250,
+																height: 250,
+																borderRadius: 6,
+															}}
+														/>
+													)}
 													<div
 														className="centerAligner"
 														style={{
@@ -456,7 +471,7 @@ const ViewProgramContainer = (props) => {
 															cursor: "pointer",
 															border: "1px solid #000",
 														}}
-														// onClick={() => setOverviewMediaOne("")}
+														onClick={() => setOverviewMediaOne("")}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -468,6 +483,7 @@ const ViewProgramContainer = (props) => {
 													{...{
 														setImageUrl: setOverviewMediaOne,
 														small: false,
+														setTypeOfMedia: setTypeOfMedia,
 													}}
 												/>
 											)}
@@ -602,7 +618,7 @@ const ViewProgramContainer = (props) => {
 								<Row>
 									<Col xs={24} sm={24} md={24} lg={10} xl={10}>
 										<div className="flexStart mb30">
-											<span className="addBlogInputLabel">DIFFICULTY</span>
+											<span className="addBlogInputLabel">SCHEDULE IMAGE</span>
 											<div style={{ marginTop: 10 }}>
 												<div>
 													<div
@@ -625,7 +641,7 @@ const ViewProgramContainer = (props) => {
 																	alt="UserImage"
 																	style={{
 																		width: 250,
-																		height: 250,
+																		height: 285,
 																		borderRadius: 6,
 																	}}
 																/>
@@ -689,7 +705,7 @@ const ViewProgramContainer = (props) => {
 													value={values.scheduleDescription}
 													style={{
 														width: 500,
-														height: 400,
+														height: 285,
 														display: "flex",
 													}}
 													disabled
@@ -722,7 +738,7 @@ const ViewProgramContainer = (props) => {
 									<div className="daysAdditionBtnDiv">
 										<input
 											type={"number"}
-											// defaultValue={daysNumber}
+											defaultValue={daysNumber}
 											className="inputfont nmbrBtn"
 											onChange={(e) => setDaysNumber(e.target.value)}
 										/>
@@ -739,6 +755,18 @@ const ViewProgramContainer = (props) => {
 													});
 												}
 												setDays(tempDays);
+												notification.success({
+													message:
+														daysNumber > 1
+															? `You have added ${daysNumber} days to the program`
+															: `You have added ${daysNumber} day to the program`,
+													description: ``, //`${values.name}  has been successfully updated`,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setDaysNumber(0);
+													},
+												});
 											}}
 											disabled
 										>

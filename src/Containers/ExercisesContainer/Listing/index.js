@@ -21,6 +21,9 @@ const PrizeListing = (props) => {
 		},
 		{
 			title: "CATEGORY",
+
+			// sorter: (a, b) => a.category.toLowerCase() - b.category.toLowerCase(),
+			// sortDirections: ["ascend", "descend"],
 			render: (rowData) => {
 				return (
 					<div style={{ width: 140 }}>
@@ -94,6 +97,38 @@ const PrizeListing = (props) => {
 			spin
 		/>
 	);
+	const listing = () => {
+		if (!props.searchQuery) {
+			return props.campaignListing;
+		} else {
+			if (props.filterBy) {
+				return props.campaignListing.filter((item) =>
+					item[props.filterBy]
+						.toLowerCase()
+						.includes(props.searchQuery.toLowerCase())
+				);
+			}
+			return props.campaignListing.filter((item) =>
+				item[props.filterBy]
+					.toLowerCase()
+					.includes(props.searchQuery.toLowerCase())
+			);
+		}
+	};
+	// console.log(
+	// 	"result of functoin",
+	// 	props.orderBy
+	// 		? listing().sort((a, b) => {
+	// 				if (a.category.toLowerCase() < b.category.toLowerCase()) {
+	// 					return -1;
+	// 				}
+	// 				if (a.category.toLowerCase() > b.category.toLowerCase()) {
+	// 					return 1;
+	// 				}
+	// 				return 0;
+	// 		  })
+	// 		: listing()
+	// );
 	return (
 		<div style={{ width: "100%", backgroundColor: "#E5E5E5" }}>
 			{props.loading ? (
@@ -111,7 +146,19 @@ const PrizeListing = (props) => {
 				<Table
 					// rowSelection
 					columns={columns}
-					dataSource={props.campaignListing}
+					dataSource={
+						props.orderBy
+							? listing().sort((a, b) => {
+									if (a.category.toLowerCase() < b.category.toLowerCase()) {
+										return -1;
+									}
+									if (a.category.toLowerCase() > b.category.toLowerCase()) {
+										return 1;
+									}
+									return 0;
+							  })
+							: listing()
+					}
 					// scroll={{
 					// 	x: 1300,
 					// }}

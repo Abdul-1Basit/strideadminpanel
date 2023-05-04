@@ -19,6 +19,7 @@ const PrizeListing = (props) => {
 	// overviewMediaOne,
 	// overviewMediaTwo,
 	// scheduleImage,
+
 	const columns = [
 		{
 			title: "",
@@ -125,7 +126,11 @@ const PrizeListing = (props) => {
 						className="capsule"
 						style={{
 							backgroundColor:
-								rowData.status === "Active" ? "#5DB135" :rowData.status==='Draft'?'#7D7D7D' :"#D30E0E",
+								rowData.status === "Active"
+									? "#5DB135"
+									: rowData.status === "Draft"
+									? "#7D7D7D"
+									: "#D30E0E",
 							// : "#E2BB2E",
 						}}
 					>
@@ -212,17 +217,43 @@ const PrizeListing = (props) => {
 			spin
 		/>
 	);
-	// const sortedList = () => {
-	// 	if (!props.sortBy) {
-	// 		return props.programList;
-	// 	}
-	// 	let newList = props.programList;
-	// 	if (props.sortBy) {
-	// 		 newList=newList.sort((a,b)=>a.id-b.id)
-	// 	}
-	// };
+
+	const sortedList = () => {
+		// if (!props.sortBy) {
+		// 	return props.programList;
+		// }
+		// let newList = props.programList;
+		// if (props.sortBy) {
+		// 	 newList=newList.sort((a,b)=>a.id-b.id)
+		// }
+		// console.log("orderbyquery", props.programList[0].id);
+		let newList = [...props.programList];
+		// if (props.orderBy) {
+		// 	let arr =
+		// 		props.orderBy === "id"
+		// 			? newList.sort((a, b) => a.id < b.id)
+		// 			: newList.sort((a, b) => a.id < b.id);
+		// 	return arr;
+		// }
+
+		if (!props.searchUserQuery && !props.searchProgramQuery) return newList;
+		if (props.searchProgramQuery) {
+			if (props.orderBy === "id")
+				return newList.filter((a) =>
+					a.id.toLowerCase().includes(props.searchProgramQuery)
+				);
+			return newList.filter((a) =>
+				a.name.toLowerCase().includes(props.searchProgramQuery)
+			);
+		}
+
+		return newList;
+		// return props.filterBy?props.programList.filter((a) => a[props.filterBy].toLowerCase().includes(props.searchUserQuery)):props.programList.filter((a) => a.name.toLowerCase().includes(props.searchUserQuery))
+	};
+
 	return (
 		<div style={{ width: "100%", backgroundColor: "#E5E5E5" }}>
+			{/* {props.orderBy} */}
 			{props.loading ? (
 				<div
 					style={{
@@ -236,12 +267,14 @@ const PrizeListing = (props) => {
 				</div>
 			) : (
 				<Table
-					// rowSelection
 					columns={columns}
-					dataSource={props.programList}
-					// scroll={{
-					// 	x: 1300,
-					// }}
+					dataSource={
+						props.programList
+							? props.orderBy === "id"
+								? props.programList.sort((a, b) => a.id < b.id)
+								: props.programList.sort((a, b) => a.name < b.name)
+							: []
+					}
 				/>
 			)}
 		</div>

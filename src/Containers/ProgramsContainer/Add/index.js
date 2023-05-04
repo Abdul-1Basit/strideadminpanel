@@ -11,6 +11,7 @@ import {
 	notification,
 	Col,
 } from "antd";
+import VideoThumbnail from "react-video-thumbnail";
 import { CloseOutlined } from "@ant-design/icons";
 import programSchema, { initVals } from "./Constants";
 // import SpinnerComponent from "../../../Components/SpinnerComponent";
@@ -19,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import DaysTable from "../../../Components/DaysTable";
-import DayEdit from "./DayEdit";
+import DayEdit from "./DayEdit/index.js";
 import { addProgram } from "../../../Helpers/firebase";
 import "./index.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -41,6 +42,7 @@ const AddProgramContainer = (props) => {
 	const [activeScreen, setActiveScreen] = React.useState(0);
 	const [activeItemIndex, setActiveItemIndex] = React.useState(-1);
 	const [progressPercent, setProgressPercent] = React.useState(0);
+	const [typeOfMedia, setTypeOfMedia] = React.useState(false);
 	const [api, contextHolder] = notification.useNotification();
 	// const handleSubmit
 
@@ -80,10 +82,10 @@ const AddProgramContainer = (props) => {
 		if (await addProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Added!`,
-				description: `${values.name}  has been successfully added`,
+				message: `Successfully added your program!`,
+				description: ``, // `${values.name}  has been successfully added`,
 				placement: "topRight",
-				duration: 2,
+				duration: 3,
 				onClose: function () {
 					setAddingUser(false);
 					navigate(-1);
@@ -375,9 +377,11 @@ const AddProgramContainer = (props) => {
 											</div>
 										</div>
 									) : (
-										<EmployeeDropZone
-											{...{ setImageUrl: setBasicDetailMedia, small: false }}
-										/>
+										<div className="colCenteral">
+											<EmployeeDropZone
+												{...{ setImageUrl: setBasicDetailMedia, small: false }}
+											/>
+										</div>
 									)}
 									{basicDetailMediaOneError && (
 										<Typography
@@ -421,15 +425,26 @@ const AddProgramContainer = (props) => {
 														alignItems: "center",
 													}}
 												>
-													<img
-														src={overviewMediaOne}
-														alt="UserImage"
-														style={{
-															width: 250,
-															height: 250,
-															borderRadius: 6,
-														}}
-													/>
+													{typeOfMedia ? (
+														<VideoThumbnail
+															videoUrl={overviewMediaOne}
+															thumbnailHandler={(thumbnail) =>
+																console.log("thumbnail", thumbnail)
+															}
+															width={250}
+															height={250}
+														/>
+													) : (
+														<img
+															src={overviewMediaOne}
+															alt="UserImage"
+															style={{
+																width: 250,
+																height: 250,
+																borderRadius: 6,
+															}}
+														/>
+													)}
 													<div
 														className="centerAligner"
 														style={{
@@ -455,6 +470,7 @@ const AddProgramContainer = (props) => {
 													{...{
 														setImageUrl: setOverviewMediaOne,
 														small: false,
+														setTypeOfMedia: setTypeOfMedia,
 													}}
 												/>
 											)}
@@ -494,7 +510,7 @@ const AddProgramContainer = (props) => {
 											value={values.overviewDescription}
 											style={{
 												width: 700,
-												height: 650,
+												height: 400,
 											}}
 										/>
 										{errors.overviewDescription &&
@@ -588,7 +604,7 @@ const AddProgramContainer = (props) => {
 								<Row>
 									<Col xs={24} sm={24} md={24} lg={10} xl={10}>
 										<div className="flexStart mb30">
-											<span className="addBlogInputLabel">DIFFICULTY</span>
+											<span className="addBlogInputLabel">SCHEDULE IMAGE</span>
 											<div style={{ marginTop: 10 }}>
 												<div>
 													<div
@@ -611,7 +627,7 @@ const AddProgramContainer = (props) => {
 																	alt="UserImage"
 																	style={{
 																		width: 250,
-																		height: 250,
+																		height: 285,
 																		borderRadius: 6,
 																	}}
 																/>
@@ -675,7 +691,7 @@ const AddProgramContainer = (props) => {
 													value={values.scheduleDescription}
 													style={{
 														width: 500,
-														height: 400,
+														height: 285,
 														display: "flex",
 													}}
 												/>
@@ -712,6 +728,9 @@ const AddProgramContainer = (props) => {
 											onChange={(e) => {
 												if (parseInt(e.target.value) > -1)
 													setDaysNumber(parseInt(e.target.value));
+												if (!e.target.value) {
+													setDaysNumber(0);
+												}
 											}}
 											style={{ width: 50 }}
 											value={daysNumber}
@@ -741,9 +760,22 @@ const AddProgramContainer = (props) => {
 														warmup: [],
 														workout: [],
 														cooldown: [],
+														notes: "",
 													});
 												}
 												setDays(tempDays);
+												notification.success({
+													message:
+														daysNumber > 1
+															? `You have added ${daysNumber} days to the program`
+															: `You have added ${daysNumber} day to the program`,
+													description: ``, //`${values.name}  has been successfully updated`,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setDaysNumber(0);
+													},
+												});
 											}}
 										>
 											Add

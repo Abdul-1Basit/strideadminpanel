@@ -129,7 +129,22 @@ const UserListing = (props) => {
 		},
 	];
 
-	const data = props.employeeListing;
+	const listing = () => {
+		if (!props.searchQuery) {
+			return props.employeeListing;
+		} else {
+			if (props.filterBy) {
+				return props.employeeListing.filter((item) =>
+					item[props.filterBy]
+						.toLowerCase()
+						.includes(props.searchQuery.toLowerCase())
+				);
+			}
+			// return props.employeeListing.filter((item) =>
+			// 	item.fullName.toLowerCase().includes(props.searchQuery.toLowerCase())
+			// );
+		}
+	};
 
 	const antIcon = (
 		<LoadingOutlined
@@ -157,7 +172,21 @@ const UserListing = (props) => {
 					<Spin indicator={antIcon} />
 				</div>
 			) : (
-				<Table columns={columns} dataSource={data ?? []} />
+				<Table
+					columns={columns}
+					dataSource={
+						props.employeeListing
+							? props.orderBy === "id"
+								? listing().sort(
+										(a, b) => a.id.toLowerCase() < b.id.toLowerCase()
+								  )
+								: listing().sort(
+										(a, b) =>
+											a.fullName.toLowerCase() < b.fullName.toLowerCase()
+								  )
+							: []
+					}
+				/>
 			)}
 		</div>
 	);

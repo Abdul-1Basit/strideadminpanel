@@ -9,7 +9,7 @@ import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import { getAllWorkouts, updateWorkout } from "../../../Helpers/firebase";
 import "./index.css";
-import DayEdit from "./DayEdit";
+import DayEdit from "../Add/DayEdit";
 const { TextArea } = Input;
 
 const EditWorkoutContainer = (props) => {
@@ -270,6 +270,8 @@ const EditWorkoutContainer = (props) => {
 								</Col>
 							</Row>
 						</div>
+						<br />
+						<br />
 						<div className="flexStart mb30" style={{ paddingLeft: 47 }}>
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10 }}>
@@ -284,7 +286,8 @@ const EditWorkoutContainer = (props) => {
 									onBlur={handleBlur}
 									value={values.description}
 									style={{
-										width: 700,
+										width: "100%",
+										display: "flex",
 										height: 600,
 										backgroundColor: "#F4F4F4",
 									}}

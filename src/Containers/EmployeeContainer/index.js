@@ -67,13 +67,21 @@ const customDeleteStyles = {
 };
 const EmployeesContainer = () => {
 	const [addModal, setAddModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState(-1);
+	// const [filterItem, setFilterItem] = React.useState(-1);
 	const [editModal, setEditModal] = React.useState(false);
 	const [cloneModal, setCloneModal] = React.useState(false);
 	const [activeCategory, setActiveCategory] = React.useState(null);
 	const [deleteModal, setDeleteModal] = React.useState(false);
 	const [employeeListing, setEmployeeListing] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchQuery, setSearchQuery] = React.useState("");
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const successMessage = (modalFunc, type, usr) => {
 		let title = "";
 		let subTitle = "";
@@ -112,6 +120,17 @@ const EmployeesContainer = () => {
 		setLoading(true);
 		let temporaryList = await getAllEmployees();
 		setEmployeeListing(temporaryList);
+		let totalPrograms = temporaryList.length,
+			activePrograms = temporaryList.length,
+			pendingPrograms = 0;
+		// result.forEach((element) => {
+		// 	element.status !== "Inactive" ? activePrograms++ : pendingPrograms++;
+		// });
+		setTopValues({
+			totalPrograms,
+			pendingPrograms,
+			activePrograms,
+		});
 		setLoading(false);
 	};
 	return (
@@ -201,7 +220,7 @@ const EmployeesContainer = () => {
 					}
 					heading="Total Employees"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.totalPrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -215,7 +234,7 @@ const EmployeesContainer = () => {
 					}
 					heading="Active"
 					// headingCount="120"
-					subHeading="35"
+					subHeading={topValues.activePrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -229,7 +248,7 @@ const EmployeesContainer = () => {
 					}
 					heading="Total Employees"
 					// headingCount="120"
-					subHeading="50"
+					subHeading="0"
 					type=""
 				/>
 			</div>
@@ -248,18 +267,30 @@ const EmployeesContainer = () => {
 						addModal || editModal || deleteModal ? "grayscale(1)" : "none",
 				}}
 			>
-				<UserSearch setAddModal={setAddModal} setFilterItem={setFilterItem} />
+				<UserSearch
+					{...{
+						setAddModal,
+						filterBy,
+						setFilterBy,
+						orderBy,
+						setOrderBy,
+						searchQuery,
+						setSearchQuery,
+					}}
+				/>
 				<br />
 				<UserListing
 					{...{
 						employeeListing,
-						filterItem,
 						setEditModal,
 						activeCategory,
 						setActiveCategory,
 						setDeleteModal,
 						setCloneModal,
 						loading,
+						filterBy,
+						orderBy,
+						searchQuery,
 					}}
 				/>
 			</div>

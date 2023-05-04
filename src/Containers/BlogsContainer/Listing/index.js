@@ -44,7 +44,7 @@ const PrizeListing = (props) => {
 		{
 			title: "DESCRIPTION",
 			width: 190,
-			// fixed: "left",
+
 			render: (rowData) => {
 				return (
 					<span className="label" style={{ width: 190 }}>
@@ -59,7 +59,7 @@ const PrizeListing = (props) => {
 		{
 			title: "STATUS",
 			width: 100,
-			// fixed: "left",
+
 			render: (rowData) => {
 				return (
 					<div
@@ -83,7 +83,7 @@ const PrizeListing = (props) => {
 		{
 			title: "DATE CREATED",
 			width: 150,
-			// fixed: "left",
+
 			render: (rowData) => {
 				return (
 					<span className="label">
@@ -99,22 +99,9 @@ const PrizeListing = (props) => {
 
 		{
 			title: "ACTION",
-			//key: "operation",
-			// fixed: "right",
 			width: 150,
-			//render: () =>
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
-					{/* <Tooltip placement="topRight" title={"View"}>
-						<div
-							onClick={() => {
-								// navigate("/add");
-							}}
-							style={{ cursor: "pointer" }}
-						>
-							<AiFillEye color="#2DAB22" size={20} />
-						</div>
-					</Tooltip> */}
 					<Tooltip placement="topRight" title={"Edit"}>
 						<div
 							onClick={() => {
@@ -151,6 +138,23 @@ const PrizeListing = (props) => {
 			),
 		},
 	];
+	const listing = () => {
+		if (!props.searchQuery) {
+			return props.blogList;
+		} else {
+			if (props.filterBy) {
+				return props.blogList.filter((item) =>
+					item[props.filterBy]
+						.toLowerCase()
+						.includes(props.searchQuery.toLowerCase())
+				);
+			}
+			return props.blogList.filter((item) =>
+				item.name.toLowerCase().includes(props.searchQuery.toLowerCase())
+			);
+		}
+	};
+
 	const antIcon = (
 		<LoadingOutlined
 			style={{
@@ -173,7 +177,19 @@ const PrizeListing = (props) => {
 					<Spin indicator={antIcon} />
 				</div>
 			) : (
-				<Table columns={columns} dataSource={props.blogList} />
+				<Table
+					columns={columns}
+					// dataSource={props.blogList}
+					dataSource={
+						props.blogList
+							? props.orderBy
+								? listing().sort((a, b) =>
+										a[props.orderBy].toString().localeCompare(b[props.orderBy])
+								  )
+								: listing()
+							: []
+					}
+				/>
 			)}
 		</div>
 	);

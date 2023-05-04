@@ -1,12 +1,15 @@
 import React from "react";
 import "../index.css";
-import { InputNumber } from "antd";
+// import { InputNumber } from "antd";
 import Select from "react-select";
-import { IoMdAdd } from "react-icons/io";
+import { IoIosArrowUp, IoIosArrowDown, IoMdAdd } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
-
+import { WeightSelection, TimeSelection } from "./AddOns";
 import { getAllExercises } from "../../../../Helpers/firebase";
-
+import { Input, notification } from "antd";
+// import {IosIosArrowUp}
+import { SlArrowUp, SlArrowDown } from "react-icons/sl";
+const { TextArea } = Input;
 export default function DayEdit(props) {
 	const [refreshMe, setRefereshMe] = React.useState(false);
 	const [warmupCounter, setWarmupCounter] = React.useState(1);
@@ -19,6 +22,8 @@ export default function DayEdit(props) {
 	const [cooldownCounter, setCoolDownCounter] = React.useState(1);
 	const [cooldownOpen, setCoolDownOpen] = React.useState(true);
 	const [cooldown, setCoolDown] = React.useState(props.data.cooldown ?? []);
+	const [api, contextHolder] = notification.useNotification();
+	const [notes, setNotes] = React.useState(props.data.notes ?? "");
 	const deleteMeFromWarmup = (index) => {
 		let newArr = [...warmup];
 		newArr = newArr.filter((itm, idex) => idex !== index);
@@ -123,6 +128,7 @@ export default function DayEdit(props) {
 				width: "100%",
 			}}
 		>
+			{contextHolder}
 			<div className="rowing">
 				<div />
 				<div className="rowing">
@@ -139,6 +145,7 @@ export default function DayEdit(props) {
 							oldDaya.warmup = warmup;
 							oldDaya.workout = workout;
 							oldDaya.cooldown = cooldown;
+							oldDaya.notes = notes;
 							props.setData(oldDaya);
 						}}
 					>
@@ -174,7 +181,7 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
@@ -182,9 +189,28 @@ export default function DayEdit(props) {
 										style={{ width: 50 }}
 										value={warmupCounter}
 										onChange={(e) => {
-											if (e.target.value > -1) setWarmupCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setWarmupCounter(parseInt(e.target.value));
+											if (!e.target.value) {
+												setWarmupCounter(0);
+											}
 										}}
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setWarmupCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (warmupCounter !== 0)
+													setWarmupCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -195,6 +221,9 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
@@ -203,12 +232,34 @@ export default function DayEdit(props) {
 											}
 											setWarmup(tempDays);
 											setWarmupOpen(true);
+											notification.success({
+												message:
+													warmupCounter > 1
+														? `You have added ${warmupCounter} days to the warmup`
+														: `You have added ${warmupCounter} day to the warmup`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setWarmupCounter(0);
+												},
+											});
 										}}
 									>
 										Add
 									</button>
 								</div>
 							</div>
+						</div>
+						<div
+							onClick={() => setWarmupOpen(!warmupOpen)}
+							style={{ cursor: "pointer", fontWeight: "bold" }}
+						>
+							{warmupOpen ? (
+								<SlArrowUp color="#F94F00" size={30} />
+							) : (
+								<SlArrowDown color="#F94F00" size={30} fontWeight={"bold"} />
+							)}
 						</div>
 					</div>
 					<div className="barVertical" />
@@ -223,6 +274,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromWarmup}
 											setToAll={setToAllWarmup}
+											setterFunc={setWarmup}
+											activeParentItem={warmup}
 										/>
 									))}
 							</div>
@@ -236,6 +289,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -278,7 +334,7 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
 										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
@@ -287,12 +343,27 @@ export default function DayEdit(props) {
 										style={{ width: 50 }}
 										value={workoutCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setWorkoutCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setWorkoutCounter(parseInt(e.target.value));
 											// console.log("worokout counter value", e.target.value);
 										}}
 										// className=""
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setWorkoutCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (workoutCounter !== 0)
+													setWorkoutCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -303,19 +374,45 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
 												});
+												// console.log("loop executing");
 											}
 											setWorkout(tempDays);
 											setWorkoutOpen(true);
+											notification.success({
+												message:
+													workoutCounter > 1
+														? `You have added ${workoutCounter} days to the workout`
+														: `You have added ${workoutCounter} day to the workout`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setWorkoutCounter(0);
+												},
+											});
 										}}
 									>
 										Add
 									</button>
 								</div>
 							</div>
+						</div>
+						<div
+							onClick={() => setWorkoutOpen(!workoutOpen)}
+							style={{ cursor: "pointer", fontWeight: "bold" }}
+						>
+							{workoutOpen ? (
+								<SlArrowUp color="#F94F00" size={30} />
+							) : (
+								<SlArrowDown color="#F94F00" size={30} fontWeight={"bold"} />
+							)}
 						</div>
 					</div>
 					<div className="barVertical" />
@@ -330,6 +427,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromWorkout}
 											setToAll={setToAllWorkout}
+											setterFunc={setWorkout}
+											activeParentItem={workout}
 										/>
 									))}
 							</div>
@@ -343,6 +442,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -384,16 +486,36 @@ export default function DayEdit(props) {
 							<div className="rowing ">
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
-										type={"number"}
+										type={"text"}
+										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
+										// defaultValue={daysNumber}
+										// onChange={setWorkoutCounter}
 										style={{ width: 50 }}
 										value={cooldownCounter}
 										onChange={(e) => {
-											if (e.target.value > -1)
-												setCoolDownCounter(e.target.value);
+											if (parseInt(e.target.value) > -1)
+												setCoolDownCounter(parseInt(e.target.value));
+											// console.log("worokout counter value", e.target.value);
 										}}
+										// className=""
 									/>
+									<div className="colCenter">
+										<IoIosArrowUp
+											onClick={() => {
+												setCoolDownCounter((prev) => prev + 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+										<IoIosArrowDown
+											onClick={() => {
+												if (cooldownCounter !== 0)
+													setCoolDownCounter((prev) => prev - 1);
+											}}
+											style={{ cursor: "pointer" }}
+										/>
+									</div>
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
@@ -404,6 +526,9 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
@@ -412,12 +537,34 @@ export default function DayEdit(props) {
 											}
 											setCoolDownOpen(true);
 											setCoolDown(tempDays);
+											notification.success({
+												message:
+													cooldownCounter > 1
+														? `You have added ${cooldownCounter} days to the cooldown`
+														: `You have added ${cooldownCounter} day to the cooldown`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setCoolDownCounter(0);
+												},
+											});
 										}}
 									>
 										Add
 									</button>
 								</div>
 							</div>
+						</div>
+						<div
+							onClick={() => setCoolDownOpen(!cooldownOpen)}
+							style={{ cursor: "pointer", fontWeight: "bold" }}
+						>
+							{cooldownOpen ? (
+								<SlArrowUp color="#F94F00" size={30} />
+							) : (
+								<SlArrowDown color="#F94F00" size={30} fontWeight={"bold"} />
+							)}
 						</div>
 					</div>
 					<div className="barVertical" />
@@ -432,6 +579,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromCoolDown}
 											setToAll={setToAllCoolDown}
+											setterFunc={setCoolDown}
+											activeParentItem={cooldown}
 										/>
 									))}
 							</div>
@@ -445,6 +594,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -463,6 +615,27 @@ export default function DayEdit(props) {
 						</>
 					)}
 				</div>
+				<div>
+					<span className="addBlogInputLabel">NOTES</span>
+					<div style={{ marginTop: 10 }}>
+						<TextArea
+							rows={4}
+							placeholder="Enter notes..."
+							maxLength={500}
+							showCount
+							className="addBlogInput overViewDescription"
+							name="overviewDescription"
+							onChange={(e) => setNotes(e.target.value)}
+							// onBlur={handleBlur}
+							value={notes}
+							style={{
+								width: "100%",
+								display: "flex",
+								height: 400,
+							}}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -473,31 +646,48 @@ const ExerciseItem = ({
 	index,
 	deleteMe,
 	setToAll,
+	setterFunc,
+	activeParentItem,
 }) => {
+	const [activeIndex, setActiveIndex] = React.useState(-1);
+
 	return (
 		<div style={{ marginBottom: 0 }}>
 			<div className="rowing">
 				<div className="rowing">
-					<span className="exerciseLabel">EXERCISE # {index + 1}</span>
+					<span className="exerciseLabel">Exercise # {index + 1}</span>
 					<span className="deleteWarmup" onClick={() => deleteMe(index)}>
 						<AiFillDelete color="#D30E0E" size={22} />
 					</span>
 
-					<span className="seeAll" onClick={() => setToAll(index)}>
-						set to all
-					</span>
+					{index === 0 && (
+						<span
+							className="seeAll"
+							onClick={() => setToAll(index)}
+							onMouseEnter={() => {
+								setActiveIndex(0);
+							}}
+							onMouseLeave={() => {
+								setActiveIndex(-1);
+							}}
+						>
+							set to all
+						</span>
+					)}
 				</div>
 				<div />
 			</div>
 			<div className="rowStart marginVertical50">
 				<div className="flexStart">
-					<span className="addBlogInputLabel">EXERCISE NAME</span>
+					<span className="customInputStyling">Exercise Name</span>
 					<div style={{ marginTop: 10 }}>
 						<Select
-							defaultInputValue={item.name}
-							defaultValue={item.name}
+							defaultInputValue={activeParentItem[index].name}
+							defaultValue={activeParentItem[index].name}
 							onChange={(e) => {
-								item.name = e.value;
+								let prevValues = [...activeParentItem];
+								prevValues[index].name = e.value;
+								setterFunc(prevValues);
 							}}
 							styles={{
 								control: (baseStyles, state) => ({
@@ -507,6 +697,12 @@ const ExerciseItem = ({
 									height: 58,
 									background: "#F4F4F4",
 									borderRadius: 8,
+									fontFamily: "Montserrat",
+									fontStyle: "normal",
+									fontWeight: "500",
+									fontSize: 18,
+									paddingLeft: 24,
+									// lineHeight: 22,
 								}),
 							}}
 							options={listOfCategories.map((itm) => {
@@ -519,88 +715,159 @@ const ExerciseItem = ({
 					</div>
 				</div>
 				<div className="flexStart">
-					<span className="addBlogInputLabel">Reps</span>
-					<div style={{ marginTop: 10 }}>
-						<InputNumber
-							type={"number"}
-							min={0}
+					<span className="customInputStyling">Reps</span>
+					<div
+						className="daysAdditionBtnDiv centerMe"
+						style={{
+							width: 115,
+							marginTop: 10,
+							backgroundColor:
+								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
+						}}
+					>
+						<input
+							type={"text"}
+							className="inputfont nmbrBtn"
+							defaultValue={activeParentItem[index].reps}
+							style={{ width: 90, paddingLeft: 0 }}
+							placeholder={"3 - 5"}
+							value={activeParentItem[index].reps}
 							onChange={(e) => {
-								if (e > -1) {
-									item.reps = e;
-								}
+								let prevValues = [...activeParentItem];
+								prevValues[index].reps = e.target.value;
+								setterFunc(prevValues);
 							}}
-							// value={item.reps}
-							placeholder={item.reps}
-							// defaultValue={item.reps}
-							className="inputNumberProgram inputText newNumber"
 						/>
 					</div>
 				</div>
 				<div className="flexStart">
-					<span className="addBlogInputLabel">Sets</span>
-					<div style={{ marginTop: 10 }}>
-						<InputNumber
-							min={0}
-							maxLength={20}
-							onChange={(val) => {
-								if (val > -1) {
-									item.sets = val;
-								}
+					<span className="customInputStyling">Sets</span>
+					<div
+						className="daysAdditionBtnDiv centerMe"
+						style={{
+							width: 115,
+							marginTop: 10,
+							backgroundColor:
+								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
+						}}
+					>
+						<input
+							type={"text"}
+							className="inputfont nmbrBtn"
+							defaultValue={activeParentItem[index].sets}
+							style={{ width: 90, paddingLeft: 0 }}
+							placeholder={"3 - 5"}
+							value={activeParentItem[index].sets}
+							onChange={(e) => {
+								let prevValues = [...activeParentItem];
+								prevValues[index].sets = e.target.value;
+								setterFunc(prevValues);
 							}}
-							placeholder={item.sets}
-							className="inputNumberProgram inputText"
 						/>
 					</div>
 				</div>
 				<div className="flexStart">
-					<span className="addBlogInputLabel">Weights</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={1000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.weight = val;
-								}
+					<span className="customInputStyling">Weight</span>
+					<div
+						className="daysAdditionBtnDiv rowing"
+						style={{
+							width: 120,
+							marginTop: 10,
+							backgroundColor:
+								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
+						}}
+					>
+						<input
+							type={"text"}
+							className="inputfont nmbrBtn"
+							defaultValue={activeParentItem[index].weight}
+							style={{ width: 55, paddingLeft: 0 }}
+							placeholder={"3 - 5"}
+							value={activeParentItem[index].weight}
+							onChange={(e) => {
+								let prevValues = [...activeParentItem];
+								prevValues[index].weight = e.target.value;
+								setterFunc(prevValues);
 							}}
-							placeholder={item.weight}
-							className="inputNumberProgram inputText"
 						/>
-						<span>(lb)</span>
+						<WeightSelection
+							activeParentItem={activeParentItem}
+							index={index}
+							setterFunc={setterFunc}
+						/>
 					</div>
 				</div>
 				<div className="flexStart">
-					<span className="addBlogInputLabel">Time</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={100000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.time = val;
-								}
+					<span className="customInputStyling">Time</span>
+					<div style={{ marginTop: 0 }} className="colCenteral">
+						<div
+							className="daysAdditionBtnDiv rowing"
+							style={{
+								width: 120,
+								marginTop: 10,
+								backgroundColor:
+									activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 							}}
-							placeholder={item.time}
-							className="inputNumberProgram inputText"
-						/>
-						<span>(sec)</span>
+						>
+							<input
+								type={"text"}
+								className="inputfont nmbrBtn"
+								defaultValue={activeParentItem[index].time}
+								style={{ width: 55, paddingLeft: 0 }}
+								placeholder={"0"}
+								value={activeParentItem[index].time}
+								onChange={(e) => {
+									let newVal = activeParentItem[index].time;
+									if (parseInt(e.target.value) > -1) newVal = e.target.value;
+									if (!e.target.value) newVal = 0;
+									let prevValues = [...activeParentItem];
+									prevValues[index].time = newVal;
+									setterFunc(prevValues);
+								}}
+							/>
+							<TimeSelection
+								activeParentItem={activeParentItem}
+								index={index}
+								setterFunc={setterFunc}
+							/>
+						</div>
 					</div>
 				</div>
 				<div className="flexStart">
-					<span className="addBlogInputLabel">Rest</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={100000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.rest = val;
-								}
+					<span className="customInputStyling">Rest</span>
+					<div
+						className="daysAdditionBtnDiv rowing"
+						style={{
+							width: 120,
+							marginTop: 10,
+							backgroundColor:
+								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
+						}}
+					>
+						<input
+							type={"text"}
+							// defaultValue={daysNumber}
+							className="inputfont nmbrBtn"
+							placeholder={0}
+							defaultValue={activeParentItem[index].rest}
+							// value={item.rest}
+							style={{ width: 55, paddingLeft: 0 }}
+							// placeholder={"0"}
+							value={activeParentItem[index].rest}
+							onChange={(e) => {
+								let newVal = activeParentItem[index].rest;
+								if (parseInt(e.target.value) > -1) newVal = e.target.value;
+								if (!e.target.value) newVal = 0;
+								let prevValues = [...activeParentItem];
+								prevValues[index].rest = newVal;
+								setterFunc(prevValues);
 							}}
-							placeholder={item.rest}
-							className="inputNumberProgram inputText"
 						/>
-						<span>(sec)</span>
+						<TimeSelection
+							activeParentItem={activeParentItem}
+							index={index}
+							setterFunc={setterFunc}
+						/>
 					</div>
 				</div>
 			</div>

@@ -1077,3 +1077,8 @@ cursor: pointer;
 color: #F94F00;
 cursor: pointer;
 }
+.imageMesaurement{
+  margin-top: -10px;
+  margin-bottom: 15px;
+  font-size: 12px;
+}

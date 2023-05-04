@@ -23,9 +23,15 @@ const ExercisesContainer = (props) => {
 	const [addModal, setAddModal] = React.useState(false);
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
 	// const [editModal, setEditModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState("");
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchQuery, setSearchQuery] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
-
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const [campaignListing, setCampaignListing] = React.useState([]);
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
@@ -64,7 +70,20 @@ const ExercisesContainer = (props) => {
 		setLoading(true);
 		let result = await getAllExercises();
 		setCampaignListing(result);
-		console.log("result", result);
+		let totalPrograms = result.length,
+			activePrograms = 0,
+			pendingPrograms = 0;
+		result.forEach((element) => {
+			if (element.status) {
+				element.status !== "Inactive" ? activePrograms++ : pendingPrograms++;
+			}
+		});
+		setTopValues({
+			totalPrograms,
+			pendingPrograms,
+			activePrograms,
+		});
+		// console.log("result", result);
 		setLoading(false);
 	};
 	const editThisProgram = (id) => {
@@ -128,11 +147,11 @@ const ExercisesContainer = (props) => {
 							primaryColor="#F94F00"
 							secondaryColor="rgba(255, 255, 255, 0.16)"
 							icon={
-								<img src="/Icon2.png" style={{ width: 38.75, height: 35.23 }} />
+								<img src="/bmbl.png" style={{ width: 38.75, height: 35.23 }} />
 							}
 							heading="Total Exercises"
 							// headingCount="120"
-							subHeading="50"
+							subHeading={topValues.totalPrograms}
 							type=""
 						/>
 						<CustomSmallCard
@@ -146,7 +165,7 @@ const ExercisesContainer = (props) => {
 							}
 							heading="Active Exercises"
 							// headingCount="120"
-							subHeading="35"
+							subHeading={topValues.activePrograms}
 							type=""
 						/>
 						<CustomSmallCard
@@ -160,7 +179,7 @@ const ExercisesContainer = (props) => {
 							}
 							heading="Pending Exercises"
 							// headingCount="120"
-							subHeading="50"
+							subHeading={topValues.pendingPrograms}
 							type=""
 						/>
 					</div>
@@ -182,8 +201,12 @@ const ExercisesContainer = (props) => {
 						<ProductCategorySearch
 							{...{
 								setAddModal,
-								filterItem,
-								setFilterItem,
+								filterBy,
+								setFilterBy,
+								orderBy,
+								setOrderBy,
+								searchQuery,
+								setSearchQuery,
 							}}
 						/>
 
@@ -195,6 +218,9 @@ const ExercisesContainer = (props) => {
 								setShowDeleteModal,
 								campaignListing,
 								editThisProgram,
+								filterBy,
+								orderBy,
+								searchQuery,
 							}}
 						/>
 					</div>

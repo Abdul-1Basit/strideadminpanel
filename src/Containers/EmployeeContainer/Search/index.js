@@ -48,13 +48,6 @@ const UserSearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				{/* <Typography
-					alignment="left"
-					title="List of Employees"
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/> */}
 				<span className="tableTitle">List of Employees</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">
@@ -80,27 +73,38 @@ const UserSearch = (props) => {
 						}}
 						placeholder="Search a user"
 						className="searchNewInput"
+						onChange={(e) => {
+							props.setSearchQuery(e.target.value);
+						}}
 					/>
 					<button className="searchIconbtn">
 						<BsSearch size={23} color="#fff" />
 					</button>
 				</div>
 				<div style={{ width: 45 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true}>
+				<select
+					className="newSelect"
+					value={props.orderBy}
+					onChange={(e) => props.setOrderBy(e.target.value)}
+				>
+					<option value="" disabled={true} selected={true}>
 						Sort By
 					</option>
 					<option value="id">Id</option>
 					<option value="name">Name</option>
-				</select>{" "}
+				</select>
 				<div style={{ width: 24 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true} selected={true}>
+				<select
+					className="newSelect"
+					value={props.filterBy}
+					onChange={(e) => props.setFilterBy(e.target.value)}
+				>
+					<option value="" disabled={true} selected={true}>
 						Filter By
 					</option>
 					<option value="id">Id</option>
-					<option value="name">Name</option>
-					<option value="Phone">Phone #</option>
+					<option value="fullName">Name</option>
+					<option value="phonenumber">Phone #</option>
 					<option value="address">Address</option>
 				</select>
 				<div style={{ width: 24 }} />

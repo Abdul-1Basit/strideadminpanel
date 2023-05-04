@@ -6,7 +6,7 @@ export default function CustomSmallCard(props) {
 			className="customCrd"
 			style={{
 				backgroundColor: props.primaryColor,
-				width: window.screen.width <= 1200 ? 280 : 330,
+				width: window.screen.width <= 1200 ? 270 : 330,
 			}}
 		>
 			<div

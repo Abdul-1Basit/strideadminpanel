@@ -18,13 +18,22 @@ import CustomSmallCard from "../../Components/CustomSmallCard";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutsContainer = (props) => {
+	const navigate = useNavigate();
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const [activeCategory, setActiveCategory] = React.useState();
 	const [addModal, setAddModal] = React.useState(false);
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
 	const [editModal, setEditModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState("");
+	// const [filterItem, setFilterItem] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
-	const navigate = useNavigate();
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchProgramQuery, setSearchProgramQuery] = React.useState("");
+	const [searchUserQuery, setSearchUserQuery] = React.useState("");
 	const [campaignListing, setCampaignListing] = React.useState([]);
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
@@ -60,7 +69,18 @@ const WorkoutsContainer = (props) => {
 		setLoading(true);
 		let result = await getAllWorkouts();
 		setCampaignListing(result);
-		console.log("result", result);
+		let totalPrograms = result.length,
+			activePrograms = 0,
+			pendingPrograms = 0;
+		result.forEach((element) => {
+			element.status !== "Inactive" ? activePrograms++ : pendingPrograms++;
+		});
+		setTopValues({
+			totalPrograms,
+			pendingPrograms,
+			activePrograms,
+		});
+		// console.log("result", result);
 		setLoading(false);
 	};
 	const editThisWorkout = (id) => {
@@ -144,12 +164,10 @@ const WorkoutsContainer = (props) => {
 					textColor="#fff"
 					primaryColor="#F94F00"
 					secondaryColor="rgba(255, 255, 255, 0.16)"
-					icon={
-						<img src="/Icon2.png" style={{ width: 38.75, height: 35.23 }} />
-					}
+					icon={<img src="/bmbl.png" style={{ width: 38.75, height: 35.23 }} />}
 					heading="Total Workouts"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.totalPrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -163,7 +181,7 @@ const WorkoutsContainer = (props) => {
 					}
 					heading="Active Workouts"
 					// headingCount="120"
-					subHeading="35"
+					subHeading={topValues.activePrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -177,7 +195,7 @@ const WorkoutsContainer = (props) => {
 					}
 					heading="Pending Workouts"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.pendingPrograms}
 					type=""
 				/>
 			</div>
@@ -196,8 +214,15 @@ const WorkoutsContainer = (props) => {
 				<ProductCategorySearch
 					{...{
 						setAddModal,
-						filterItem,
-						setFilterItem,
+
+						orderBy,
+						setOrderBy,
+						filterBy,
+						setFilterBy,
+						setSearchProgramQuery,
+						searchProgramQuery,
+						searchUserQuery,
+						setSearchUserQuery,
 					}}
 				/>
 
@@ -210,6 +235,10 @@ const WorkoutsContainer = (props) => {
 						setShowDeleteModal,
 						campaignListing,
 						editThisWorkout,
+						orderBy,
+						filterBy,
+						searchProgramQuery,
+						searchUserQuery,
 					}}
 				/>
 			</div>

@@ -18,9 +18,15 @@ const BlogsContainer = (props) => {
 	const [activeCategory, setActiveCategory] = React.useState();
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
 	const [editModal, setEditModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState("");
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchQuery, setSearchQuery] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
-
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const [blogList, setBlogList] = React.useState([]);
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
@@ -56,7 +62,18 @@ const BlogsContainer = (props) => {
 		setLoading(true);
 		let result = await getAllBlogs();
 		setBlogList(result);
-		console.log("result", result);
+		let totalPrograms = result.length,
+			activePrograms = 0,
+			pendingPrograms = 0;
+		result.forEach((rowData) => {
+			rowData.status === "Active" ? activePrograms++ : pendingPrograms++;
+		});
+		setTopValues({
+			totalPrograms,
+			pendingPrograms,
+			activePrograms,
+		});
+		// console.log("result", result);
 		setLoading(false);
 	};
 
@@ -70,39 +87,6 @@ const BlogsContainer = (props) => {
 			}}
 		>
 			<div style={{ display: "flex", width: "100%" }}>
-				{/* <Modal
-					visible={addModal}
-					title=""
-					onCancel={() => setAddModal(false)}
-					closable={false}
-					style={ModalStyle}
-					bodyStyle={ModalBodyStyle}
-					footer={null}
-					destroyOnClose
-				>
-					<AddProductCategory {...{ setAddModal, successMessage }} />
-				</Modal> */}
-
-				{/* <Modal
-					visible={editModal}
-					title=""
-					onCancel={() => setEditModal(false)}
-					closable={false}
-					style={ModalStyle}
-					bodyStyle={ModalBodyStyle}
-					footer={null}
-					destroyOnClose
-				>
-					<EditCampaign
-						{...{
-							setEditModal,
-							activeCategory,
-							setActiveCategory,
-							successMessage,
-						}}
-					/>
-				</Modal>
-*/}
 				<Modal
 					visible={showDeleteModal}
 					title=""
@@ -140,9 +124,9 @@ const BlogsContainer = (props) => {
 					icon={
 						<img src="/Icon2.png" style={{ width: 38.75, height: 35.23 }} />
 					}
-					heading="Total Employees"
+					heading="Total Blogs"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.totalPrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -154,9 +138,9 @@ const BlogsContainer = (props) => {
 							style={{ width: 38.75, height: 35.23, color: "#2DAB22" }}
 						/>
 					}
-					heading="Active"
+					heading="Active Blogs"
 					// headingCount="120"
-					subHeading="35"
+					subHeading={topValues.activePrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -168,18 +152,15 @@ const BlogsContainer = (props) => {
 							style={{ width: 38.75, height: 35.23, color: "#D30E0E" }}
 						/>
 					}
-					heading="Total Employees"
+					heading="Inactive Blogs"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.pendingPrograms}
 					type=""
 				/>
 			</div>
 			<div
 				style={{
-					// paddingLeft: 40,
-					// paddingRight: 40,
 					width: "100%",
-					// backgroundColor: "#E5E5E5",
 					background: "#FFFFFF",
 					boxShadow: " 0px 0px 16px rgba(0, 0, 0, 0.16)",
 					borderRadius: 20,
@@ -190,8 +171,12 @@ const BlogsContainer = (props) => {
 			>
 				<ProductCategorySearch
 					{...{
-						filterItem,
-						setFilterItem,
+						filterBy,
+						setFilterBy,
+						orderBy,
+						setOrderBy,
+						searchQuery,
+						setSearchQuery,
 					}}
 				/>
 
@@ -202,6 +187,9 @@ const BlogsContainer = (props) => {
 						loading,
 						setShowDeleteModal,
 						blogList,
+						filterBy,
+						orderBy,
+						searchQuery,
 					}}
 				/>
 			</div>

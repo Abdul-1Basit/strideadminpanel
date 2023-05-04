@@ -2,21 +2,24 @@ import React from "react";
 // import SpinnerComponent from "../../../../Components/SpinnerComponent";
 import "../index.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Input, InputNumber, Modal } from "antd";
+import { Input, notification } from "antd";
 // import { primaryColor } from "../../../../Constants";
 // import { RiDeleteBackFill } from "react-icons/ri";
 // import { GrAdd } from "react-icons/gr";
-import Select from "react-select";
-import { RxCross2, RxCross1 } from "react-icons/rx";
+// import Select from "react-select";
+// import { RxCross2, RxCross1 } from "react-icons/rx";
 import { IoMdAdd } from "react-icons/io";
-import { AiFillDelete } from "react-icons/ai";
-import { BiSearch } from "react-icons/bi";
-import { BsCheckLg } from "react-icons/bs";
-import { SlArrowUp, SlArrowDown } from "react-icons/sl";
+// import { BiSearch } from "react-icons/bi";
+// import { BsCheckLg } from "react-icons/bs";
+// import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { getAllExercises } from "../../../../Helpers/firebase";
-
+import ExerciseItem from "./ExerciseItem";
+const { TextArea } = Input;
 export default function DayEdit(props) {
 	const [visible, setVisible] = React.useState(false);
+	const [notes, setNotes] = React.useState(
+		props.days[props.activeItemIndex].notes ?? ""
+	);
 	const [activeType, setActiveType] = React.useState("");
 	const [refreshMe, setRefereshMe] = React.useState(false);
 	const [warmupCounter, setWarmupCounter] = React.useState(1);
@@ -29,6 +32,7 @@ export default function DayEdit(props) {
 	const [workout, setWorkout] = React.useState(
 		props.days[props.activeItemIndex].workout ?? []
 	);
+	const [api, contextHolder] = notification.useNotification();
 	const [listOfCategories, setListOfCategories] = React.useState([]);
 	const [cooldownCounter, setCoolDownCounter] = React.useState(1);
 	const [cooldownOpen, setCoolDownOpen] = React.useState(true);
@@ -63,27 +67,34 @@ export default function DayEdit(props) {
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
+			innerItem.weightunit = item.weightunit;
+			innerItem.timeUnit = item.timeUnit;
+			innerItem.restUnit = item.restUnit;
 			innerItem.time = item.time;
 			innerItem.rest = item.rest;
 		});
 		// console.log("loop executing");
-
+		console.log("previous array", warmup);
+		console.log("new array", newArr);
 		setWarmup(newArr);
 		setRefereshMe(true);
 	};
 	const setToAllWorkout = (index) => {
 		let item = workout[index]; //.find((itm, idex) => idex === index);
 		let newArr = [...workout];
-		newArr.forEach((innerItem, innnerIndex) => {
+		newArr.forEach((innerItem) => {
 			// innerItem.name = item.name;
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
+			innerItem.weightunit = item.weightunit;
+			innerItem.timeUnit = item.timeUnit;
+			innerItem.restUnit = item.restUnit;
 			innerItem.time = item.time;
 			innerItem.rest = item.rest;
 			console.log("current active val", item);
 		});
-		console.log("executingsetto All workout function");
+		console.log("executingsetto All workout function", newArr);
 
 		setWorkout(newArr);
 	};
@@ -95,6 +106,10 @@ export default function DayEdit(props) {
 			innerItem.reps = item.reps;
 			innerItem.sets = item.sets;
 			innerItem.weight = item.weight;
+			innerItem.weightunit = item.weightunit;
+			innerItem.timeUnit = item.timeUnit;
+			innerItem.restUnit = item.restUnit;
+
 			innerItem.time = item.time;
 			innerItem.rest = item.rest;
 		});
@@ -152,6 +167,7 @@ export default function DayEdit(props) {
 		setActiveType("");
 		setVisible(false);
 	};
+	console.log("cooldown", cooldown);
 	React.useEffect(() => {
 		if (refreshMe) {
 			setRefereshMe(false);
@@ -184,8 +200,10 @@ export default function DayEdit(props) {
 		setListOfCategories(listOfExercisez);
 		console.log("list ofexercises", listOfExercisez);
 	};
+
 	return (
 		<div className="containerForAdd">
+			{contextHolder}
 			{/* <AddModal
 				visible={visible}
 				setVisible={setVisible}
@@ -214,6 +232,7 @@ export default function DayEdit(props) {
 							oldDaya[props.activeItemIndex].warmup = warmup;
 							oldDaya[props.activeItemIndex].workout = workout;
 							oldDaya[props.activeItemIndex].cooldown = cooldown;
+							oldDaya[props.activeItemIndex].notes = notes;
 							props.setDays(oldDaya);
 							props.setActiveScreen(0);
 						}}
@@ -257,6 +276,9 @@ export default function DayEdit(props) {
 										onChange={(e) => {
 											if (parseInt(e.target.value) > -1)
 												setWarmupCounter(parseInt(e.target.value));
+											if (!e.target.value) {
+												setWarmupCounter(0);
+											}
 										}}
 									/>
 									<div className="colCenter">
@@ -284,6 +306,9 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
@@ -292,6 +317,18 @@ export default function DayEdit(props) {
 											}
 											setWarmup(tempDays);
 											setWarmupOpen(true);
+											notification.success({
+												message:
+													warmupCounter > 1
+														? `You have added ${warmupCounter} days to the warmup`
+														: `You have added ${warmupCounter} day to the warmup`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setWarmupCounter(0);
+												},
+											});
 										}}
 									>
 										Add
@@ -312,6 +349,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromWarmup}
 											setToAll={setToAllWarmup}
+											setterFunc={setWarmup}
+											activeParentItem={warmup}
 										/>
 									))}
 							</div>
@@ -325,6 +364,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -407,6 +449,9 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
@@ -415,6 +460,18 @@ export default function DayEdit(props) {
 											}
 											setWorkout(tempDays);
 											setWorkoutOpen(true);
+											notification.success({
+												message:
+													workoutCounter > 1
+														? `You have added ${workoutCounter} days to the workout`
+														: `You have added ${workoutCounter} day to the workout`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setWorkoutCounter(0);
+												},
+											});
 										}}
 									>
 										Add
@@ -435,6 +492,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromWorkout}
 											setToAll={setToAllWorkout}
+											setterFunc={setWorkout}
+											activeParentItem={workout}
 										/>
 									))}
 							</div>
@@ -448,6 +507,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -530,6 +592,9 @@ export default function DayEdit(props) {
 													name: "",
 													reps: 0,
 													sets: 0,
+													weightunit: "lbs",
+													timeUnit: "Sec",
+													restUnit: "Sec",
 													weight: 0,
 													time: 0,
 													rest: 0,
@@ -538,6 +603,18 @@ export default function DayEdit(props) {
 											}
 											setCoolDownOpen(true);
 											setCoolDown(tempDays);
+											notification.success({
+												message:
+													cooldownCounter > 1
+														? `You have added ${cooldownCounter} days to the cooldown`
+														: `You have added ${cooldownCounter} day to the cooldown`,
+												description: ``, //`${values.name}  has been successfully updated`,
+												placement: "topRight",
+												duration: 3,
+												onClose: function () {
+													setCoolDownCounter(0);
+												},
+											});
 										}}
 									>
 										Add
@@ -558,6 +635,8 @@ export default function DayEdit(props) {
 											index={index}
 											deleteMe={deleteMeFromCoolDown}
 											setToAll={setToAllCoolDown}
+											setterFunc={setCoolDown}
+											activeParentItem={cooldown}
 										/>
 									))}
 							</div>
@@ -571,6 +650,9 @@ export default function DayEdit(props) {
 											name: "",
 											reps: 0,
 											sets: 0,
+											weightunit: "lbs",
+											timeUnit: "Sec",
+											restUnit: "Sec",
 											weight: 0,
 											time: 0,
 											rest: 0,
@@ -589,369 +671,250 @@ export default function DayEdit(props) {
 						</>
 					)}
 				</div>
+				<div>
+					<span className="addBlogInputLabel">NOTES</span>
+					<div style={{ marginTop: 10 }}>
+						<TextArea
+							rows={4}
+							placeholder="Enter notes..."
+							maxLength={500}
+							showCount
+							className="addBlogInput overViewDescription"
+							name="overviewDescription"
+							onChange={(e) => setNotes(e.target.value)}
+							// onBlur={handleBlur}
+							value={notes}
+							style={{
+								width: "100%",
+								display: "flex",
+								height: 400,
+							}}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
 }
-const ExerciseItem = ({
-	listOfCategories,
-	item,
-	index,
-	deleteMe,
-	setToAll,
-}) => {
-	return (
-		<div style={{ marginBottom: 0 }}>
-			<div className="rowing">
-				<div className="rowing">
-					<span className="exerciseLabel">EXERCISE # {index + 1}</span>
-					<span className="deleteWarmup" onClick={() => deleteMe(index)}>
-						<AiFillDelete color="#D30E0E" size={22} />
-					</span>
 
-					<span className="seeAll" onClick={() => setToAll(index)}>
-						set to all
-					</span>
-				</div>
-				<div />
-			</div>
-			<div className="rowStart marginVertical50">
-				<div className="flexStart">
-					<span className="addBlogInputLabel">EXERCISE NAME</span>
-					<div style={{ marginTop: 10 }}>
-						<Select
-							defaultInputValue={item.name}
-							defaultValue={item.name}
-							onChange={(e) => {
-								item.name = e.value;
-							}}
-							styles={{
-								control: (baseStyles, state) => ({
-									...baseStyles,
-									// padding: "18px 24px",
-									width: 314,
-									height: 58,
-									background: "#F4F4F4",
-									borderRadius: 8,
-								}),
-							}}
-							options={listOfCategories.map((itm) => {
-								return {
-									value: itm,
-									label: itm,
-								};
-							})}
-						/>
-					</div>
-				</div>
-				<div className="flexStart">
-					<span className="addBlogInputLabel">Reps</span>
-					<div style={{ marginTop: 10 }}>
-						<InputNumber
-							type={"number"}
-							min={0}
-							onChange={(e) => {
-								if (e > -1) {
-									item.reps = e;
-								}
-							}}
-							// value={item.reps}
-							placeholder={item.reps}
-							// defaultValue={item.reps}
-							className="inputNumberProgram inputText newNumber"
-						/>
-					</div>
-				</div>
-				<div className="flexStart">
-					<span className="addBlogInputLabel">Sets</span>
-					<div style={{ marginTop: 10 }}>
-						<Input
-							// min={0}
-							// maxLength={20}
-							onChange={(val) => {
-								// if (val > -1) {
-								// 	item.sets = val;
-								// }
-								item.sets = val.target.value;
-							}}
-							placeholder={item.sets}
-							className="inputNumberProgram inputText"
-						/>
-					</div>
-				</div>
-				<div className="flexStart">
-					<span className="addBlogInputLabel">Weights</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={1000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.weight = val;
-								}
-							}}
-							placeholder={item.weight}
-							className="inputNumberProgram inputText"
-						/>
-						<span>(lb)</span>
-					</div>
-				</div>
-				<div className="flexStart">
-					<span className="addBlogInputLabel">Time</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={100000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.time = val;
-								}
-							}}
-							placeholder={item.time}
-							className="inputNumberProgram inputText"
-						/>
-						<span>(sec)</span>
-					</div>
-				</div>
-				<div className="flexStart">
-					<span className="addBlogInputLabel">Rest</span>
-					<div style={{ marginTop: 10 }} className="colCenteral">
-						<InputNumber
-							min={0}
-							maxLength={100000}
-							onChange={(val) => {
-								if (val > -1) {
-									item.rest = val;
-								}
-							}}
-							placeholder={item.rest}
-							className="inputNumberProgram inputText"
-						/>
-						<span>(sec)</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
-};
-const AddModal = (props) => {
-	const [listOfExercise, setListOfExercise] = React.useState([]);
-	const [searchQuery, setSearchQuery] = React.useState("");
-	const [listOfCategories, setListOfCategories] = React.useState([]);
-	React.useEffect(() => {
-		fetchExercises();
-	}, []);
-	const fetchExercises = async () => {
-		const listOfExes = await getAllExercises();
-		let categoryList = [];
-		let listOfExercisez = [];
-		let prevCatogries = [];
+// const AddModal = (props) => {
+// 	const [listOfExercise, setListOfExercise] = React.useState([]);
+// 	const [searchQuery, setSearchQuery] = React.useState("");
+// 	const [listOfCategories, setListOfCategories] = React.useState([]);
+// 	React.useEffect(() => {
+// 		fetchExercises();
+// 	}, []);
+// 	const fetchExercises = async () => {
+// 		const listOfExes = await getAllExercises();
+// 		let categoryList = [];
+// 		let listOfExercisez = [];
+// 		let prevCatogries = [];
 
-		listOfExes.forEach((item) => {
-			if (categoryList.findIndex((lIndex) => lIndex === item.category) < 0) {
-				categoryList.push(item.category);
-			}
-		});
-		categoryList.forEach((itemOne) => {
-			listOfExes.forEach((itemTwo) => {
-				if (itemOne === itemTwo.category) {
-					listOfExercisez.push(itemTwo.name);
-				}
-			});
-			prevCatogries.push({
-				categoryName: itemOne,
-				listOfExercises: listOfExercisez,
-			});
-			listOfExercisez = [];
-		});
-		setListOfCategories(prevCatogries);
-	};
-	const deleteMe = (index) => {
-		let newList = [...listOfExercise];
-		newList = listOfExercise.filter((itm, ind) => ind !== index);
-		setListOfExercise(newList);
-	};
+// 		listOfExes.forEach((item) => {
+// 			if (categoryList.findIndex((lIndex) => lIndex === item.category) < 0) {
+// 				categoryList.push(item.category);
+// 			}
+// 		});
+// 		categoryList.forEach((itemOne) => {
+// 			listOfExes.forEach((itemTwo) => {
+// 				if (itemOne === itemTwo.category) {
+// 					listOfExercisez.push(itemTwo.name);
+// 				}
+// 			});
+// 			prevCatogries.push({
+// 				categoryName: itemOne,
+// 				listOfExercises: listOfExercisez,
+// 			});
+// 			listOfExercisez = [];
+// 		});
+// 		setListOfCategories(prevCatogries);
+// 	};
+// 	const deleteMe = (index) => {
+// 		let newList = [...listOfExercise];
+// 		newList = listOfExercise.filter((itm, ind) => ind !== index);
+// 		setListOfExercise(newList);
+// 	};
 
-	const checkForListOfExercise = (item) => {
-		let newList = [...listOfExercise];
-		// let checkIndex=
-		if (newList.findIndex((innrItem) => innrItem === item) < 0) {
-			newList.push(item);
-		} else {
-			newList = newList.filter((innrItem) => innrItem !== item);
-		}
-		setListOfExercise(newList);
-	};
+// 	const checkForListOfExercise = (item) => {
+// 		let newList = [...listOfExercise];
+// 		// let checkIndex=
+// 		if (newList.findIndex((innrItem) => innrItem === item) < 0) {
+// 			newList.push(item);
+// 		} else {
+// 			newList = newList.filter((innrItem) => innrItem !== item);
+// 		}
+// 		setListOfExercise(newList);
+// 	};
 
-	return (
-		<Modal
-			open={props.visible}
-			// className="addProgramsModal"
-			style={{
-				position: "absolute",
-				right: 0,
-				top: 0,
-				// padding: 40,
-				borderRadius: 0,
-			}}
-			closable={false}
-			footer={null}
-			title={null}
-		>
-			<div //className="addProgramsModal"
-				style={{ padding: 40, minHeight: "100vh", height: "100%" }}
-			>
-				<div className="flexEnd" style={{ paddingBottom: 32 }}>
-					<span
-						className="modlCloseBtn"
-						onClick={() => props.setVisible(false)}
-					>
-						<RxCross2 size={30} style={{ alignSelf: "center" }} />
-					</span>
-				</div>
-				<span className="addMdlHeading">Select Exercises for Warm up</span>
-				<div className="modlBody">
-					<div style={{ width: 247 }}>
-						{listOfExercise.map((item, index) => {
-							return (
-								<div className="tagCustom" key={index}>
-									<span>{item}</span>
-									<RxCross1 size={14} onClick={() => deleteMe(index)} />
-								</div>
-							);
-						})}
-					</div>
-					<div className="inputSearchCustom">
-						<input
-							className="inputField"
-							onChange={(e) => setSearchQuery(e.target.value)}
-							placeholder="Search"
-						/>
-						<BiSearch color="#D6D6D6" size={25} />
-					</div>
-					{listOfCategories.map((itm, ind) => (
-						<CustomCollapsible
-							item={itm}
-							key={ind}
-							checkForListOfExercise={checkForListOfExercise}
-							listOfExercise={listOfExercise}
-						/>
-					))}
-					<input
-						className="customAddBtn"
-						value="Add"
-						onClick={() => {
-							if (listOfExercise.length !== 0) {
-								props.addFollowing(listOfExercise);
-							} else {
-								alert("Please select one exercise atleast");
-							}
-						}}
-					/>
-				</div>
-			</div>
-		</Modal>
-	);
-};
+// 	return (
+// 		<Modal
+// 			open={props.visible}
+// 			// className="addProgramsModal"
+// 			style={{
+// 				position: "absolute",
+// 				right: 0,
+// 				top: 0,
+// 				// padding: 40,
+// 				borderRadius: 0,
+// 			}}
+// 			closable={false}
+// 			footer={null}
+// 			title={null}
+// 		>
+// 			<div //className="addProgramsModal"
+// 				style={{ padding: 40, minHeight: "100vh", height: "100%" }}
+// 			>
+// 				<div className="flexEnd" style={{ paddingBottom: 32 }}>
+// 					<span
+// 						className="modlCloseBtn"
+// 						onClick={() => props.setVisible(false)}
+// 					>
+// 						<RxCross2 size={30} style={{ alignSelf: "center" }} />
+// 					</span>
+// 				</div>
+// 				<span className="addMdlHeading">Select Exercises for Warm up</span>
+// 				<div className="modlBody">
+// 					<div style={{ width: 247 }}>
+// 						{listOfExercise.map((item, index) => {
+// 							return (
+// 								<div className="tagCustom" key={index}>
+// 									<span>{item}</span>
+// 									<RxCross1 size={14} onClick={() => deleteMe(index)} />
+// 								</div>
+// 							);
+// 						})}
+// 					</div>
+// 					<div className="inputSearchCustom">
+// 						<input
+// 							className="inputField"
+// 							onChange={(e) => setSearchQuery(e.target.value)}
+// 							placeholder="Search"
+// 						/>
+// 						<BiSearch color="#D6D6D6" size={25} />
+// 					</div>
+// 					{listOfCategories.map((itm, ind) => (
+// 						<CustomCollapsible
+// 							item={itm}
+// 							key={ind}
+// 							checkForListOfExercise={checkForListOfExercise}
+// 							listOfExercise={listOfExercise}
+// 						/>
+// 					))}
+// 					<input
+// 						className="customAddBtn"
+// 						value="Add"
+// 						onClick={() => {
+// 							if (listOfExercise.length !== 0) {
+// 								props.addFollowing(listOfExercise);
+// 							} else {
+// 								alert("Please select one exercise atleast");
+// 							}
+// 						}}
+// 					/>
+// 				</div>
+// 			</div>
+// 		</Modal>
+// 	);
+// };
 
-const CustomCollapsible = (props) => {
-	const [open, setOpen] = React.useState(false);
-	return (
-		<div>
-			<span className="checkBoxHeading" onClick={() => setOpen(!open)}>
-				{open ? (
-					<SlArrowUp color="#F94F00" style={{ marginRight: 10 }} />
-				) : (
-					<SlArrowDown color="#F94F00" style={{ marginRight: 10 }} />
-				)}
-				{props.item.categoryName}
-			</span>
-			{open && (
-				<div>
-					{props.item.listOfExercises.map((innerItem, innerIndex) => {
-						return (
-							<span
-								className="checkboxItem rowing"
-								key={innerIndex}
-								onClick={() => {
-									props.checkForListOfExercise(innerItem);
-								}}
-							>
-								{innerItem}
-								{props.listOfExercise.findIndex((itm) => itm === innerItem) <
-								0 ? (
-									<div className="emptyCheckBox" />
-								) : (
-									<div className="checkBoxContainer">
-										<BsCheckLg size={14} color="#fff" />
-									</div>
-								)}
-							</span>
-						);
-					})}
-				</div>
-			)}
-		</div>
-	);
-};
+// const CustomCollapsible = (props) => {
+// 	const [open, setOpen] = React.useState(false);
+// 	return (
+// 		<div>
+// 			<span className="checkBoxHeading" onClick={() => setOpen(!open)}>
+// 				{open ? (
+// 					<SlArrowUp color="#F94F00" style={{ marginRight: 10 }} />
+// 				) : (
+// 					<SlArrowDown color="#F94F00" style={{ marginRight: 10 }} />
+// 				)}
+// 				{props.item.categoryName}
+// 			</span>
+// 			{open && (
+// 				<div>
+// 					{props.item.listOfExercises.map((innerItem, innerIndex) => {
+// 						return (
+// 							<span
+// 								className="checkboxItem rowing"
+// 								key={innerIndex}
+// 								onClick={() => {
+// 									props.checkForListOfExercise(innerItem);
+// 								}}
+// 							>
+// 								{innerItem}
+// 								{props.listOfExercise.findIndex((itm) => itm === innerItem) <
+// 								0 ? (
+// 									<div className="emptyCheckBox" />
+// 								) : (
+// 									<div className="checkBoxContainer">
+// 										<BsCheckLg size={14} color="#fff" />
+// 									</div>
+// 								)}
+// 							</span>
+// 						);
+// 					})}
+// 				</div>
+// 			)}
+// 		</div>
+// 	);
+// };
 
-const SearchInput = (props) => {
-	let oldData = ["Alpha", "Beta", "Gama", "Theta"];
-	const [data, setData] = React.useState(oldData);
-	const [value, setValue] = React.useState("");
-	const handleSearch = (newValue) => {
-		if (newValue) {
-			fetch(newValue, setData);
-		} else {
-			setData([]);
-		}
-	};
-	const handleChange = (newValue) => {
-		setValue(newValue);
-	};
-	return (
-		<Select
-			showSearch
-			value={value}
-			placeholder={props.placeholder}
-			style={props.style}
-			defaultActiveFirstOption={false}
-			showArrow={false}
-			filterOption={false}
-			onSearch={handleSearch}
-			onChange={handleChange}
-			notFoundContent={null}
-			options={(data || []).map((d) => ({
-				value: d,
-				label: d,
-			}))}
-		/>
-	);
-};
-const fetch = (value, callback) => {
-	callback(
-		["Alpha", "Beta", "Gama", "Theta"].filter((item) => item.includes(value))
-	);
-	// if (timeout) {
-	//   clearTimeout(timeout);
-	//   timeout = null;
-	// }
-	// currentValue = value;
-	// const fake = () => {
-	//   const str = qs.stringify({
-	// 	code: 'utf-8',
-	// 	q: value,
-	//   });
-	//   jsonp(`https://suggest.taobao.com/sug?${str}`)
-	// 	.then((response) => response.json())
-	// 	.then((d) => {
-	// 	  if (currentValue === value) {
-	// 		const { result } = d;
-	// 		const data = result.map((item) => ({
-	// 		  value: item[0],
-	// 		  text: item[0],
-	// 		}));
-	// 		callback(data);
-	// 	  }
-	// 	});
-};
+// const SearchInput = (props) => {
+// 	let oldData = ["Alpha", "Beta", "Gama", "Theta"];
+// 	const [data, setData] = React.useState(oldData);
+// 	const [value, setValue] = React.useState("");
+// 	const handleSearch = (newValue) => {
+// 		if (newValue) {
+// 			fetch(newValue, setData);
+// 		} else {
+// 			setData([]);
+// 		}
+// 	};
+// 	const handleChange = (newValue) => {
+// 		setValue(newValue);
+// 	};
+// 	return (
+// 		<Select
+// 			showSearch
+// 			value={value}
+// 			placeholder={props.placeholder}
+// 			style={props.style}
+// 			defaultActiveFirstOption={false}
+// 			showArrow={false}
+// 			filterOption={false}
+// 			onSearch={handleSearch}
+// 			onChange={handleChange}
+// 			notFoundContent={null}
+// 			options={(data || []).map((d) => ({
+// 				value: d,
+// 				label: d,
+// 			}))}
+// 		/>
+// 	);
+// };
+// const fetch = (value, callback) => {
+// 	callback(
+// 		["Alpha", "Beta", "Gama", "Theta"].filter((item) => item.includes(value))
+// 	);
+// 	// if (timeout) {
+// 	//   clearTimeout(timeout);
+// 	//   timeout = null;
+// 	// }
+// 	// currentValue = value;
+// 	// const fake = () => {
+// 	//   const str = qs.stringify({
+// 	// 	code: 'utf-8',
+// 	// 	q: value,
+// 	//   });
+// 	//   jsonp(`https://suggest.taobao.com/sug?${str}`)
+// 	// 	.then((response) => response.json())
+// 	// 	.then((d) => {
+// 	// 	  if (currentValue === value) {
+// 	// 		const { result } = d;
+// 	// 		const data = result.map((item) => ({
+// 	// 		  value: item[0],
+// 	// 		  text: item[0],
+// 	// 		}));
+// 	// 		callback(data);
+// 	// 	  }
+// 	// 	});
+// };

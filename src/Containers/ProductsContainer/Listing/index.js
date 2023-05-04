@@ -203,6 +203,23 @@ const ProductListing = (props) => {
 			spin
 		/>
 	);
+	const listing = () => {
+		if (!props.searchQuery) {
+			return props.productsList;
+		} else {
+			if (!props.filterItem) return props.productsList;
+			else if (props.filterItem === "productName") {
+				return props.productsList.filter((item) =>
+					item.productName
+						.toLowerCase()
+						.includes(props.searchQuery.toLowerCase())
+				);
+			}
+			return props.productsList.filter((item) =>
+				item.id.toLowerCase().includes(props.searchQuery.toLowerCase())
+			);
+		}
+	};
 	return (
 		<div style={{ width: "100%", backgroundColor: "#f8f7f3" }}>
 			{props.loading ? (
@@ -220,10 +237,11 @@ const ProductListing = (props) => {
 				<Table
 					rowSelection
 					columns={columns}
-					dataSource={props.productsList}
-					// scroll={{
-					// 	x: 1300,
-					// }}
+					dataSource={
+						props.orderBy
+							? listing().sort((a, b) => a[props.orderBy] < b[props.orderBy])
+							: listing()
+					}
 				/>
 			)}
 		</div>

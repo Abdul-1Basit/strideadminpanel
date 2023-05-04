@@ -1,42 +1,8 @@
 import React from "react";
-import { endpoints } from "../../../Helpers/dbConfig";
-import { Select, Input } from "antd";
-import Typography from "../../../Components/Typography";
-import { apiGetRequest } from "../../../Helpers/axiosRequests";
-import { searchAddButton } from "../../CommonStyles";
 import Wrapper from "../../../Components/Wrapper";
 import { BsSearch } from "react-icons/bs";
 import { MdOutlineAdd } from "react-icons/md";
-const { Search } = Input;
 const ProductCategorySearch = (props) => {
-	const [arr, setArr] = React.useState(null);
-	// const getProductCategories = async () => {
-	// 	try {
-	// 		const res = await apiGetRequest(endpoints.getListOfUsers);
-	// 		if (res.status === 200) {
-	// 			setArr(res.data.data.data);
-	// 			console.log("userlist", res.data.data.data);
-	// 			return;
-	// 		}
-	// 		throw new Error("Failed to get USERS list!");
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-
-	// React.useEffect(() => {
-	// 	if (!arr) {
-	// 		getProductCategories();
-	// 	}
-	// }, [arr]);
-
-	const { Option } = Select;
-
-	// function onChange(value) {
-	// 	props.setFilterItem(value);
-	// }
-
-	// function onSearch(value) {}
 	return (
 		<Wrapper
 			type="rowSpaced"
@@ -48,13 +14,6 @@ const ProductCategorySearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				{/* <Typography
-					alignment="left"
-					title="List of Employees"
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/> */}
 				<span className="tableTitle">List of Exercises</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">
@@ -80,28 +39,45 @@ const ProductCategorySearch = (props) => {
 						}}
 						placeholder="Search a exercise"
 						className="searchNewInput"
+						// ,orderBy, setOrderBy,searchQuery, setSearchQuery
+						value={props.searchQuery}
+						onChange={(e) => {
+							props.setSearchQuery(e.target.value);
+						}}
 					/>
 					<button className="searchIconbtn">
 						<BsSearch size={23} color="#fff" />
 					</button>
 				</div>
 				<div style={{ width: 45 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true}>
+				<select
+					className="newSelect"
+					value={props.orderBy}
+					onChange={(e) => {
+						props.setOrderBy(e.target.value);
+					}}
+				>
+					<option value="" disabled={true} selected={true}>
 						Sort By
 					</option>
 					<option value="id">Id</option>
 					<option value="name">Name</option>
-				</select>{" "}
+					<option value="category">Category</option>
+				</select>
 				<div style={{ width: 24 }} />
-				<select name="cars" id="cars" className="newSelect">
-					<option value="volvo" disabled={true} selected={true}>
+				<select
+					className="newSelect"
+					value={props.filterBy}
+					onChange={(e) => {
+						props.setFilterBy(e.target.value);
+					}}
+				>
+					<option value="" disabled={true} selected={true}>
 						Filter By
 					</option>
 					<option value="id">Id</option>
 					<option value="name">Name</option>
-					<option value="Phone">Phone #</option>
-					<option value="address">Address</option>
+					<option value="category">Category</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<div

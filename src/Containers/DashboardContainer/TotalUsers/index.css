@@ -1,0 +1,41 @@
+.cardTotalUsers{
+    width: 330px;
+    height: 300px;
+    border:2px solid #222222;
+    border-radius: 26.5323px;
+    background: #F8F7F3;
+}
+.topHeaderCard{
+width: 330px;
+height: 127px;
+background: #222222;
+border-radius: 24px;
+padding-left: 24px;
+
+}
+.cardTUContent{
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    /* padding-left: 24px; */
+
+
+}
+.cardTUdescription{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+line-height: 20px;
+letter-spacing: -0.02em;
+color: #222222;
+}
+.progressBar{
+    width: 277px;
+height: 8px;margin-top: 2px;
+background: #E2E2E2;
+border-radius: 21px;
+}
+.margB16{
+    margin-bottom: 16px;
+}

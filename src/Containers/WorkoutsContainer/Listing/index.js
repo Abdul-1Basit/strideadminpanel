@@ -166,6 +166,35 @@ const PrizeListing = (props) => {
 			spin
 		/>
 	);
+	const listing = () => {
+		// orderBy,
+		// 				filterBy,
+		// 				searchProgramQuery,
+		// 				searchUserQuery
+		if (!props.searchProgramQuery && !props.searchUserQuery) {
+			return props.campaignListing;
+		}
+		if (props.searchProgramQuery) {
+			return props.filterBy === "id"
+				? props.campaignListing.filter((item) =>
+						item.id
+							.toLowerCase()
+							.includes(props.searchProgramQuery.toLowerCase())
+				  )
+				: props.campaignListing.filter((item) =>
+						item.name
+							.toLowerCase()
+							.includes(props.searchProgramQuery.toLowerCase())
+				  );
+		}
+		return props.filterBy === "name"
+			? props.campaignListing.filter((item) =>
+					item.id.toLowerCase().includes(props.searchUserQuery.toLowerCase())
+			  )
+			: props.campaignListing.filter((item) =>
+					item.name.toLowerCase().includes(props.searchUserQuery.toLowerCase())
+			  );
+	};
 	return (
 		<div style={{ width: "100%", backgroundColor: "#E5E5E5" }}>
 			{props.loading ? (
@@ -184,7 +213,11 @@ const PrizeListing = (props) => {
 					// rowSelection
 					columns={columns}
 					dataSource={
-						props.campaignListing ?? []
+						props.campaignListing
+							? props.orderBy === "id"
+								? listing().sort((a, b) => a.id < b.id)
+								: listing().sort((a, b) => a.name.localeCompare(b.name))
+							: []
 						// {
 						// 	id: 0,
 						// 	workoutImage:

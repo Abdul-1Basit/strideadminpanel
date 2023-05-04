@@ -103,7 +103,8 @@ const Listing = (props) => {
 					className="capsule"
 					style={{
 						backgroundColor:
-							rowData.deliveryStatus === "Fullfilled"
+							rowData.deliveryStatus === "Fullfilled" ||
+							rowData.deliveryStatus === "Fulfilled"
 								? "#5DB135"
 								: rowData.deliveryStatus === "Cancelled"
 								? "#D30E0E"
@@ -133,7 +134,32 @@ const Listing = (props) => {
 			),
 		},
 	];
-	const filteredOrderList = props.orderList;
+	// const filteredOrderList = props.orderList;
+
+	const listing = () => {
+		let newList = [...props.orderList];
+		if (props.orderBy) {
+			newList =
+				props.orderBy === "id"
+					? props.orderList.sort((a, b) => a.id < b.id)
+					: props.orderList.sort((a, b) => a.orderCreated < b.orderCreated);
+		}
+		if (!props.searchQuery) {
+			return newList;
+		} else {
+			if (props.filterBy) {
+				newList = newList.filter((item) =>
+					item[props.filterBy]
+						.toLowerCase()
+						.includes(props.searchQuery.toLowerCase())
+				);
+			}
+			// return props.employeeListing.filter((item) =>
+			// 	item.fullName.toLowerCase().includes(props.searchQuery.toLowerCase())
+			// );
+		}
+		return newList;
+	};
 
 	const antIcon = (
 		<LoadingOutlined
@@ -157,7 +183,21 @@ const Listing = (props) => {
 					<Spin indicator={antIcon} />
 				</div>
 			) : (
-				<Table columns={columns} dataSource={props.orderList} />
+				<Table
+					columns={columns}
+					dataSource={
+						// props.employeeListing
+						// 	? props.orderBy
+						// 		? listing().sort(
+						// 				(a, b) =>
+						// 					a[props.orderBy].toLowerCase() <
+						// 					b[props.orderBy].toLowerCase()
+						// 		  )
+						// 		: listing()
+						// 	: []
+						listing()
+					}
+				/>
 			)}
 		</div>
 	);

@@ -16,7 +16,9 @@ import { BsCheck } from "react-icons/bs";
 import { FaExclamation } from "react-icons/fa";
 const { Option } = Select;
 const OrdersContainer = (props) => {
-	const [filterItem, setFilterItem] = React.useState("");
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchQuery, setSearchQuery] = React.useState("");
 	const [addModal, setAddModal] = React.useState(false);
 	const [editModal, setEditModal] = React.useState(false);
 	const [deleteModal, setDeleteModal] = React.useState(false);
@@ -29,6 +31,11 @@ const OrdersContainer = (props) => {
 	const [statusOption, setStatusOption] = React.useState("No");
 	const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
 	const [orderList, setOrderList] = React.useState([]);
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const successMessage = (modalFunc, type, cat) => {
 		let title = "";
 		let subTitle = "";
@@ -66,17 +73,29 @@ const OrdersContainer = (props) => {
 		}
 		setLoading(false);
 	};
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		getAllData();
 	}, [addModal, editModal, deleteModal]);
 	const getAllData = async () => {
 		setLoading(true);
-		// const getprods = await getAllProducts();
-		// setProductList(getprods);
-		// const usrList = await getAllEmployees();
+
 		const ordsList = await getAllOrders();
-		// setUserList(usrList);
 		setOrderList(ordsList);
+
+		let totalPrograms = ordsList.length,
+			activePrograms = 0,
+			pendingPrograms = 0;
+		ordsList.forEach((rowData) => {
+			rowData.deliveryStatus === "Fullfilled" ||
+			rowData.deliveryStatus === "Fulfilled"
+				? activePrograms++
+				: pendingPrograms++;
+		});
+		setTopValues({
+			totalPrograms,
+			pendingPrograms,
+			activePrograms,
+		});
 		setLoading(false);
 	};
 
@@ -106,7 +125,6 @@ const OrdersContainer = (props) => {
 						{...{
 							setAddModal,
 							successMessage,
-							// campaignList,
 							userList,
 							productList,
 						}}
@@ -146,9 +164,6 @@ const OrdersContainer = (props) => {
 							activeOrder,
 							setActiveOrder,
 							successMessage,
-							// campaignList,
-							// userList,
-							// productList,
 						}}
 					/>
 				</Modal>
@@ -163,9 +178,9 @@ const OrdersContainer = (props) => {
 					}
 					heading="Orders Today"
 					// headingCount="120"
-					subHeading="512"
+					subHeading={topValues.totalPrograms}
 					type=""
-				/>{" "}
+				/>
 				<CustomSmallCard
 					textColor="#D30E0E"
 					primaryColor="rgba(211, 14, 14, 0.08)"
@@ -177,7 +192,7 @@ const OrdersContainer = (props) => {
 					}
 					heading="Pending Orders"
 					// headingCount="120"
-					subHeading="45"
+					subHeading={topValues.pendingPrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -191,7 +206,7 @@ const OrdersContainer = (props) => {
 					}
 					heading="Fulfilled Orders"
 					// headingCount="120"
-					subHeading="465"
+					subHeading={topValues.activePrograms}
 					type=""
 				/>
 			</div>
@@ -209,8 +224,13 @@ const OrdersContainer = (props) => {
 				{/* <Analytics {...{ orderList }} /> */}
 				<Search
 					{...{
-						setFilterItem,
 						setAddModal,
+						filterBy,
+						setFilterBy,
+						orderBy,
+						setOrderBy,
+						searchQuery,
+						setSearchQuery,
 					}}
 				/>
 				<Tabs
@@ -249,7 +269,6 @@ const OrdersContainer = (props) => {
 				></Tabs>
 				<Listing
 					{...{
-						filterItem,
 						setEditModal,
 						setActiveOrder,
 						setDeleteModal,
@@ -263,6 +282,9 @@ const OrdersContainer = (props) => {
 						loading,
 						statusOption,
 						confirmOrder,
+						filterBy,
+						orderBy,
+						searchQuery,
 					}}
 				/>
 			</div>

@@ -1,0 +1,24 @@
+.ordersCardDashboard{
+    background: #FFFFFF;
+box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.16);
+border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius:20px;
+    background-color: #fff;
+    padding: 0px 31px 30px 31px;
+
+}
+.bolderTableText{
+    font-family: 'Montserrat';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 24px;
+/* identical to box height, or 171% */
+
+letter-spacing: -0.02em;
+
+color: #222222;
+text-align: center;
+}

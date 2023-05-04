@@ -19,10 +19,16 @@ import { BsCheck } from "react-icons/bs";
 const Programs = (props) => {
 	const [activeCategory, setActiveCategory] = React.useState();
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
-	// const [editModal, setEditModal] = React.useState(false);
-	const [filterItem, setFilterItem] = React.useState("");
-	const [sortBy, setSortBy] = React.useState("");
+	const [filterBy, setFilterBy] = React.useState("");
+	const [orderBy, setOrderBy] = React.useState("");
+	const [searchProgramQuery, setSearchProgramQuery] = React.useState("");
+	const [searchUserQuery, setSearchUserQuery] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
+	const [topValues, setTopValues] = React.useState({
+		totalPrograms: 0,
+		activePrograms: 0,
+		pendingPrograms: 0,
+	});
 	const navigate = useNavigate();
 	const [programList, setProgramList] = React.useState([]);
 	const successMessage = (modalFunc, type, cat) => {
@@ -52,16 +58,26 @@ const Programs = (props) => {
 		});
 		return;
 	};
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		getPrograms();
 	}, [showDeleteModal]);
 	const getPrograms = async () => {
 		setLoading(true);
 		let result = await getAllPrograms();
 		setProgramList(result);
-		// console.log("result", result);
+		let totalPrograms = result.length,
+			activePrograms = 0,
+			pendingPrograms = 0;
+		result.forEach((element) => {
+			if (element.status === "Active") activePrograms++;
+			else if (element.status === "Pending") pendingPrograms++;
+		});
+		setTopValues({
+			totalPrograms,
+			activePrograms,
+			pendingPrograms,
+		});
 		setLoading(false);
-		console.log("test logigns");
 	};
 	const editThisProgram = (id) => {
 		navigate("/programs/edit/" + id);
@@ -97,7 +113,7 @@ const Programs = (props) => {
 					}
 					heading="Total Programs"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.totalPrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -111,7 +127,7 @@ const Programs = (props) => {
 					}
 					heading="Active Programs"
 					// headingCount="120"
-					subHeading="35"
+					subHeading={topValues.activePrograms}
 					type=""
 				/>
 				<CustomSmallCard
@@ -125,31 +141,11 @@ const Programs = (props) => {
 					}
 					heading="Pending Programs"
 					// headingCount="120"
-					subHeading="50"
+					subHeading={topValues.pendingPrograms}
 					type=""
 				/>
 			</div>
 			<div style={{ display: "flex", width: "100%" }}>
-				{/* <Modal
-					visible={editModal}
-					title=""
-					onCancel={() => setEditModal(false)}
-					closable={false}
-					style={ModalStyle}
-					bodyStyle={ModalBodyStyle}
-					footer={null}
-					destroyOnClose
-				>
-					<EditCampaign
-						{...{
-							setEditModal,
-							activeCategory,
-							setActiveCategory,
-							successMessage,
-						}}
-					/>
-				</Modal> */}
-
 				<Modal
 					visible={showDeleteModal}
 					title=""
@@ -189,9 +185,14 @@ const Programs = (props) => {
 			>
 				<ProductCategorySearch
 					{...{
-						filterItem,
-						setFilterItem,
-						setSortBy,
+						filterBy,
+						setFilterBy,
+						orderBy,
+						setOrderBy,
+						searchUserQuery,
+						setSearchUserQuery,
+						searchProgramQuery,
+						setSearchProgramQuery,
 					}}
 				/>
 
@@ -204,7 +205,10 @@ const Programs = (props) => {
 						programList,
 						cloneThisProgram,
 						viewThisProgram,
-						sortBy,
+						filterBy,
+						orderBy,
+						searchUserQuery,
+						searchProgramQuery,
 					}}
 				/>
 			</div>
