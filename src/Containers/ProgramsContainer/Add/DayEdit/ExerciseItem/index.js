@@ -80,10 +80,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Reps</span>
 					<div
-						className="daysAdditionBtnDiv centerMe"
+						className="daysAdditionBtnDiv centerMe programDaysInput"
 						style={{
-							width: 115,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -92,8 +90,8 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].reps}
-							style={{ width: 90, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 90, paddingLeft: 0 }}
+							placeholder={"0-0"}
 							value={activeParentItem[index].reps}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
@@ -106,10 +104,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Sets</span>
 					<div
-						className="daysAdditionBtnDiv centerMe"
+						className="daysAdditionBtnDiv centerMe programDaysInput"
 						style={{
-							width: 115,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -118,8 +114,8 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].sets}
-							style={{ width: 90, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 90, paddingLeft: 0 }}
+							placeholder={"0-0"}
 							value={activeParentItem[index].sets}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
@@ -132,7 +128,7 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Weight</span>
 					<div
-						className="daysAdditionBtnDiv rowing"
+						className="daysAdditionBtnDiv rowing programDaysInput"
 						style={{
 							width: 120,
 							marginTop: 10,
@@ -144,8 +140,8 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].weight}
-							style={{ width: 55, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
+							placeholder={"0"}
 							value={activeParentItem[index].weight}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
@@ -164,10 +160,8 @@ const ExerciseItem = ({
 					<span className="customInputStyling">Time</span>
 					<div style={{ marginTop: 0 }} className="colCenteral">
 						<div
-							className="daysAdditionBtnDiv rowing"
+							className="daysAdditionBtnDiv rowing programDaysInput"
 							style={{
-								width: 120,
-								marginTop: 10,
 								backgroundColor:
 									activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 							}}
@@ -176,13 +170,14 @@ const ExerciseItem = ({
 								type={"text"}
 								className="inputfont nmbrBtn"
 								defaultValue={activeParentItem[index].time}
-								style={{ width: 55, paddingLeft: 0 }}
+								style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
 								placeholder={"0"}
 								value={activeParentItem[index].time}
 								onChange={(e) => {
 									let newVal = activeParentItem[index].time;
-									if (parseInt(e.target.value) > -1) newVal = e.target.value;
-									if (!e.target.value) newVal = 0;
+									if (parseInt(e.target.value) > -1 || !e.target.value)
+										newVal = e.target.value;
+									// if (!e.target.value) newVal = 0;
 									let prevValues = [...activeParentItem];
 									prevValues[index].time = newVal;
 									setterFunc(prevValues);
@@ -199,10 +194,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Rest</span>
 					<div
-						className="daysAdditionBtnDiv rowing"
+						className="daysAdditionBtnDiv rowing programDaysInput"
 						style={{
-							width: 120,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -214,7 +207,7 @@ const ExerciseItem = ({
 							placeholder={0}
 							defaultValue={activeParentItem[index].rest}
 							// value={item.rest}
-							style={{ width: 55, paddingLeft: 0 }}
+							style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
 							// placeholder={"0"}
 							value={activeParentItem[index].rest}
 							onChange={(e) => {

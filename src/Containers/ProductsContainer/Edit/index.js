@@ -240,7 +240,10 @@ const EditProduct = (props) => {
 							</div>
 						</div>
 						{/**Description */}
-						<div className="fieldDiv">
+						<div
+							className="fieldDiv"
+							style={{ width: "100%", display: "flex" }}
+						>
 							<Wrapper type="rowStart" marginBottom={8}>
 								<Typography
 									alignment="left"
@@ -260,11 +263,16 @@ const EditProduct = (props) => {
 							</Wrapper>
 							<TextArea
 								rows={4}
+								autoSize={{
+									minRows: 4,
+									maxRows: 4,
+								}}
 								name="description"
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.description}
 								className="textAreaInput"
+								style={{ width: "100%", display: "flex" }}
 							/>
 							{errors.description && touched.description ? (
 								<Typography

@@ -1082,3 +1082,38 @@ cursor: pointer;
   margin-bottom: 15px;
   font-size: 12px;
 }
+
+.newCategorybtn{
+  font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+text-align: center;
+text-decoration-line: underline;
+color: #F94F00;
+margin-left: 10px;
+cursor: pointer;
+
+}
+.programDaysInput{
+  width: 120px;
+  margin-top: 10px;
+}
+.addonField{
+  background-color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  height: 40px;
+  width: 45px;
+}
+@media screen and (max-width: 1250px) {
+  .programDaysInput{
+    width: 90px;
+    margin-top: 10px;
+  }
+  .addonField{
+    width: 40px;
+  }
+}

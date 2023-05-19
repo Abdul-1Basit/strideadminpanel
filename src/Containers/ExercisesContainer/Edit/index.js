@@ -4,38 +4,23 @@ import CustomButton from "../../../Components/CustomButton";
 import { CloseOutlined } from "@ant-design/icons";
 import CategorySchema, { initVals } from "./Constants";
 import { Formik, Form } from "formik";
-import {
-	Select,
-	Radio,
-	Progress,
-	notification,
-	message,
-	Input,
-	Row,
-	Col,
-} from "antd";
-// import { AiFillDelete } from "react-icons/ai";
+import { Progress, notification, message, Input, Row, Col } from "antd";
 import Typography from "../../../Components/Typography";
-// import Wrapper from "../../../Components/Wrapper";
 import {
-	addExercise,
+	getAllExerciseCategories,
 	getAllExercises,
 	updateExercise,
-	uploadImage,
 } from "../../../Helpers/firebase";
-// import CustomDropZone from "../../../Components/CustomDropZone";
-import SpinnerComponent from "../../../Components/SpinnerComponent";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import AudioDropZone from "../../../Components/AudioDropZone";
 import { useNavigate, useParams } from "react-router-dom";
 import RichTextEditor from "react-rte";
-const { Option } = Select;
+import NewCategoryModal from "../NewCategoryModal";
 const { TextArea } = Input;
 const EditExerciseContainer = (props) => {
 	let { id } = useParams();
 	const navigate = useNavigate();
-	// const [fileList, setFileList] = React.useState([]);
 	const [value, setValue] = React.useState(RichTextEditor.createEmptyValue());
 	const [imageError, setImageError] = React.useState(false);
 	const [videoError, setVideoError] = React.useState(false);
@@ -46,6 +31,9 @@ const EditExerciseContainer = (props) => {
 	const [audioValue, setAudioValue] = React.useState("");
 	const [videoValue, setVideoValue] = React.useState("");
 	const [newinitVals, setNewinitVals] = React.useState(initVals);
+
+	const [open, setOpen] = React.useState(false);
+	const [categoryListing, setCategoryListing] = React.useState([]);
 	const addCategoryToList = async (values) => {
 		if (!imageurl) {
 			message.error("Please attach an image");
@@ -60,18 +48,12 @@ const EditExerciseContainer = (props) => {
 
 		setVideoError(false);
 		setImageError(false);
-		// setImageError(false);
-		// console.log("values", values);
-		// return;
 		setIsLoading(true);
 		setProgressPercent(25);
 		values.img = imageurl;
 		values.audio = audioValue ?? "";
 		values.video = videoValue;
 		values.id = newinitVals.id;
-		// console.log("values", values);
-
-		// return;
 		setProgressPercent(50);
 		if (await updateExercise(values)) {
 			setProgressPercent(100);
@@ -81,7 +63,6 @@ const EditExerciseContainer = (props) => {
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {
-					// props.setAddModal(false);
 					setIsLoading(false);
 					navigate(-1);
 				},
@@ -101,15 +82,15 @@ const EditExerciseContainer = (props) => {
 	};
 	React.useEffect(() => {
 		if (id) fetchData();
-	}, []);
+		getExercs();
+	}, [open]);
+	const getExercs = async () => {
+		let reslts = await getAllExerciseCategories();
+		setCategoryListing(reslts);
+	};
 	const fetchData = async () => {
 		const listOfExercises = await getAllExercises();
 		const selectedItem = listOfExercises.find((item) => item.id === id);
-		// newinitVals.name=	selectedItem.name
-		// newinitVals.category=selectedItem.category
-		// newinitVals.status	selectedItem.status
-		// selectedItem.instructions: "",
-		// selectedItem.targetArea: ""
 		setValue(
 			RichTextEditor.createValueFromString(
 				selectedItem.instructions,
@@ -122,7 +103,15 @@ const EditExerciseContainer = (props) => {
 		setNewinitVals(selectedItem);
 	};
 	return (
-		<div>
+		<div
+			style={{
+				height: "100%",
+				paddingTop: 52,
+				paddingLeft: 40,
+				paddingRight: 40,
+				paddingBottom: 37,
+			}}
+		>
 			<Formik
 				initialValues={newinitVals}
 				validationSchema={CategorySchema}
@@ -133,7 +122,6 @@ const EditExerciseContainer = (props) => {
 			>
 				{({
 					errors,
-					isSubmitting,
 					touched,
 					values,
 					handleChange,
@@ -166,157 +154,11 @@ const EditExerciseContainer = (props) => {
 								</div>
 							)}
 						</div>
+						{open && <NewCategoryModal {...{ open, setOpen }} />}
+
 						<div className="cardAdditionBlog">
 							<span className="tableTitle">Basic Detail</span>
 							<div className="barVertical" />
-							{/* <div className="rowFlexCenter mb30">
-								<div className="flexStart mb30 mr72">
-									<span className="addBlogInputLabel">EXERCISE NAME</span>
-									<div style={{ marginTop: 10 }}>
-										<input
-											type={"text"}
-											name="name"
-											className="addBlogInput inputText"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.name}
-										/>
-										{errors.name && touched.name ? (
-											<Typography
-												alignment="left"
-												title={errors.name}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : null}
-									</div>
-								</div>
-								<div className="flexStart">
-									<span className="addBlogInputLabel">CATEGORY</span>
-									<div style={{ marginTop: 10 }}>
-										<select
-											name="category"
-											id="category"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.category}
-											className="addBlogInput inputText"
-										>
-											<option value="default" selected={true} disabled={true}>
-												Select Exercise
-											</option>
-											<option value="Chest">Chest</option>
-											<option value="Arms">Arms</option>
-											<option value="Back">Back</option>
-											<option value="Shoulders">Shoulders</option>
-											<option value="Legs">Legs</option>
-											<option value="Abs">Abs</option>
-											<option value="Core">Core</option>
-										</select>
-										{errors.category && touched.category ? (
-											<Typography
-												alignment="left"
-												title={errors.category}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : null}
-									</div>
-								</div>
-							</div>
-							<div className="rowFlexCenter mb30">
-								<div className="flexStart mrDynamic">
-									<span className="addBlogInputLabel">EXERCISE IMAGE</span>
-									<div style={{ marginTop: 10 }}>
-										{imageurl ? (
-											<div
-												style={{
-													display: "flex",
-													justifyContent: "center",
-													alignItems: "center",
-												}}
-											>
-												<img
-													src={imageurl}
-													alt="UserImage"
-													style={{
-														width: 156,
-														height: 156,
-														borderRadius: "50%",
-													}}
-												/>
-												<div
-													className="centerAligner"
-													style={{
-														width: 15,
-														height: 15,
-														borderRadius: "50%",
-														backgroundColor: "#fff",
-														marginLeft: -10,
-														marginTop: -20,
-														boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-														cursor: "pointer",
-														border: "1px solid #000",
-													}}
-													onClick={() => setImageUrl("")}
-												>
-													<CloseOutlined
-														style={{ fontSize: 8, color: primaryColor }}
-													/>
-												</div>
-											</div>
-										) : (
-											<EmployeeDropZone
-												{...{ setImageUrl: setImageUrl, small: false }}
-											/>
-										)}
-									</div>
-								</div>
-								<div className="flexStart">
-									<span className="addBlogInputLabel">STATUS</span>
-									<div style={{ marginTop: 10 }}>
-										<Radio.Group
-											name="isActive"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											value={values.isActive}
-											defaultValue={values.isActive}
-										>
-											<Radio value={"Active"}>
-												<Typography
-													alignment="left"
-													title="Active"
-													fontFamily="Gilroy-Medium"
-													color="#64748B"
-													type="label"
-												/>
-											</Radio>
-											<Radio value={"Inactive"}>
-												<Typography
-													alignment="left"
-													title="Inactive"
-													fontFamily="Gilroy-Medium"
-													color="#64748B"
-													type="label"
-												/>
-											</Radio>
-										</Radio.Group>
-										{errors.isActive && touched.isActive ? (
-											<Typography
-												alignment="left"
-												title={errors.isActive}
-												fontFamily="Gilroy-Medium"
-												color="red"
-												type="label"
-											/>
-										) : (
-											""
-										)}
-									</div>
-								</div>
-							</div> */}
 							<div style={{ marginTop: 42 }}>
 								<Row>
 									<Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -327,10 +169,6 @@ const EditExerciseContainer = (props) => {
 													type={"text"}
 													name="name"
 													className="addBlogInput inputText"
-													// onChange={(e) => {
-													// 	props.item.name = e.target.value;
-													// }}
-													// value={props.item.name}
 													onChange={handleChange}
 													onBlur={handleBlur}
 													value={values.name}
@@ -348,7 +186,13 @@ const EditExerciseContainer = (props) => {
 										</div>
 										<div className="flexStart mb30">
 											<span className="addBlogInputLabel">Instructions</span>
-											<div style={{ marginTop: 10 }}>
+											<div
+												style={{
+													marginTop: 10,
+													width: "100%",
+													maxWidth: 420,
+												}}
+											>
 												<RichTextEditor
 													value={value}
 													onChange={(val) => {
@@ -378,19 +222,12 @@ const EditExerciseContainer = (props) => {
 											<div style={{ marginTop: 10 }}>
 												<TextArea
 													className="addBlogInput inputText"
-													rows={8}
-													// cols={20}
+													autoSize={{
+														minRows: 8,
+														maxRows: 8,
+													}}
 													name="targetArea"
 													placeholder="Please enter Target Area"
-													// onChange={(e) => {
-													// 	props.item.targetArea = e.target.value;
-													// }}
-													// allowClear
-													// style={{
-													// 	width: "85%",
-													// 	backgroundColor: "#F4F4F4",
-													// 	borderRadius: 8,
-													// }}
 													onChange={handleChange}
 													onBlur={handleBlur}
 													value={values.targetArea}
@@ -425,15 +262,11 @@ const EditExerciseContainer = (props) => {
 														selected={true}
 														disabled={true}
 													>
-														Select Exercise
+														Select Category
 													</option>
-													<option value="Chest">Chest</option>
-													<option value="Arms">Arms</option>
-													<option value="Back">Back</option>
-													<option value="Shoulders">Shoulders</option>
-													<option value="Legs">Legs</option>
-													<option value="Abs">Abs</option>
-													<option value="Core">Core</option>
+													{categoryListing.map((item) => (
+														<option value={item.name}>{item.name}</option>
+													))}
 												</select>
 												{errors.category && touched.category ? (
 													<Typography

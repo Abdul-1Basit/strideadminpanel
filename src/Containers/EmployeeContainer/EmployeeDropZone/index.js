@@ -11,6 +11,7 @@ function EmployeeDropZone({
 	small = false,
 	shortWidth = false,
 	setTypeOfMedia = null,
+	categoryType = false,
 }) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const onDrop = async (acceptedFiles) => {
@@ -33,14 +34,20 @@ function EmployeeDropZone({
 		<div
 			{...getRootProps()}
 			className="dropZoneDiv"
-			style={{ width: shortWidth ? 240 : 298 }}
+			style={{
+				width: shortWidth ? 230 : 298,
+				height: categoryType ? 215 : 258,
+			}}
 		>
 			{isDragActive ? (
 				!small && <p>Drop the files here ...</p>
 			) : (
 				<div
 					className="colCenteral drpzn"
-					style={{ width: shortWidth ? 240 : 298, height: 258 }}
+					style={{
+						width: shortWidth ? 240 : 298,
+						height: categoryType ? 215 : 258,
+					}}
 				>
 					<input {...getInputProps()} />
 					<p //style={{ fontSize: small ? 8 : 14 }}

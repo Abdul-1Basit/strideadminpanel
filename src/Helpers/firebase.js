@@ -251,7 +251,15 @@ const deletePrize = async (id) => {
 
 //-----------Workouts-----------------------
 const addWorkout = async (Workout) => {
-	let { name, subtitle, basicDetailMedia, exercises, description } = Workout;
+	let {
+		name,
+		subtitle,
+		basicDetailMedia,
+		exercises,
+		description,
+		category,
+		status,
+	} = Workout;
 	try {
 		await addDoc(collection(db, "workouts"), {
 			name,
@@ -259,6 +267,8 @@ const addWorkout = async (Workout) => {
 			basicDetailMedia,
 			exercises,
 			description,
+			category,
+			status,
 		});
 		return true;
 	} catch (err) {
@@ -277,7 +287,15 @@ const getAllWorkouts = async () => {
 	return newData;
 };
 const updateWorkout = async (workout) => {
-	let { name, subtitle, basicDetailMedia, exercises, description } = workout;
+	let {
+		name,
+		subtitle,
+		basicDetailMedia,
+		exercises,
+		description,
+		category,
+		status,
+	} = workout;
 
 	try {
 		//console.log("roze", prize.id);
@@ -288,6 +306,8 @@ const updateWorkout = async (workout) => {
 			basicDetailMedia,
 			exercises,
 			description,
+			category,
+			status,
 		});
 		// console.log("campign", campaign);
 		return true;
@@ -301,6 +321,114 @@ const updateWorkout = async (workout) => {
 const deleteWorkout = async (workout) => {
 	try {
 		await deleteDoc(doc(db, "workouts", workout.id));
+		return true;
+	} catch (err) {
+		console.log("err", err);
+		return false;
+	}
+};
+//----------------------------------------------------
+
+//-----------WorkoutCategories------------------------
+const addWorkoutCategory = async (Workout) => {
+	let { name, image, description } = Workout;
+	try {
+		await addDoc(collection(db, "workoutCategories"), {
+			name,
+			image,
+			description,
+		});
+		return true;
+	} catch (err) {
+		console.error(err);
+		return false;
+	}
+};
+const getAllWorkoutCategories = async () => {
+	const querySnapshot = await getDocs(collection(db, "workoutCategories"));
+	let newData = [];
+	querySnapshot.forEach((doc) => {
+		let temp = doc.data();
+		temp.id = doc.id;
+		newData.push(temp);
+	});
+	return newData;
+};
+const updateWorkoutCategory = async (workout) => {
+	let { name, image, description } = workout;
+
+	try {
+		const prodRef = await doc(db, "workoutCategories", workout.id);
+		await updateDoc(prodRef, {
+			name,
+			image,
+			description,
+		});
+		return true;
+	} catch (err) {
+		console.log("err", err);
+
+		console.log("err", err.message);
+		return false;
+	}
+};
+const deleteWorkoutCategory = async (workout) => {
+	try {
+		await deleteDoc(doc(db, "workoutCategories", workout.id));
+		return true;
+	} catch (err) {
+		console.log("err", err);
+		return false;
+	}
+};
+//----------------------------------------------------
+
+//-----------ExerciseCategories------------------------
+const addExerciseCategory = async (Workout) => {
+	let { name, image, description } = Workout;
+	try {
+		await addDoc(collection(db, "exerciseCategories"), {
+			name,
+			image,
+			description,
+		});
+		return true;
+	} catch (err) {
+		console.error(err);
+		return false;
+	}
+};
+const getAllExerciseCategories = async () => {
+	const querySnapshot = await getDocs(collection(db, "exerciseCategories"));
+	let newData = [];
+	querySnapshot.forEach((doc) => {
+		let temp = doc.data();
+		temp.id = doc.id;
+		newData.push(temp);
+	});
+	return newData;
+};
+const updateExerciseCategory = async (workout) => {
+	let { name, image, description } = workout;
+
+	try {
+		const prodRef = await doc(db, "exerciseCategories", workout.id);
+		await updateDoc(prodRef, {
+			name,
+			image,
+			description,
+		});
+		return true;
+	} catch (err) {
+		console.log("err", err);
+
+		console.log("err", err.message);
+		return false;
+	}
+};
+const deleteExerciseCategory = async (workout) => {
+	try {
+		await deleteDoc(doc(db, "exerciseCategories", workout.id));
 		return true;
 	} catch (err) {
 		console.log("err", err);
@@ -1043,4 +1171,12 @@ export {
 	deleteProgram,
 	getOnboarding,
 	updateOnboarding,
+	getAllWorkoutCategories,
+	addWorkoutCategory,
+	updateWorkoutCategory,
+	deleteWorkoutCategory,
+	getAllExerciseCategories,
+	addExerciseCategory,
+	updateExerciseCategory,
+	deleteExerciseCategory,
 };

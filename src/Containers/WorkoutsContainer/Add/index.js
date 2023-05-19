@@ -7,9 +7,10 @@ import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
-import { addWorkout } from "../../../Helpers/firebase";
+import { addWorkout, getAllWorkoutCategories } from "../../../Helpers/firebase";
 import "./index.css";
 import DayEdit from "./DayEdit";
+import NewCategoryModal from "../NewCategoryModal";
 
 const { TextArea } = Input;
 
@@ -17,9 +18,11 @@ const AddWorkoutContainer = (props) => {
 	const [addingUser, setAddingUser] = React.useState(false);
 	const navigate = useNavigate();
 	const [basicDetailMedia, setBasicDetailMedia] = React.useState(null);
+	const [categoryListing, setCategoryListing] = React.useState([]);
 	const [basicDetailMediaOneError, setBasicDetailMediaError] =
 		React.useState(false);
 	const [progressPercent, setProgressPercent] = React.useState(0);
+	const [open, setOpen] = React.useState(false);
 	const [data, setData] = React.useState({
 		id: 0,
 		warmup: [],
@@ -27,9 +30,6 @@ const AddWorkoutContainer = (props) => {
 		cooldown: [],
 		notes: "",
 	});
-	const [prompted, setPrompted] = React.useState(false);
-	// const handleSubmit
-
 	const addProgramToList = async (values) => {
 		if (!basicDetailMedia) {
 			message.error("Please add an Image for Basic Details!");
@@ -37,22 +37,6 @@ const AddWorkoutContainer = (props) => {
 			return;
 		}
 		setBasicDetailMediaError(false);
-		if (
-			!prompted &&
-			data.warmup.length === 0 &&
-			data.workout.length === 0 &&
-			data.cooldown.length === 0
-		) {
-			setPrompted(true);
-			notification.warning({
-				message: `Save all changes made to workout!`,
-				description: `If you have made any changes to exercises please save them first!`,
-				placement: "topRight",
-				duration: 2,
-				onClose: function () {},
-			});
-			return;
-		}
 		setAddingUser(true);
 		setProgressPercent(25);
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "";
@@ -84,7 +68,12 @@ const AddWorkoutContainer = (props) => {
 			});
 		}
 	};
-
+	React.useEffect(() => {
+		(async function () {
+			const rsp = await getAllWorkoutCategories();
+			setCategoryListing(rsp);
+		})();
+	}, [open]);
 	return (
 		<Formik
 			initialValues={initVals}
@@ -94,7 +83,6 @@ const AddWorkoutContainer = (props) => {
 		>
 			{({
 				errors,
-
 				touched,
 				values,
 				handleChange,
@@ -123,7 +111,7 @@ const AddWorkoutContainer = (props) => {
 							</div>
 						)}
 					</div>
-
+					{open && <NewCategoryModal {...{ open, setOpen }} />}
 					<div className="cardAdditionBlog">
 						<Row style={{ paddingLeft: 47 }}>
 							<Col xs={24} sm={24} md={24} lg={12} xl={13}>
@@ -186,6 +174,49 @@ const AddWorkoutContainer = (props) => {
 												)}
 											</div>
 										</div>
+										<div className="flexStart mb30">
+											<span>
+												<span className="addBlogInputLabel">CATEGORY</span>
+												<span
+													className="newCategorybtn"
+													onClick={() => {
+														setOpen(true);
+													}}
+												>
+													Add new category
+												</span>
+											</span>
+											<div style={{ marginTop: 10 }}>
+												<select
+													name="category"
+													id="category"
+													onChange={handleChange}
+													onBlur={handleBlur}
+													value={values.category}
+													className="addBlogInput inputText"
+												>
+													<option
+														value="default"
+														selected={true}
+														disabled={true}
+													>
+														Select Category
+													</option>
+													{categoryListing.map((item) => (
+														<option value={item.name}>{item.name}</option>
+													))}
+												</select>
+												{errors.category && touched.category ? (
+													<Typography
+														alignment="left"
+														title={errors.category}
+														fontFamily="Gilroy-Medium"
+														color="red"
+														type="label"
+													/>
+												) : null}
+											</div>
+										</div>
 									</div>
 								</Col>
 								<Col xs={24} sm={24} md={24} lg={3} xl={3} xxl={2} />
@@ -209,8 +240,8 @@ const AddWorkoutContainer = (props) => {
 													src={basicDetailMedia}
 													alt="UserImage"
 													style={{
-														width: 250,
-														height: 250,
+														width: 298,
+														height: 215,
 														borderRadius: 6,
 													}}
 												/>
@@ -239,6 +270,7 @@ const AddWorkoutContainer = (props) => {
 												{...{
 													setImageUrl: setBasicDetailMedia,
 													small: false,
+													categoryType: true,
 												}}
 											/>
 										)}
@@ -252,6 +284,51 @@ const AddWorkoutContainer = (props) => {
 											/>
 										)}
 									</div>
+									<div className="flexStart mb30" style={{ marginTop: 27 }}>
+										<span className="addBlogInputLabel">STATUS</span>
+										<div style={{ marginTop: 10 }}>
+											<select
+												name="status"
+												id="category"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												value={values.status}
+												className="addBlogInput inputText"
+												style={{
+													background:
+														values.status === "Active"
+															? "#5DB135"
+															: values.status === "Inactive"
+															? "#E2BB2E"
+															: "#F4F4F4",
+													color:
+														values.status === "Active" ||
+														values.status === "Inactive"
+															? "#fff"
+															: "#000000",
+													paddingRight: 50,
+													borderRight: "16px solid transparent",
+												}}
+											>
+												<option value="" selected={true} disabled={true}>
+													Select Status
+												</option>
+												<option value="Active">Active</option>
+												<option value="Inactive">Inactive</option>
+											</select>
+											{errors.status && touched.status ? (
+												<Typography
+													alignment="left"
+													title={errors.status}
+													fontFamily="Gilroy-Medium"
+													color="red"
+													type="label"
+												/>
+											) : (
+												<></>
+											)}
+										</div>
+									</div>
 								</Col>
 							</Row>
 						</div>
@@ -261,7 +338,11 @@ const AddWorkoutContainer = (props) => {
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10 }}>
 								<TextArea
-									rows={4}
+									// rows={4}
+									autoSize={{
+										minRows: 12,
+										maxRows: 12,
+									}}
 									placeholder="Enter Description"
 									maxLength={500}
 									showCount
@@ -273,7 +354,7 @@ const AddWorkoutContainer = (props) => {
 									style={{
 										width: "100%",
 										display: "flex",
-										height: 600,
+										height: 300,
 										backgroundColor: "#F4F4F4",
 									}}
 								/>
@@ -292,7 +373,7 @@ const AddWorkoutContainer = (props) => {
 						</div>
 						<br />
 						<br /> <br />
-						<DayEdit {...{ data, setData, prompted }} />
+						<DayEdit {...{ data, setData }} />
 					</div>
 				</div>
 			)}

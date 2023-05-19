@@ -1,7 +1,6 @@
 import React from "react";
 import { Tooltip, Table, Spin } from "antd";
 import Wrapper from "../../../Components/Wrapper";
-import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 // import { RiDeleteBinLine } from "react-icons/ri";
@@ -21,9 +20,6 @@ const PrizeListing = (props) => {
 		},
 		{
 			title: "CATEGORY",
-
-			// sorter: (a, b) => a.category.toLowerCase() - b.category.toLowerCase(),
-			// sortDirections: ["ascend", "descend"],
 			render: (rowData) => {
 				return (
 					<div style={{ width: 140 }}>
@@ -40,10 +36,6 @@ const PrizeListing = (props) => {
 						className="exerciseStatusCapsule"
 						style={{
 							backgroundColor: "#5DB135",
-							// rowData.status.toLowerCase() === "active"
-							// 	? "#5DB135"
-							// 	:
-							// "#D30E0E",
 							width: 140,
 						}}
 					>
@@ -64,10 +56,8 @@ const PrizeListing = (props) => {
 				<Wrapper type="rowEvenAlign">
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner pointing"}
 							onClick={() => {
-								// props.setActiveCategory(rowData);
-								//console.log(rowData);
 								props.editThisProgram(rowData.id);
 							}}
 						>
@@ -76,7 +66,7 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner pointing"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);

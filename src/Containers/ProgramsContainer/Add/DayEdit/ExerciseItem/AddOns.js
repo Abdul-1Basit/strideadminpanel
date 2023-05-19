@@ -16,15 +16,7 @@ const WeightSelection = ({ activeParentItem, index, setterFunc }) => (
 			prevValues[index].weightunit = e.target.value;
 			setterFunc(prevValues);
 		}}
-		style={{
-			backgroundColor: "#fff",
-			border: "none",
-			// padding: 5,
-			outline: "none",
-			borderRadius: 6,
-			height: 40,
-			width: 45,
-		}}
+		className="addonField"
 	>
 		<option value="lbs">lbs</option>
 		<option value="kg">kg</option>
@@ -35,15 +27,7 @@ const TimeSelection = ({ activeParentItem, index, setterFunc }) => (
 		name="weightselect"
 		id="weightselect"
 		defaultValue={activeParentItem[index].weightunit ?? "Sec"}
-		style={{
-			backgroundColor: "#fff",
-			border: "none",
-			// padding: 5,
-			outline: "none",
-			borderRadius: 6,
-			height: 40,
-			width: 45,
-		}}
+		className="addonField"
 		onChange={(e) => {
 			// item = e.target.value;
 			let prevValues = [...activeParentItem];

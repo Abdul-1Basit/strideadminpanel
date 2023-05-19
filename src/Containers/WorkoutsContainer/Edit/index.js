@@ -2,14 +2,19 @@ import React from "react";
 import Typography from "../../../Components/Typography";
 import { Row, message, Input, Progress, notification, Col } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
-import programSchema, { initVals } from "./Constants";
+import programSchema, { initVals } from "../Add/Constants";
 import { Formik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
-import { getAllWorkouts, updateWorkout } from "../../../Helpers/firebase";
+import {
+	getAllWorkoutCategories,
+	getAllWorkouts,
+	updateWorkout,
+} from "../../../Helpers/firebase";
 import "./index.css";
 import DayEdit from "../Add/DayEdit";
+import NewCategoryModal from "../NewCategoryModal";
 const { TextArea } = Input;
 
 const EditWorkoutContainer = (props) => {
@@ -22,10 +27,8 @@ const EditWorkoutContainer = (props) => {
 	const [progressPercent, setProgressPercent] = React.useState(0);
 	const [activeData, setActiveData] = React.useState(initVals);
 	const [data, setData] = React.useState(null);
-	const [prompted, setPrompted] = React.useState(false);
-
-	// const handleSubmit
-
+	const [categoryListing, setCategoryListing] = React.useState([]);
+	const [open, setOpen] = React.useState(false);
 	const addProgramToList = async (values) => {
 		if (!basicDetailMedia) {
 			message.error("Please add an Image for Basic Details!");
@@ -33,29 +36,12 @@ const EditWorkoutContainer = (props) => {
 			return;
 		}
 		setBasicDetailMediaError(false);
-		if (
-			!prompted &&
-			data.warmup.length === 0 &&
-			data.workout.length === 0 &&
-			data.cooldown.length === 0
-		) {
-			setPrompted(true);
-			notification.warning({
-				message: `Save all changes made to workout!`,
-				description: `If you have made any changes to exercises please save them first!`,
-				placement: "topRight",
-				duration: 2,
-				onClose: function () {},
-			});
-			return;
-		}
 		setAddingUser(true);
 		setProgressPercent(25);
 		values.id = activeData.id;
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "";
 		values.exercises = data;
 		console.log("values", values);
-		// return;
 		setProgressPercent(50);
 		console.log("values", values);
 		if (await updateWorkout(values)) {
@@ -83,14 +69,16 @@ const EditWorkoutContainer = (props) => {
 			});
 		}
 	};
-	// React.useEffect(() => {
-
-	// }, []);
 	React.useLayoutEffect(() => {
-		if (id) {
+		if (id && activeData !== null) {
 			fetchList();
 		}
-	}, [id]);
+		(async function () {
+			const rsp = await getAllWorkoutCategories();
+			setCategoryListing(rsp);
+		})();
+	}, [id, open]);
+
 	async function fetchList() {
 		const workoutList = await getAllWorkouts();
 		let foundData = workoutList.find((itm) => itm.id === id);
@@ -99,7 +87,6 @@ const EditWorkoutContainer = (props) => {
 		}
 		setBasicDetailMedia(foundData.basicDetailMedia);
 		setData(foundData.exercises);
-		// console.log("found this", foundData);
 	}
 
 	return (
@@ -111,7 +98,6 @@ const EditWorkoutContainer = (props) => {
 		>
 			{({
 				errors,
-
 				touched,
 				values,
 				handleChange,
@@ -138,7 +124,7 @@ const EditWorkoutContainer = (props) => {
 							</div>
 						)}
 					</div>
-
+					{open && <NewCategoryModal {...{ open, setOpen }} />}
 					<div className="cardAdditionBlog">
 						<Row style={{ paddingLeft: 47 }}>
 							<Col xs={24} sm={24} md={24} lg={12} xl={13}>
@@ -200,6 +186,45 @@ const EditWorkoutContainer = (props) => {
 													""
 												)}
 											</div>
+										</div>
+									</div>
+									<div className="flexStart mb30">
+										<span>
+											<span className="addBlogInputLabel">CATEGORY</span>
+											<span
+												className="newCategorybtn"
+												onClick={() => {
+													setOpen(true);
+												}}
+											>
+												Add new category
+											</span>
+										</span>
+										<div style={{ marginTop: 10 }}>
+											<select
+												name="category"
+												id="category"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												value={values.category}
+												className="addBlogInput inputText"
+											>
+												<option value="default" selected={true} disabled={true}>
+													Select Category
+												</option>
+												{categoryListing.map((item) => (
+													<option value={item.name}>{item.name}</option>
+												))}
+											</select>
+											{errors.category && touched.category ? (
+												<Typography
+													alignment="left"
+													title={errors.category}
+													fontFamily="Gilroy-Medium"
+													color="red"
+													type="label"
+												/>
+											) : null}
 										</div>
 									</div>
 								</Col>
@@ -267,6 +292,51 @@ const EditWorkoutContainer = (props) => {
 											/>
 										)}
 									</div>
+									<div className="flexStart mb30" style={{ marginTop: 27 }}>
+										<span className="addBlogInputLabel">STATUS</span>
+										<div style={{ marginTop: 10 }}>
+											<select
+												name="status"
+												id="category"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												value={values.status}
+												className="addBlogInput inputText"
+												style={{
+													background:
+														values.status === "Active"
+															? "#5DB135"
+															: values.status === "Inactive"
+															? "#E2BB2E"
+															: "#F4F4F4",
+													color:
+														values.status === "Active" ||
+														values.status === "Inactive"
+															? "#fff"
+															: "#000000",
+													paddingRight: 50,
+													borderRight: "16px solid transparent",
+												}}
+											>
+												<option value="" selected={true} disabled={true}>
+													Select Status
+												</option>
+												<option value="Active">Active</option>
+												<option value="Inactive">Inactive</option>
+											</select>
+											{errors.status && touched.status ? (
+												<Typography
+													alignment="left"
+													title={errors.status}
+													fontFamily="Gilroy-Medium"
+													color="red"
+													type="label"
+												/>
+											) : (
+												<></>
+											)}
+										</div>
+									</div>
 								</Col>
 							</Row>
 						</div>
@@ -276,7 +346,10 @@ const EditWorkoutContainer = (props) => {
 							<span className="addBlogInputLabel">DESCRIPTION</span>
 							<div style={{ marginTop: 10 }}>
 								<TextArea
-									rows={4}
+									autoSize={{
+										minRows: 12,
+										maxRows: 12,
+									}}
 									placeholder="Enter Description"
 									maxLength={500}
 									showCount
@@ -288,7 +361,7 @@ const EditWorkoutContainer = (props) => {
 									style={{
 										width: "100%",
 										display: "flex",
-										height: 600,
+										height: 300,
 										backgroundColor: "#F4F4F4",
 									}}
 								/>
@@ -307,7 +380,7 @@ const EditWorkoutContainer = (props) => {
 						</div>
 						<br />
 						<br /> <br />
-						{data && <DayEdit {...{ data, setData, prompted }} />}
+						{data && <DayEdit {...{ data, setData }} />}
 					</div>
 				</div>
 			)}

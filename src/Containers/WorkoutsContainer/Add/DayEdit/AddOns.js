@@ -1,12 +1,4 @@
-import { Select } from "antd";
-const { Option } = Select;
-const weightSelection = (item) => (
-	<Select defaultValue={"lbs"}>
-		<Option value="lbs">lbs</Option>
-		<Option value="kg">kg</Option>
-	</Select>
-);
-const WeightSelection = ({ activeParentItem, index, setterFunc }) => (
+const WeightSelection = ({ activeParentItem, index, setterFunc, type }) => (
 	<select
 		name="weightselect"
 		id="weightselect"
@@ -14,41 +6,25 @@ const WeightSelection = ({ activeParentItem, index, setterFunc }) => (
 		onChange={(e) => {
 			let prevValues = [...activeParentItem];
 			prevValues[index].weightunit = e.target.value;
-			setterFunc(prevValues);
+			setterFunc(type, prevValues);
 		}}
-		style={{
-			backgroundColor: "#fff",
-			border: "none",
-			// padding: 5,
-			outline: "none",
-			borderRadius: 6,
-			height: 40,
-			width: 45,
-		}}
+		className="addonField"
 	>
 		<option value="lbs">lbs</option>
 		<option value="kg">kg</option>
 	</select>
 );
-const TimeSelection = ({ activeParentItem, index, setterFunc }) => (
+const TimeSelection = ({ activeParentItem, index, setterFunc, type }) => (
 	<select
 		name="weightselect"
 		id="weightselect"
 		defaultValue={activeParentItem[index].weightunit ?? "Sec"}
-		style={{
-			backgroundColor: "#fff",
-			border: "none",
-			// padding: 5,
-			outline: "none",
-			borderRadius: 6,
-			height: 40,
-			width: 45,
-		}}
+		className="addonField"
 		onChange={(e) => {
 			// item = e.target.value;
 			let prevValues = [...activeParentItem];
 			prevValues[index].weightunit = e.target.value;
-			setterFunc(prevValues);
+			setterFunc(type, prevValues);
 		}}
 	>
 		<option value="Min">Min</option>

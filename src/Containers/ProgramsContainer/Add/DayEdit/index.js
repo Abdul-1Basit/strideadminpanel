@@ -200,6 +200,15 @@ export default function DayEdit(props) {
 		setListOfCategories(listOfExercisez);
 		console.log("list ofexercises", listOfExercisez);
 	};
+	// const showMessage = () => {
+	// 	notification.warning({
+	// 		message: `You are in a quick view`,
+	// 		description: `Select the edit option to make changes to this program`,
+	// 		placement: "topRight",
+	// 		duration: 2,
+	// 		onClose: function () {},
+	// 	});
+	// };
 
 	return (
 		<div className="containerForAdd">
@@ -218,7 +227,17 @@ export default function DayEdit(props) {
 					<span
 						className="draftBtn"
 						style={{ backgroundColor: "#7D7D7D" }}
-						onClick={() => props.setActiveScreen(0)}
+						onClick={() => {
+							notification.info({
+								message: `Your changes haven't been made`,
+								description: ``,
+								placement: "topRight",
+								duration: 2,
+								onClose: function () {
+									props.setActiveScreen(0);
+								},
+							});
+						}}
 					>
 						Cancel
 					</span>
@@ -228,13 +247,25 @@ export default function DayEdit(props) {
 							// console.log("warm values", warmup);
 							// console.log("workouts", workout);
 							// console.log("cooldonw", cooldown);
+							if (props.disabled) {
+								props.showWarning();
+								return;
+							}
 							let oldDaya = [...props.days];
 							oldDaya[props.activeItemIndex].warmup = warmup;
 							oldDaya[props.activeItemIndex].workout = workout;
 							oldDaya[props.activeItemIndex].cooldown = cooldown;
 							oldDaya[props.activeItemIndex].notes = notes;
 							props.setDays(oldDaya);
-							props.setActiveScreen(0);
+							notification.success({
+								message: `Your changes have been saved`,
+								description: ``,
+								placement: "topRight",
+								duration: 2,
+								onClose: function () {
+									props.setActiveScreen(0);
+								},
+							});
 						}}
 					>
 						Save
@@ -320,8 +351,8 @@ export default function DayEdit(props) {
 											notification.success({
 												message:
 													warmupCounter > 1
-														? `You have added ${warmupCounter} days to the warmup`
-														: `You have added ${warmupCounter} day to the warmup`,
+														? `You have added ${warmupCounter} exercises to the warmup`
+														: `You have added ${warmupCounter} exercise to the warmup`,
 												description: ``, //`${values.name}  has been successfully updated`,
 												placement: "topRight",
 												duration: 3,
@@ -463,8 +494,8 @@ export default function DayEdit(props) {
 											notification.success({
 												message:
 													workoutCounter > 1
-														? `You have added ${workoutCounter} days to the workout`
-														: `You have added ${workoutCounter} day to the workout`,
+														? `You have added ${workoutCounter} exercises to the workout`
+														: `You have added ${workoutCounter} exercise to the workout`,
 												description: ``, //`${values.name}  has been successfully updated`,
 												placement: "topRight",
 												duration: 3,
@@ -606,8 +637,8 @@ export default function DayEdit(props) {
 											notification.success({
 												message:
 													cooldownCounter > 1
-														? `You have added ${cooldownCounter} days to the cooldown`
-														: `You have added ${cooldownCounter} day to the cooldown`,
+														? `You have added ${cooldownCounter} exercises to the cooldown`
+														: `You have added ${cooldownCounter} exercise to the cooldown`,
 												description: ``, //`${values.name}  has been successfully updated`,
 												placement: "topRight",
 												duration: 3,
@@ -675,7 +706,11 @@ export default function DayEdit(props) {
 					<span className="addBlogInputLabel">NOTES</span>
 					<div style={{ marginTop: 10 }}>
 						<TextArea
-							rows={4}
+							// rows={4}
+							autoSize={{
+								minRows: 15,
+								maxRows: 15,
+							}}
 							placeholder="Enter notes..."
 							maxLength={500}
 							showCount

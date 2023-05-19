@@ -1,41 +1,23 @@
 import "./index.css";
 import React from "react";
-import CustomButton from "../../../Components/CustomButton";
 import { CloseOutlined } from "@ant-design/icons";
 import CategorySchema, { initVals } from "./Constants";
 import { Formik, Form } from "formik";
-import {
-	Select,
-	Radio,
-	Progress,
-	notification,
-	message,
-	Input,
-	Row,
-	Col,
-} from "antd";
-// import { AiFillDelete } from "react-icons/ai";
+import { Progress, notification, message, Input, Row, Col } from "antd";
 import Typography from "../../../Components/Typography";
-// import Wrapper from "../../../Components/Wrapper";
 import {
 	addExercise,
+	getAllExerciseCategories,
 	getAllExercises,
-	uploadImage,
 } from "../../../Helpers/firebase";
-// import CustomDropZone from "../../../Components/CustomDropZone";
-import SpinnerComponent from "../../../Components/SpinnerComponent";
 import EmployeeDropZone from "../../EmployeeContainer/EmployeeDropZone";
 import { primaryColor } from "../../../Constants";
 import AudioDropZone from "../../../Components/AudioDropZone";
-import { useNavigate } from "react-router-dom";
 import RichTextEditor from "react-rte";
-const { Option } = Select;
+import NewCategoryModal from "../NewCategoryModal";
 const { TextArea } = Input;
 const AddProductCategory = (props) => {
-	// const [fileList, setFileList] = React.useState([]);
-	const navigate = useNavigate();
 	const [value, setValue] = React.useState(RichTextEditor.createEmptyValue());
-
 	const [imageError, setImageError] = React.useState(false);
 	const [videoError, setVideoError] = React.useState(false);
 	const [audioError, setAudioError] = React.useState(false);
@@ -45,6 +27,8 @@ const AddProductCategory = (props) => {
 	const [audioValue, setAudioValue] = React.useState("");
 	const [videoValue, setVideoValue] = React.useState("");
 	const [campaignListing, setCampaignListing] = React.useState([]);
+	const [open, setOpen] = React.useState(false);
+	const [categoryListing, setCategoryListing] = React.useState([]);
 
 	const addCategoryToList = async (values) => {
 		if (!imageurl) {
@@ -70,17 +54,12 @@ const AddProductCategory = (props) => {
 			});
 			return;
 		}
-		// setImageError(false);
-		// console.log("values", values);
-		// return;
 		setIsLoading(true);
 		setProgressPercent(25);
 		values.img = imageurl;
 		values.audio = audioValue ?? "";
 		values.video = videoValue;
 		console.log("values", values);
-
-		// return;
 		setProgressPercent(50);
 		if (await addExercise(values)) {
 			setProgressPercent(100);
@@ -109,10 +88,15 @@ const AddProductCategory = (props) => {
 	};
 	React.useEffect(() => {
 		getWorkouts();
-	}, []);
+		getExercs();
+	}, [open]);
 	const getWorkouts = async () => {
 		let result = await getAllExercises();
 		setCampaignListing(result);
+	};
+	const getExercs = async () => {
+		let reslts = await getAllExerciseCategories();
+		setCategoryListing(reslts);
 	};
 	return (
 		<div>
@@ -126,7 +110,6 @@ const AddProductCategory = (props) => {
 			>
 				{({
 					errors,
-					isSubmitting,
 					touched,
 					values,
 					handleChange,
@@ -140,7 +123,6 @@ const AddProductCategory = (props) => {
 								<Progress type="circle" percent={progressPercent} />
 							) : (
 								<div className="rowing">
-									{/* <span className="draftBtn">Save as draft</span> */}
 									<span
 										className="draftBtn"
 										style={{ backgroundColor: "#7D7D7D" }}
@@ -160,6 +142,7 @@ const AddProductCategory = (props) => {
 								</div>
 							)}
 						</div>
+						{open && <NewCategoryModal {...{ open, setOpen }} />}
 						<div className="cardAdditionBlog">
 							<span className="tableTitle">Basic Detail</span>
 							<div className="barVertical" />
@@ -173,10 +156,6 @@ const AddProductCategory = (props) => {
 													type={"text"}
 													name="name"
 													className="addBlogInput inputText"
-													// onChange={(e) => {
-													// 	props.item.name = e.target.value;
-													// }}
-													// value={props.item.name}
 													onChange={handleChange}
 													onBlur={handleBlur}
 													value={values.name}
@@ -197,19 +176,21 @@ const AddProductCategory = (props) => {
 											<div
 												style={{ marginTop: 10, width: "100%", maxWidth: 420 }}
 											>
-												<RichTextEditor
-													value={value}
-													onChange={(val) => {
-														console.log("value", val.toString("html"));
-														setValue(val);
-														values.instructions = val.toString("html");
-													}}
-													editorStyle={{
-														height: 420,
-														marginBottom: 50,
-														width: 400,
-													}}
-												/>
+												{!open && (
+													<RichTextEditor
+														value={value}
+														onChange={(val) => {
+															console.log("value", val.toString("html"));
+															setValue(val);
+															values.instructions = val.toString("html");
+														}}
+														editorStyle={{
+															height: 420,
+															marginBottom: 50,
+															width: 400,
+														}}
+													/>
+												)}
 												{errors.instructions && touched.instructions ? (
 													<Typography
 														alignment="left"
@@ -226,19 +207,12 @@ const AddProductCategory = (props) => {
 											<div style={{ marginTop: 10 }}>
 												<TextArea
 													className="addBlogInput inputText"
-													rows={8}
-													// cols={20}
+													autoSize={{
+														minRows: 8,
+														maxRows: 8,
+													}}
 													name="targetArea"
 													placeholder="Please enter Target Area"
-													// onChange={(e) => {
-													// 	props.item.targetArea = e.target.value;
-													// }}
-													// allowClear
-													// style={{
-													// 	width: "85%",
-													// 	backgroundColor: "#F4F4F4",
-													// 	borderRadius: 8,
-													// }}
 													onChange={handleChange}
 													onBlur={handleBlur}
 													value={values.targetArea}
@@ -259,7 +233,17 @@ const AddProductCategory = (props) => {
 									<Col xs={24} sm={24} md={24} lg={11} xl={11}>
 										{/* {"Target Area"} */}
 										<div className="flexStart mb30">
-											<span className="addBlogInputLabel">CATEGORY</span>
+											<span>
+												<span className="addBlogInputLabel">CATEGORY</span>
+												<span
+													className="newCategorybtn"
+													onClick={() => {
+														setOpen(true);
+													}}
+												>
+													Add new category
+												</span>
+											</span>
 											<div style={{ marginTop: 10 }}>
 												<select
 													name="category"
@@ -274,15 +258,11 @@ const AddProductCategory = (props) => {
 														selected={true}
 														disabled={true}
 													>
-														Select Exercise
+														Select Category
 													</option>
-													<option value="Chest">Chest</option>
-													<option value="Arms">Arms</option>
-													<option value="Back">Back</option>
-													<option value="Shoulders">Shoulders</option>
-													<option value="Legs">Legs</option>
-													<option value="Abs">Abs</option>
-													<option value="Core">Core</option>
+													{categoryListing.map((item) => (
+														<option value={item.name}>{item.name}</option>
+													))}
 												</select>
 												{errors.category && touched.category ? (
 													<Typography

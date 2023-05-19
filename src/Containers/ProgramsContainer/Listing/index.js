@@ -66,7 +66,7 @@ const PrizeListing = (props) => {
 							props.viewThisProgram(rowData.id);
 						}}
 					>
-						<Tooltip placement="top" title={"View"}>
+						<Tooltip placement="top" title={"Quick View"}>
 							<span className="label">{rowData.name}</span>
 						</Tooltip>
 					</div>
@@ -155,7 +155,7 @@ const PrizeListing = (props) => {
 			width: 120,
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
-					<Tooltip placement="topRight" title={"Clone"}>
+					<Tooltip placement="topRight" title={"Duplicate"}>
 						<div
 							className={"centerAligner"}
 							onClick={() => {

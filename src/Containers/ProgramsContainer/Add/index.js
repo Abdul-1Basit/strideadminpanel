@@ -499,7 +499,11 @@ const AddProgramContainer = (props) => {
 									/>
 									<div style={{ marginTop: 10 }}>
 										<TextArea
-											rows={4}
+											// rows={4}
+											autoSize={{
+												minRows: 16,
+												maxRows: 16,
+											}}
 											placeholder="Enter Description"
 											maxLength={500}
 											showCount
@@ -679,7 +683,11 @@ const AddProgramContainer = (props) => {
 											<span className="addBlogInputLabel">DESCRIPTION</span>
 											<div style={{ marginTop: 10, width: 500 }}>
 												<TextArea
-													rows={4}
+													// rows={4}
+													autoSize={{
+														minRows: 11,
+														maxRows: 11,
+													}}
 													placeholder="Schedule Description"
 													maxLength={500}
 													showCount
@@ -798,6 +806,7 @@ const AddProgramContainer = (props) => {
 						setDays={setDays}
 						setActiveScreen={setActiveScreen}
 						activeItemIndex={activeItemIndex}
+						disabled={false}
 					/>
 				)
 			}

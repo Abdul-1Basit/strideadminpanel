@@ -15,9 +15,9 @@ const UserProvider = (props) => {
 		activeIndex: -1,
 		changedQuery: false,
 	});
-	React.useEffect(() => {
-		// console.log(userData)
-	}, [userData]);
+	// React.useEffect(() => {
+	// 	// console.log(userData)
+	// }, [userData]);
 	return (
 		<UserContext.Provider value={[userData, setUserData]}>
 			{props.children}

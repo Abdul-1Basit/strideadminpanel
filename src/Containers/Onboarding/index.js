@@ -137,7 +137,10 @@ export default function OnboardingContainer(props) {
 										<span className="addBlogInputLabel">Description</span>
 										<div style={{ marginTop: 10 }}>
 											<TextArea
-												rows={4}
+												autoSize={{
+													minRows: 5,
+													maxRows: 5,
+												}}
 												name="descriptionOne"
 												className="addBlogInput inputText"
 												onChange={handleChange}
@@ -181,7 +184,10 @@ export default function OnboardingContainer(props) {
 										<span className="addBlogInputLabel">Description</span>
 										<div style={{ marginTop: 10 }}>
 											<TextArea
-												rows={4}
+												autoSize={{
+													minRows: 5,
+													maxRows: 5,
+												}}
 												name="descriptionTwo"
 												className="addBlogInput inputText"
 												onChange={handleChange}

@@ -35,6 +35,8 @@ import ViewProgram from "../Pages/Programs/CloneProgram copy";
 import EditExercise from "../Pages/Exercises/EditExercise";
 import Onboarding from "../Pages/Onboarding";
 import ReqConsultation from "../Pages/ReqConsultation";
+import ExerciseCategory from "../Pages/ExerciseCategory";
+import WorkoutCategory from "../Pages/WorkoutCategory";
 export default function StrideRoutes() {
 	return (
 		<BrowserRouter>
@@ -72,6 +74,22 @@ export default function StrideRoutes() {
 					element={
 						<AuthenticateRoute>
 							<Exercises />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/exercise-categories"
+					element={
+						<AuthenticateRoute>
+							<ExerciseCategory />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/workout-categories"
+					element={
+						<AuthenticateRoute>
+							<WorkoutCategory />
 						</AuthenticateRoute>
 					}
 				/>

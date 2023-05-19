@@ -5,7 +5,7 @@ import { FiUsers } from "react-icons/fi";
 import { GiWeightLiftingUp, GiPerson } from "react-icons/gi";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import { TbUnlink } from "react-icons/tb";
-
+import { TfiMenuAlt } from "react-icons/tfi";
 export const listOfNavs = {
 	one: [
 		{
@@ -14,6 +14,8 @@ export const listOfNavs = {
 			navLink: "/dashboard",
 			backgroundColor: "#1e293b",
 			content: "happy to have you back",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Users",
@@ -21,6 +23,8 @@ export const listOfNavs = {
 			navLink: "/users",
 			backgroundColor: "#1e293b",
 			content: "you can manage data related to app users",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 
 		{
@@ -29,6 +33,8 @@ export const listOfNavs = {
 			navLink: "/products",
 			backgroundColor: "#1e293b",
 			content: "manage your products here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 
 		{
@@ -37,6 +43,8 @@ export const listOfNavs = {
 			navLink: "/programs",
 			backgroundColor: "#1e293b",
 			content: "Manage programs here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Workouts",
@@ -44,6 +52,17 @@ export const listOfNavs = {
 			navLink: "/workouts",
 			backgroundColor: "#1e293b",
 			content: "Manage workout here",
+			hasSubmenu: true,
+			showSubmenu: false,
+		},
+		{
+			itemName: "Workout Categories",
+			itemLogo: <TfiMenuAlt size={23} />,
+			navLink: "/workout-categories",
+			backgroundColor: "#1e293b",
+			content: "Manage workout categories here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Exercises",
@@ -51,6 +70,17 @@ export const listOfNavs = {
 			navLink: "/exercises",
 			backgroundColor: "#1e293b",
 			content: "Manage exercises here",
+			hasSubmenu: true,
+			showSubmenu: false,
+		},
+		{
+			itemName: "Exercise Categories",
+			itemLogo: <TfiMenuAlt size={23} />,
+			navLink: "/exercise-categories",
+			backgroundColor: "#1e293b",
+			content: "Manage exercise categories here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Affiliates",
@@ -58,6 +88,8 @@ export const listOfNavs = {
 			navLink: "/employees",
 			backgroundColor: "#1e293b",
 			content: "",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Messages",
@@ -65,6 +97,8 @@ export const listOfNavs = {
 			navLink: "/employees",
 			backgroundColor: "#1e293b",
 			content: "",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Employees",
@@ -72,6 +106,8 @@ export const listOfNavs = {
 			navLink: "/employees",
 			backgroundColor: "#1e293b",
 			content: "manage your staff here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Orders",
@@ -79,6 +115,8 @@ export const listOfNavs = {
 			navLink: "/orders",
 			backgroundColor: "#1e293b",
 			content: "you can order data here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 		{
 			itemName: "Blogs",
@@ -86,6 +124,8 @@ export const listOfNavs = {
 			navLink: "/blogs",
 			backgroundColor: "#1e293b",
 			content: "Manage your blogs here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 
 		{
@@ -94,6 +134,8 @@ export const listOfNavs = {
 			navLink: "/onboardingsetting",
 			backgroundColor: "#1e293b",
 			content: "Update Onboarding screens",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 
 		{
@@ -102,6 +144,8 @@ export const listOfNavs = {
 			navLink: "/reqconsultation",
 			backgroundColor: "#1e293b",
 			content: "Manage requests here",
+			hasSubmenu: false,
+			showSubmenu: false,
 		},
 	],
 };

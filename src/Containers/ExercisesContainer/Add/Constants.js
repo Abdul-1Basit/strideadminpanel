@@ -4,7 +4,7 @@ const CategorySchema = Yup.object().shape({
 		.min(2, "Too Short!")
 		.max(50, "Too Long!")
 		.required("Exercise name is required"),
-	category: Yup.string().required("Category are required"),
+	category: Yup.string().required("Category is required"),
 	instructions: Yup.string().required("Instructions are required"),
 	targetArea: Yup.string().required("Target Area are required"),
 	status: Yup.string().required("Status is required"),
@@ -12,7 +12,7 @@ const CategorySchema = Yup.object().shape({
 export const initVals = {
 	// subCategoryId:1,
 	name: "",
-	category: "",
+	category: "default",
 	status: "",
 	instructions: "",
 	targetArea: "",

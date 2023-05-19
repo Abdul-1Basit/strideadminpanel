@@ -139,6 +139,15 @@ const ViewProgramContainer = (props) => {
 		newDays = newDays.filter((item) => item.id !== id);
 		setDays(newDays);
 	};
+	const showWarning = () => {
+		notification.warning({
+			message: `You are in a quick view`,
+			description: `Select the edit option to make changes to this program`,
+			placement: "topRight",
+			duration: 2,
+			onClose: function () {},
+		});
+	};
 	return (
 		<Formik
 			initialValues={newinitVals}
@@ -471,7 +480,7 @@ const ViewProgramContainer = (props) => {
 															cursor: "pointer",
 															border: "1px solid #000",
 														}}
-														onClick={() => setOverviewMediaOne("")}
+														// onClick={() => setOverviewMediaOne("")}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -512,7 +521,10 @@ const ViewProgramContainer = (props) => {
 									/>
 									<div style={{ marginTop: 10 }}>
 										<TextArea
-											rows={4}
+											autoSize={{
+												minRows: 16,
+												maxRows: 16,
+											}}
 											placeholder="Enter Description"
 											maxLength={250}
 											showCount
@@ -693,7 +705,10 @@ const ViewProgramContainer = (props) => {
 											<span className="addBlogInputLabel">DESCRIPTION</span>
 											<div style={{ marginTop: 10, width: 500 }}>
 												<TextArea
-													rows={4}
+													autoSize={{
+														minRows: 11,
+														maxRows: 11,
+													}}
 													placeholder="Schedule Description"
 													maxLength={250}
 													showCount
@@ -735,7 +750,7 @@ const ViewProgramContainer = (props) => {
 								<span className="oOfDays">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
-									<div className="daysAdditionBtnDiv">
+									<div className="daysAdditionBtnDiv" onClick={showWarning}>
 										<input
 											type={"number"}
 											defaultValue={daysNumber}
@@ -791,6 +806,8 @@ const ViewProgramContainer = (props) => {
 						setDays={setDays}
 						setActiveScreen={setActiveScreen}
 						activeItemIndex={activeItemIndex}
+						disabled={true}
+						showWarning={showWarning}
 					/>
 				)
 			}

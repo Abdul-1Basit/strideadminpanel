@@ -9,6 +9,7 @@ import { listOfNavs } from "./Constants";
 import SearchContainer from "./SearchContainers/SearchContainer";
 // import WithoutSearchContainer from "./SearchContainers/WithoutSearchContainer";
 import "./styles.css";
+// import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const { Sider } = Layout;
 
 const SideNavWrapper = (props) => {
@@ -129,7 +130,6 @@ const SideNavWrapper = (props) => {
 										maxWidth: 180,
 										height: "auto",
 										maxHeight: 65,
-
 										marginBottom: 15.37,
 									}}
 								/>
@@ -153,7 +153,6 @@ const SideNavWrapper = (props) => {
 									icon={item.itemLogo}
 									style={{
 										color: userData.activeIndex === index ? "#FE5000" : "#fff",
-
 										marginTop: 34,
 										marginBottom: 34,
 										backgroundColor: "transparent",
@@ -161,9 +160,9 @@ const SideNavWrapper = (props) => {
 											userData.activeIndex === index
 												? "6px solid #FE5000"
 												: "none",
-										// borderRightColor: "#FE5000",
 										borderRadius: 0,
 										height: 63,
+										// marginLeft: item.itemName.includes("Categories") ? 20 : 0,
 									}}
 									onClick={(e) => {
 										setUserData({
@@ -184,6 +183,15 @@ const SideNavWrapper = (props) => {
 										fontFamily="Gilroy-Medium"
 										title={item.itemName}
 									/>
+									{/* {item.hasSubmenu && (
+										<span style={{ paddingLeft: 50, cursor: "pointer" }}>
+											{!item.showSubmenu ? (
+												<IoIosArrowUp size={25} />
+											) : (
+												<IoIosArrowDown size={25} />
+											)}
+										</span>
+									)} */}
 								</Menu.Item>
 							);
 						})}

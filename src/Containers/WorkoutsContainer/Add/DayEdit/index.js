@@ -1,125 +1,54 @@
 import React from "react";
 import "../index.css";
-// import { InputNumber } from "antd";
 import Select from "react-select";
 import { IoIosArrowUp, IoIosArrowDown, IoMdAdd } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
 import { WeightSelection, TimeSelection } from "./AddOns";
 import { getAllExercises } from "../../../../Helpers/firebase";
 import { Input, notification } from "antd";
-// import {IosIosArrowUp}
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 const { TextArea } = Input;
-export default function DayEdit(props) {
-	const [refreshMe, setRefereshMe] = React.useState(false);
+export default function DayEdit({ data, setData }) {
 	const [warmupCounter, setWarmupCounter] = React.useState(1);
 	const [warmupOpen, setWarmupOpen] = React.useState(true);
-	const [warmup, setWarmup] = React.useState(props.data.warmup ?? []);
 	const [workoutCounter, setWorkoutCounter] = React.useState(1);
 	const [workoutOpen, setWorkoutOpen] = React.useState(true);
-	const [workout, setWorkout] = React.useState(props.data.workout ?? []);
 	const [listOfCategories, setListOfCategories] = React.useState([]);
 	const [cooldownCounter, setCoolDownCounter] = React.useState(1);
 	const [cooldownOpen, setCoolDownOpen] = React.useState(true);
-	const [cooldown, setCoolDown] = React.useState(props.data.cooldown ?? []);
 	const [api, contextHolder] = notification.useNotification();
-	const [notes, setNotes] = React.useState(props.data.notes ?? "");
-	const deleteMeFromWarmup = (index) => {
-		let newArr = [...warmup];
-		newArr = newArr.filter((itm, idex) => idex !== index);
-		setWarmup(newArr);
-		setRefereshMe(true);
+	const deleteFunc = (property, item) => {
+		let newObj = { ...data };
+		newObj[property] = newObj[property].filter((itm) => itm.id !== item.id);
+		setData(newObj);
 	};
-
-	const deleteMeFromWorkout = (index) => {
-		let newArr = [...workout];
-		newArr = newArr.filter((itm, idex) => idex !== index);
-		setWorkout(newArr);
-		setRefereshMe(true);
-	};
-
-	const deleteMeFromCoolDown = (index) => {
-		let newArr = [...cooldown];
-		newArr = newArr.filter((itm, idex) => idex !== index);
-		setCoolDown(newArr);
-		setRefereshMe(true);
-	};
-	const setToAllWarmup = (index) => {
-		let item = warmup[index]; //.find((itm, idex) => idex === index);
-		let newArr = [...warmup];
-		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
-			innerItem.reps = item.reps;
-			innerItem.sets = item.sets;
-			innerItem.weight = item.weight;
-			innerItem.time = item.time;
-			innerItem.rest = item.rest;
+	const setToAll = (parentPropert, item) => {
+		let newObj = { ...data };
+		let foundItem = newObj[parentPropert].find((itm) => itm.id === item.id);
+		newObj[parentPropert].forEach((innerItem) => {
+			innerItem.reps = foundItem.reps;
+			innerItem.sets = foundItem.sets;
+			innerItem.weight = foundItem.weight;
+			innerItem.time = foundItem.time;
+			innerItem.rest = foundItem.rest;
 		});
-		// console.log("loop executing");
-
-		setWarmup(newArr);
-		setRefereshMe(true);
+		setData(newObj);
 	};
-	const setToAllWorkout = (index) => {
-		let item = workout[index]; //.find((itm, idex) => idex === index);
-		let newArr = [...workout];
-		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
-			innerItem.reps = item.reps;
-			innerItem.sets = item.sets;
-			innerItem.weight = item.weight;
-			innerItem.time = item.time;
-			innerItem.rest = item.rest;
-			console.log("current active val", item);
-		});
-		console.log("executingsetto All workout function");
-
-		setWorkout(newArr);
+	const changeItem = (parentPropert, newValues) => {
+		let newObj = { ...data };
+		newObj[parentPropert] = newValues;
+		setData(newObj);
 	};
-	const setToAllCoolDown = (index) => {
-		let item = cooldown[index]; //.find((itm, idex) => idex === index);
-		let newArr = [...cooldown];
-		newArr.forEach((innerItem, innnerIndex) => {
-			// innerItem.name = item.name;
-			innerItem.reps = item.reps;
-			innerItem.sets = item.sets;
-			innerItem.weight = item.weight;
-			innerItem.time = item.time;
-			innerItem.rest = item.rest;
-		});
-		// console.log("loop executing");
-
-		setCoolDown(newArr);
-	};
-
 	React.useEffect(() => {
-		if (refreshMe) {
-			setRefereshMe(false);
-		}
 		if (listOfCategories.length === 0) fetchExercises();
-	}, [refreshMe]);
+	}, []);
 	const fetchExercises = async () => {
 		const listOfExes = await getAllExercises();
 		let listOfExercisez = [];
-		// listOfExes.forEach((item) => {
-		// 	if (categoryList.findIndex((lIndex) => lIndex === item.category) < 0) {
-		// 		categoryList.push(item.category);
-		// 	}
-		// });
-		// categoryList.forEach((itemOne) => {
 		listOfExes.forEach((itemTwo) => {
-			// if (itemOne === itemTwo.category) {
 			listOfExercisez.push(itemTwo.name);
-			// }
 		});
-		// prevCatogries.push({
-		// 	categoryName: itemOne,
-		// 	listOfExercises: listOfExercisez,
-		// });
-		// listOfExercisez = [];
-		// });
 		setListOfCategories(listOfExercisez);
-		console.log("list ofexercises", listOfExercisez);
 	};
 	return (
 		<div
@@ -129,34 +58,7 @@ export default function DayEdit(props) {
 			}}
 		>
 			{contextHolder}
-			<div className="rowing">
-				<div />
-				<div className="rowing">
-					<span
-						className="savebtn"
-						style={{
-							border: props.prompted ? "1px solid #FE5000" : "none",
-						}}
-						onClick={() => {
-							// console.log("warm values", warmup);
-							// console.log("workouts", workout);
-							// console.log("cooldonw", cooldown);
-							let oldDaya = { ...props.data };
-							oldDaya.warmup = warmup;
-							oldDaya.workout = workout;
-							oldDaya.cooldown = cooldown;
-							oldDaya.notes = notes;
-							props.setData(oldDaya);
-						}}
-					>
-						Save
-					</span>
-				</div>
-			</div>
-			<div
-				className="cardAdditionBlog"
-				style={{ border: props.prompted ? "1px solid #FE5000" : "none" }}
-			>
+			<div className="cardAdditionBlog">
 				<div className="firstIteration">
 					<div className="rowing">
 						<div
@@ -182,10 +84,8 @@ export default function DayEdit(props) {
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
 										type={"text"}
-										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
-										// defaultValue={daysNumber}
 										style={{ width: 50 }}
 										value={warmupCounter}
 										onChange={(e) => {
@@ -214,10 +114,10 @@ export default function DayEdit(props) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...warmup];
+											let tempDays = [...data.warmup];
 											for (let i = 0; i < warmupCounter; i++) {
 												tempDays.push({
-													id: warmup.length + i,
+													id: data.warmup.length + i,
 													name: "",
 													reps: 0,
 													sets: 0,
@@ -228,16 +128,18 @@ export default function DayEdit(props) {
 													time: 0,
 													rest: 0,
 												});
-												// console.log("loop executing");
 											}
-											setWarmup(tempDays);
+											setData({
+												...data,
+												warmup: tempDays,
+											});
 											setWarmupOpen(true);
 											notification.success({
 												message:
 													warmupCounter > 1
-														? `You have added ${warmupCounter} days to the warmup`
-														: `You have added ${warmupCounter} day to the warmup`,
-												description: ``, //`${values.name}  has been successfully updated`,
+														? `You have added ${warmupCounter} exercises to the warmup`
+														: `You have added ${warmupCounter} exercise to the warmup`,
+												description: ``,
 												placement: "topRight",
 												duration: 3,
 												onClose: function () {
@@ -266,26 +168,28 @@ export default function DayEdit(props) {
 					{warmupOpen && (
 						<>
 							<div>
-								{warmup.length > 0 &&
-									warmup.map((item, index) => (
+								{data.warmup.length > 0 &&
+									data.warmup.map((item, index) => (
 										<ExerciseItem
 											listOfCategories={listOfCategories}
 											item={item}
+											key={item.id}
 											index={index}
-											deleteMe={deleteMeFromWarmup}
-											setToAll={setToAllWarmup}
-											setterFunc={setWarmup}
-											activeParentItem={warmup}
+											deleteMe={deleteFunc}
+											setToAll={setToAll}
+											setterFunc={changeItem}
+											activeParentItem={data.warmup}
+											type="warmup"
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...warmup];
+									let tempDays = [...data.warmup];
 									for (let i = 0; i < 1; i++) {
 										tempDays.push({
-											id: warmup.length + i,
+											id: data.warmup.length + i,
 											name: "",
 											reps: 0,
 											sets: 0,
@@ -296,9 +200,11 @@ export default function DayEdit(props) {
 											time: 0,
 											rest: 0,
 										});
-										// console.log("loop executing");
 									}
-									setWarmup(tempDays);
+									setData({
+										...data,
+										warmup: tempDays,
+									});
 								}}
 							>
 								<IoMdAdd
@@ -335,19 +241,14 @@ export default function DayEdit(props) {
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
 										type={"text"}
-										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
-										// defaultValue={daysNumber}
-										// onChange={setWorkoutCounter}
 										style={{ width: 50 }}
 										value={workoutCounter}
 										onChange={(e) => {
 											if (parseInt(e.target.value) > -1)
 												setWorkoutCounter(parseInt(e.target.value));
-											// console.log("worokout counter value", e.target.value);
 										}}
-										// className=""
 									/>
 									<div className="colCenter">
 										<IoIosArrowUp
@@ -367,10 +268,10 @@ export default function DayEdit(props) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...workout];
+											let tempDays = [...data.workout];
 											for (let i = 0; i < workoutCounter; i++) {
 												tempDays.push({
-													id: workout.length + i,
+													id: data.workout.length + i,
 													name: "",
 													reps: 0,
 													sets: 0,
@@ -381,16 +282,18 @@ export default function DayEdit(props) {
 													time: 0,
 													rest: 0,
 												});
-												// console.log("loop executing");
 											}
-											setWorkout(tempDays);
+											setData({
+												...data,
+												workout: tempDays,
+											});
 											setWorkoutOpen(true);
 											notification.success({
 												message:
 													workoutCounter > 1
-														? `You have added ${workoutCounter} days to the workout`
-														: `You have added ${workoutCounter} day to the workout`,
-												description: ``, //`${values.name}  has been successfully updated`,
+														? `You have added ${workoutCounter} exercises to the workout`
+														: `You have added ${workoutCounter} exercise to the workout`,
+												description: ``,
 												placement: "topRight",
 												duration: 3,
 												onClose: function () {
@@ -419,26 +322,28 @@ export default function DayEdit(props) {
 					{workoutOpen && (
 						<>
 							<div>
-								{workout.length > 0 &&
-									workout.map((item, index) => (
+								{data.workout.length > 0 &&
+									data.workout.map((item, index) => (
 										<ExerciseItem
 											listOfCategories={listOfCategories}
 											item={item}
+											key={item.id}
 											index={index}
-											deleteMe={deleteMeFromWorkout}
-											setToAll={setToAllWorkout}
-											setterFunc={setWorkout}
-											activeParentItem={workout}
+											deleteMe={deleteFunc}
+											setToAll={setToAll}
+											setterFunc={changeItem}
+											activeParentItem={data.workout}
+											type="workout"
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...workout];
+									let tempDays = [...data.workout];
 									for (let i = 0; i < 1; i++) {
 										tempDays.push({
-											id: workout.length + i,
+											id: data.workout.length + i,
 											name: "",
 											reps: 0,
 											sets: 0,
@@ -450,7 +355,10 @@ export default function DayEdit(props) {
 											rest: 0,
 										});
 									}
-									setWorkout(tempDays);
+									setData({
+										...data,
+										workout: tempDays,
+									});
 								}}
 							>
 								<IoMdAdd
@@ -487,19 +395,14 @@ export default function DayEdit(props) {
 								<div className="daysAdditionBtnDiv" style={{ width: 150 }}>
 									<input
 										type={"text"}
-										// defaultValue={daysNumber}
 										className="inputfont nmbrBtn"
 										placeholder="0"
-										// defaultValue={daysNumber}
-										// onChange={setWorkoutCounter}
 										style={{ width: 50 }}
 										value={cooldownCounter}
 										onChange={(e) => {
 											if (parseInt(e.target.value) > -1)
 												setCoolDownCounter(parseInt(e.target.value));
-											// console.log("worokout counter value", e.target.value);
 										}}
-										// className=""
 									/>
 									<div className="colCenter">
 										<IoIosArrowUp
@@ -519,10 +422,10 @@ export default function DayEdit(props) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...cooldown];
+											let tempDays = [...data.cooldown];
 											for (let i = 0; i < cooldownCounter; i++) {
 												tempDays.push({
-													id: cooldown.length + i,
+													id: data.cooldown.length + i,
 													name: "",
 													reps: 0,
 													sets: 0,
@@ -533,16 +436,18 @@ export default function DayEdit(props) {
 													time: 0,
 													rest: 0,
 												});
-												// console.log("loop executing");
 											}
 											setCoolDownOpen(true);
-											setCoolDown(tempDays);
+											setData({
+												...data,
+												cooldown: tempDays,
+											});
 											notification.success({
 												message:
 													cooldownCounter > 1
 														? `You have added ${cooldownCounter} days to the cooldown`
 														: `You have added ${cooldownCounter} day to the cooldown`,
-												description: ``, //`${values.name}  has been successfully updated`,
+												description: ``,
 												placement: "topRight",
 												duration: 3,
 												onClose: function () {
@@ -571,26 +476,28 @@ export default function DayEdit(props) {
 					{cooldownOpen && (
 						<>
 							<div>
-								{cooldown.length > 0 &&
-									cooldown.map((item, index) => (
+								{data.cooldown.length > 0 &&
+									data.cooldown.map((item, index) => (
 										<ExerciseItem
 											listOfCategories={listOfCategories}
 											item={item}
+											key={item.id}
 											index={index}
-											deleteMe={deleteMeFromCoolDown}
-											setToAll={setToAllCoolDown}
-											setterFunc={setCoolDown}
-											activeParentItem={cooldown}
+											deleteMe={deleteFunc}
+											setToAll={setToAll}
+											setterFunc={changeItem}
+											activeParentItem={data.cooldown}
+											type="cooldown"
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...cooldown];
+									let tempDays = [...data.cooldown];
 									for (let i = 0; i < 1; i++) {
 										tempDays.push({
-											id: cooldown.length + i,
+											id: data.cooldown.length + i,
 											name: "",
 											reps: 0,
 											sets: 0,
@@ -601,9 +508,11 @@ export default function DayEdit(props) {
 											time: 0,
 											rest: 0,
 										});
-										// console.log("loop executing");
 									}
-									setCoolDown(tempDays);
+									setData({
+										...data,
+										cooldown: tempDays,
+									});
 								}}
 							>
 								<IoMdAdd
@@ -619,19 +528,27 @@ export default function DayEdit(props) {
 					<span className="addBlogInputLabel">NOTES</span>
 					<div style={{ marginTop: 10 }}>
 						<TextArea
-							rows={4}
+							autoSize={{
+								minRows: 12,
+								maxRows: 12,
+							}}
 							placeholder="Enter notes..."
 							maxLength={500}
 							showCount
 							className="addBlogInput overViewDescription"
 							name="overviewDescription"
-							onChange={(e) => setNotes(e.target.value)}
-							// onBlur={handleBlur}
-							value={notes}
+							onChange={(e) =>
+								setData({
+									...data,
+									notes: e.target.value,
+								})
+							}
+							value={data.notes}
 							style={{
 								width: "100%",
 								display: "flex",
-								height: 400,
+								height: 300,
+								backgroundColor: "#F4F4F4",
 							}}
 						/>
 					</div>
@@ -643,11 +560,13 @@ export default function DayEdit(props) {
 const ExerciseItem = ({
 	listOfCategories,
 	item,
+	key,
 	index,
 	deleteMe,
 	setToAll,
 	setterFunc,
 	activeParentItem,
+	type,
 }) => {
 	const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -656,14 +575,14 @@ const ExerciseItem = ({
 			<div className="rowing">
 				<div className="rowing">
 					<span className="exerciseLabel">Exercise # {index + 1}</span>
-					<span className="deleteWarmup" onClick={() => deleteMe(index)}>
+					<span className="deleteWarmup" onClick={() => deleteMe(type, item)}>
 						<AiFillDelete color="#D30E0E" size={22} />
 					</span>
 
 					{index === 0 && (
 						<span
 							className="seeAll"
-							onClick={() => setToAll(index)}
+							onClick={() => setToAll(type, item)}
 							onMouseEnter={() => {
 								setActiveIndex(0);
 							}}
@@ -687,7 +606,7 @@ const ExerciseItem = ({
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
 								prevValues[index].name = e.value;
-								setterFunc(prevValues);
+								setterFunc(type, prevValues);
 							}}
 							styles={{
 								control: (baseStyles, state) => ({
@@ -702,7 +621,6 @@ const ExerciseItem = ({
 									fontWeight: "500",
 									fontSize: 18,
 									paddingLeft: 24,
-									// lineHeight: 22,
 								}),
 							}}
 							options={listOfCategories.map((itm) => {
@@ -717,10 +635,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Reps</span>
 					<div
-						className="daysAdditionBtnDiv centerMe"
+						className="daysAdditionBtnDiv centerMe programDaysInput"
 						style={{
-							width: 115,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -729,13 +645,13 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].reps}
-							style={{ width: 90, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 90, paddingLeft: 0 }}
+							placeholder={"0-0"}
 							value={activeParentItem[index].reps}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
 								prevValues[index].reps = e.target.value;
-								setterFunc(prevValues);
+								setterFunc(type, prevValues);
 							}}
 						/>
 					</div>
@@ -743,10 +659,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Sets</span>
 					<div
-						className="daysAdditionBtnDiv centerMe"
+						className="daysAdditionBtnDiv centerMe programDaysInput"
 						style={{
-							width: 115,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -755,13 +669,13 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].sets}
-							style={{ width: 90, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 90, paddingLeft: 0 }}
+							placeholder={"0-0"}
 							value={activeParentItem[index].sets}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
 								prevValues[index].sets = e.target.value;
-								setterFunc(prevValues);
+								setterFunc(type, prevValues);
 							}}
 						/>
 					</div>
@@ -769,10 +683,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Weight</span>
 					<div
-						className="daysAdditionBtnDiv rowing"
+						className="daysAdditionBtnDiv rowing programDaysInput"
 						style={{
-							width: 120,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -781,19 +693,20 @@ const ExerciseItem = ({
 							type={"text"}
 							className="inputfont nmbrBtn"
 							defaultValue={activeParentItem[index].weight}
-							style={{ width: 55, paddingLeft: 0 }}
-							placeholder={"3 - 5"}
+							style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
+							placeholder={"0"}
 							value={activeParentItem[index].weight}
 							onChange={(e) => {
 								let prevValues = [...activeParentItem];
 								prevValues[index].weight = e.target.value;
-								setterFunc(prevValues);
+								setterFunc(type, prevValues);
 							}}
 						/>
 						<WeightSelection
 							activeParentItem={activeParentItem}
 							index={index}
 							setterFunc={setterFunc}
+							type={type}
 						/>
 					</div>
 				</div>
@@ -801,10 +714,8 @@ const ExerciseItem = ({
 					<span className="customInputStyling">Time</span>
 					<div style={{ marginTop: 0 }} className="colCenteral">
 						<div
-							className="daysAdditionBtnDiv rowing"
+							className="daysAdditionBtnDiv rowing programDaysInput"
 							style={{
-								width: 120,
-								marginTop: 10,
 								backgroundColor:
 									activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 							}}
@@ -813,22 +724,26 @@ const ExerciseItem = ({
 								type={"text"}
 								className="inputfont nmbrBtn"
 								defaultValue={activeParentItem[index].time}
-								style={{ width: 55, paddingLeft: 0 }}
+								style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
 								placeholder={"0"}
 								value={activeParentItem[index].time}
 								onChange={(e) => {
 									let newVal = activeParentItem[index].time;
-									if (parseInt(e.target.value) > -1) newVal = e.target.value;
-									if (!e.target.value) newVal = 0;
+									if (!e.target.value || parseInt(e.target.value) > -1)
+										newVal = e.target.value;
+									// if (!e.target.value) newVal = 0;
+									// if (!e.target.value) newVal = e.target.value;
 									let prevValues = [...activeParentItem];
 									prevValues[index].time = newVal;
-									setterFunc(prevValues);
+									// setterFunc(prevValues);
+									setterFunc(type, prevValues);
 								}}
 							/>
 							<TimeSelection
 								activeParentItem={activeParentItem}
 								index={index}
 								setterFunc={setterFunc}
+								type={type}
 							/>
 						</div>
 					</div>
@@ -836,10 +751,8 @@ const ExerciseItem = ({
 				<div className="flexStart">
 					<span className="customInputStyling">Rest</span>
 					<div
-						className="daysAdditionBtnDiv rowing"
+						className="daysAdditionBtnDiv rowing programDaysInput"
 						style={{
-							width: 120,
-							marginTop: 10,
 							backgroundColor:
 								activeIndex === 0 ? "rgba(249, 79, 0, 0.2" : "#f4f4f4",
 						}}
@@ -851,22 +764,25 @@ const ExerciseItem = ({
 							placeholder={0}
 							defaultValue={activeParentItem[index].rest}
 							// value={item.rest}
-							style={{ width: 55, paddingLeft: 0 }}
+							style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
 							// placeholder={"0"}
 							value={activeParentItem[index].rest}
 							onChange={(e) => {
 								let newVal = activeParentItem[index].rest;
-								if (parseInt(e.target.value) > -1) newVal = e.target.value;
-								if (!e.target.value) newVal = 0;
+								if (parseInt(e.target.value) > -1 || !e.target.value)
+									newVal = e.target.value;
+								// if (!e.target.value) newVal = e.target.value;
 								let prevValues = [...activeParentItem];
 								prevValues[index].rest = newVal;
-								setterFunc(prevValues);
+								// setterFunc(prevValues)
+								setterFunc(type, prevValues);
 							}}
 						/>
 						<TimeSelection
 							activeParentItem={activeParentItem}
 							index={index}
 							setterFunc={setterFunc}
+							type={type}
 						/>
 					</div>
 				</div>

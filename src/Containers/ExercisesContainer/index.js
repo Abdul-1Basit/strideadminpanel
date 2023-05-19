@@ -2,19 +2,16 @@ import React from "react";
 import { Modal, notification } from "antd";
 import ProductCategorySearch from "./Search";
 import AddProductCategory from "./Add";
-// import EditCampaign from "./Edit";
 import DeleteModal from "./Delete";
 import CustomSmallCard from "../../Components/CustomSmallCard";
 import { BsCheck } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import ProductCategoryListing from "./Listing";
+import { DeleteBodyStyle, DeleteModalStyle } from "../CommonStyles";
 import {
-	DeleteBodyStyle,
-	DeleteModalStyle,
-	ModalBodyStyle,
-	ModalStyle,
-} from "../CommonStyles";
-import { getAllExercises } from "../../Helpers/firebase";
+	getAllExerciseCategories,
+	getAllExercises,
+} from "../../Helpers/firebase";
 import { useNavigate } from "react-router-dom";
 
 const ExercisesContainer = (props) => {
@@ -22,7 +19,6 @@ const ExercisesContainer = (props) => {
 	const [activeCategory, setActiveCategory] = React.useState();
 	const [addModal, setAddModal] = React.useState(false);
 	const [showDeleteModal, setShowDeleteModal] = React.useState(false);
-	// const [editModal, setEditModal] = React.useState(false);
 	const [filterBy, setFilterBy] = React.useState("");
 	const [orderBy, setOrderBy] = React.useState("");
 	const [searchQuery, setSearchQuery] = React.useState("");
@@ -62,12 +58,10 @@ const ExercisesContainer = (props) => {
 	};
 	React.useEffect(() => {
 		getWorkouts();
-		// console.log(" add modal", addModal.toString());
-		// console.log(" editmodal", editModal.toString());
-		// console.log(" delete", showDeleteModal.toString());
 	}, [showDeleteModal, addModal]);
 	const getWorkouts = async () => {
 		setLoading(true);
+
 		let result = await getAllExercises();
 		setCampaignListing(result);
 		let totalPrograms = result.length,
@@ -83,7 +77,6 @@ const ExercisesContainer = (props) => {
 			pendingPrograms,
 			activePrograms,
 		});
-		// console.log("result", result);
 		setLoading(false);
 	};
 	const editThisProgram = (id) => {
