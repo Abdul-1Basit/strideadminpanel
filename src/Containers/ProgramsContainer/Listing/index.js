@@ -219,6 +219,7 @@ const PrizeListing = (props) => {
 	);
 
 	const sortedList = () => {
+		// return props.programList;
 		// if (!props.sortBy) {
 		// 	return props.programList;
 		// }
@@ -238,9 +239,9 @@ const PrizeListing = (props) => {
 
 		if (!props.searchUserQuery && !props.searchProgramQuery) return newList;
 		if (props.searchProgramQuery) {
-			if (props.orderBy === "id")
+			if (props.filterBy)
 				return newList.filter((a) =>
-					a.id.toLowerCase().includes(props.searchProgramQuery)
+					a[props.filterBy].toLowerCase().includes(props.searchProgramQuery)
 				);
 			return newList.filter((a) =>
 				a.name.toLowerCase().includes(props.searchProgramQuery)
@@ -269,11 +270,13 @@ const PrizeListing = (props) => {
 				<Table
 					columns={columns}
 					dataSource={
-						props.programList
-							? props.orderBy === "id"
-								? props.programList.sort((a, b) => a.id < b.id)
-								: props.programList.sort((a, b) => a.name < b.name)
-							: []
+						props.orderBy
+							? sortedList().sort(
+									(a, b) =>
+										a[props.orderBy].toLowerCase() <
+										b[props.orderBy].toLowerCase()
+							  )
+							: sortedList()
 					}
 				/>
 			)}

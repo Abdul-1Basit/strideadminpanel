@@ -207,10 +207,10 @@ const ProductListing = (props) => {
 		if (!props.searchQuery) {
 			return props.productsList;
 		} else {
-			if (!props.filterItem) return props.productsList;
-			else if (props.filterItem === "productName") {
+			// if (!props.filterItem) return props.productsList;
+			if (props.filterItem) {
 				return props.productsList.filter((item) =>
-					item.productName
+					item[props.filterItem]
 						.toLowerCase()
 						.includes(props.searchQuery.toLowerCase())
 				);

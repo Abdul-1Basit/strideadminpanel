@@ -71,7 +71,7 @@ const UserSearch = (props) => {
 							border: "none",
 							paddingLeft: 10,
 						}}
-						placeholder="Search a user"
+						placeholder="Search an employee"
 						className="searchNewInput"
 						onChange={(e) => {
 							props.setSearchQuery(e.target.value);
@@ -91,7 +91,7 @@ const UserSearch = (props) => {
 						Sort By
 					</option>
 					<option value="id">Id</option>
-					<option value="name">Name</option>
+					<option value="fullName">Name</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<select

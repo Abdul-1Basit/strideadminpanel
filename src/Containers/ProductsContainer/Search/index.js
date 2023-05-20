@@ -69,7 +69,7 @@ const ProductSearch = (props) => {
 					}}
 					value={props.orderBy}
 				>
-					<option value="default" disabled selected>
+					<option value="default" disabled={true} selected={true}>
 						Sort By
 					</option>
 					<option value="id">Id</option>
@@ -85,7 +85,7 @@ const ProductSearch = (props) => {
 					}}
 					value={props.filterItem}
 				>
-					<option value="default" disabled selected>
+					<option value="default" disabled={true} selected={true}>
 						Filter By
 					</option>
 					<option value="id">Id</option>

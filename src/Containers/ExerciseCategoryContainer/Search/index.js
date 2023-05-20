@@ -14,7 +14,7 @@ const ProductCategorySearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				<span className="tableTitle">List of Exercis Categories</span>
+				<span className="tableTitle">List of Exercise Categories</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">
 				<div

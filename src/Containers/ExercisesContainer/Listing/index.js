@@ -99,9 +99,7 @@ const PrizeListing = (props) => {
 				);
 			}
 			return props.campaignListing.filter((item) =>
-				item[props.filterBy]
-					.toLowerCase()
-					.includes(props.searchQuery.toLowerCase())
+				item.name.toLowerCase().includes(props.searchQuery.toLowerCase())
 			);
 		}
 	};
@@ -138,16 +136,20 @@ const PrizeListing = (props) => {
 					columns={columns}
 					dataSource={
 						props.orderBy
-							? listing().sort((a, b) => {
-									if (a.category.toLowerCase() < b.category.toLowerCase()) {
-										return -1;
-									}
-									if (a.category.toLowerCase() > b.category.toLowerCase()) {
-										return 1;
-									}
-									return 0;
-							  })
-							: listing()
+							? listing().sort(
+									(a, b) =>
+										a[props.orderBy].toLowerCase() <
+										b[props.orderBy].toLowerCase()
+							  )
+							: // 		if (a.category.toLowerCase() < b.category.toLowerCase()) {
+							  // 			return -1;
+							  // 		}
+							  // 		if (a.category.toLowerCase() > b.category.toLowerCase()) {
+							  // 			return 1;
+							  // 		}
+							  // 		return 0;
+							  //   })
+							  listing()
 					}
 					// scroll={{
 					// 	x: 1300,

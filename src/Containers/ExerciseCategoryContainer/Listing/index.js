@@ -97,12 +97,11 @@ const PrizeListing = (props) => {
 				);
 			}
 			return props.employeeListing.filter((item) =>
-				item[props.filterBy]
-					.toLowerCase()
-					.includes(props.searchQuery.toLowerCase())
+				item.name.toLowerCase().includes(props.searchQuery.toLowerCase())
 			);
 		}
 	};
+
 	// console.log(
 	// 	"result of functoin",
 	// 	props.orderBy
@@ -135,19 +134,32 @@ const PrizeListing = (props) => {
 					columns={columns}
 					dataSource={
 						// props.orderBy
-						// 	? listing().sort((a, b) => {
-						// 			if (a.name.toLowerCase() < b.name.toLowerCase()) {
-						// 				return -1;
-						// 			}
-						// 			if (a.name.toLowerCase() > b.name.toLowerCase()) {
-						// 				return 1;
-						// 			}
-						// 			return 0;
-						// 	  })
-						// 	: listing()
-						props.employeeListing.sort(
-							(a, b) => a.name.toLowerCase() > b.name.toLowerCase()
-						)
+						// 	? props.employeeListing.sort(
+						// 			(a, b) => a.id.toLowerCase() > b.id.toLowerCase()
+						// 	  )
+						// 	: props.employeeListing.sort(
+						// 			(a, b) => a.id.toLowerCase() > b.id.toLowerCase()
+						// 	  )
+						props.orderBy
+							? listing().sort(
+									(a, b) =>
+										a[props.orderBy].toLowerCase() <
+										b[props.orderBy].toLowerCase()
+							  )
+							: // {
+							  // 		if (a.name.toLowerCase() < b.name.toLowerCase()) {
+							  // 			return -1;
+							  // 		}
+							  // 		if (a.name.toLowerCase() > b.name.toLowerCase()) {
+							  // 			return 1;
+							  // 		}
+							  // 		return 0;
+							  // }
+							  // )
+							  listing()
+						// props.employeeListing.sort(
+						// 	(a, b) => a.name.toLowerCase() > b.name.toLowerCase()
+						// )
 					}
 				/>
 			)}

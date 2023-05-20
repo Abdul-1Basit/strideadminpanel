@@ -14,7 +14,7 @@ const ProductCategorySearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				<span className="tableTitle">List of Exercis Categories</span>
+				<span className="tableTitle">List of Workout Categories</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">
 				<div
@@ -62,7 +62,6 @@ const ProductCategorySearch = (props) => {
 					</option>
 					<option value="id">Id</option>
 					<option value="name">Name</option>
-					<option value="category">Category</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<select
@@ -77,7 +76,6 @@ const ProductCategorySearch = (props) => {
 					</option>
 					<option value="id">Id</option>
 					<option value="name">Name</option>
-					<option value="category">Category</option>
 				</select>
 				<div style={{ width: 24 }} />
 				<div

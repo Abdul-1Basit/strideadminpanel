@@ -65,7 +65,7 @@ const ProductCategorySearch = (props) => {
 							border: "none",
 							paddingLeft: 10,
 						}}
-						placeholder="Search a user"
+						placeholder="Search a blog"
 						className="searchNewInput"
 						value={props.searchQuery}
 						onChange={(e) => props.setSearchQuery(e.target.value)}

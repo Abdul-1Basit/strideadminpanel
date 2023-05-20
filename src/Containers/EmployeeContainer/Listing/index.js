@@ -130,16 +130,25 @@ const UserListing = (props) => {
 	];
 
 	const listing = () => {
+		let list = [...props.employeeListing];
+		if (props.orderBy) {
+			list = list.sort(
+				(a, b) =>
+					a[props.orderBy].toLowerCase() < b[props.orderBy].toLowerCase()
+			);
+		}
 		if (!props.searchQuery) {
-			return props.employeeListing;
+			return list;
 		} else {
 			if (props.filterBy) {
-				return props.employeeListing.filter((item) =>
+				return list.filter((item) =>
 					item[props.filterBy]
 						.toLowerCase()
 						.includes(props.searchQuery.toLowerCase())
 				);
 			}
+			return list;
+
 			// return props.employeeListing.filter((item) =>
 			// 	item.fullName.toLowerCase().includes(props.searchQuery.toLowerCase())
 			// );
@@ -175,16 +184,17 @@ const UserListing = (props) => {
 				<Table
 					columns={columns}
 					dataSource={
-						props.employeeListing
-							? props.orderBy === "id"
-								? listing().sort(
-										(a, b) => a.id.toLowerCase() < b.id.toLowerCase()
-								  )
-								: listing().sort(
-										(a, b) =>
-											a.fullName.toLowerCase() < b.fullName.toLowerCase()
-								  )
-							: []
+						// props.employeeListing
+						// 	? props.orderBy === "id"
+						// 		? listing().sort(
+						// 				(a, b) => a.id.toLowerCase() < b.id.toLowerCase()
+						// 		  )
+						// 		: listing().sort(
+						// 				(a, b) =>
+						// 					a.fullName.toLowerCase() < b.fullName.toLowerCase()
+						// 		  )
+						// 	: []
+						listing()
 					}
 				/>
 			)}
