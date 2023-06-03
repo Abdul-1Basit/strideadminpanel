@@ -34,3 +34,17 @@ height: 30px;
 background: #356EB1;
 border-radius: 4px;
 }
+.audioDropzonee{
+    border: 2px dashed #D6D6D6;
+    border-radius: 8px;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background: #F4F4F4;
+  border-radius: 16px;
+  padding: 20px;
+  border:none;
+  width: 320px;
+  height: 288px;
+}

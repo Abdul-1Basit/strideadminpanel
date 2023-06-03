@@ -157,7 +157,7 @@ const PrizeListing = (props) => {
 				<Wrapper type="rowEvenAlign">
 					<Tooltip placement="topRight" title={"Duplicate"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner actions"}
 							onClick={() => {
 								props.cloneThisProgram(rowData.id);
 								//console.log(rowData);
@@ -170,7 +170,7 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Edit"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner actions"}
 							onClick={() => {
 								props.editThisProgram(rowData.id);
 								//console.log(rowData);
@@ -183,7 +183,7 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);
@@ -195,7 +195,7 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Share"}>
 						<div
-							className={"centerAligner"}
+							className={"centerAligner actions"}
 							onClick={() => {
 								// props.setActiveCategory(rowData);
 								// props.setShowDeleteModal(true);

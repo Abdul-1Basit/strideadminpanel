@@ -10,14 +10,15 @@ import { primaryColor } from "../../../Constants";
 import {
 	getAllWorkoutCategories,
 	getAllWorkouts,
-	updateWorkout,
+	addWorkout,
 } from "../../../Helpers/firebase";
 import "./index.css";
 import DayEdit from "../Add/DayEdit";
 import NewCategoryModal from "../NewCategoryModal";
+import SpinnerComponent from "../../../Components/SpinnerComponent";
 const { TextArea } = Input;
 
-const EditWorkoutContainer = (props) => {
+const CloneWorkoutContainer = (props) => {
 	let { id } = useParams();
 	const [addingUser, setAddingUser] = React.useState(false);
 	const navigate = useNavigate();
@@ -25,7 +26,7 @@ const EditWorkoutContainer = (props) => {
 	const [basicDetailMediaOneError, setBasicDetailMediaError] =
 		React.useState(false);
 	const [progressPercent, setProgressPercent] = React.useState(0);
-	const [activeData, setActiveData] = React.useState(initVals);
+	const [activeData, setActiveData] = React.useState(null);
 	const [data, setData] = React.useState(null);
 	const [categoryListing, setCategoryListing] = React.useState([]);
 	const [open, setOpen] = React.useState(false);
@@ -38,13 +39,11 @@ const EditWorkoutContainer = (props) => {
 		setBasicDetailMediaError(false);
 		setAddingUser(true);
 		setProgressPercent(25);
-		values.id = id;
+		// values.id = activeData.id;
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "";
 		values.exercises = data;
-		console.log("values", values);
 		setProgressPercent(50);
-		console.log("values", values);
-		if (await updateWorkout(values)) {
+		if (await addWorkout(values)) {
 			setProgressPercent(100);
 			notification.success({
 				message: `Successfully Added!`,
@@ -70,7 +69,7 @@ const EditWorkoutContainer = (props) => {
 		}
 	};
 	React.useLayoutEffect(() => {
-		if (id && activeData !== null) {
+		if (id && activeData === null) {
 			fetchList();
 		}
 		(async function () {
@@ -85,11 +84,12 @@ const EditWorkoutContainer = (props) => {
 		if (foundData) {
 			setActiveData(foundData);
 		}
+		foundData.name += " duplicate";
 		setBasicDetailMedia(foundData.basicDetailMedia);
 		setData(foundData.exercises);
 	}
 
-	return (
+	return activeData ? (
 		<Formik
 			initialValues={activeData}
 			validationSchema={programSchema}
@@ -121,7 +121,17 @@ const EditWorkoutContainer = (props) => {
 								<span
 									className="savebtn"
 									onClick={() => {
-										addProgramToList(values);
+										handleSubmit();
+										if (Object.keys(errors).length !== 0) {
+											console.log("erros", errors);
+											notification.error({
+												message: `Please add all the required fields`,
+												// description: `Give it a try later.`,
+												placement: "topRight",
+												duration: 2,
+												onClose: function () {},
+											});
+										}
 									}}
 								>
 									Save
@@ -221,7 +231,8 @@ const EditWorkoutContainer = (props) => {
 													<option value={item.name}>{item.name}</option>
 												))}
 											</select>
-											{errors.category && touched.category ? (
+
+											{errors.category && (
 												<Typography
 													alignment="left"
 													title={errors.category}
@@ -229,7 +240,7 @@ const EditWorkoutContainer = (props) => {
 													color="red"
 													type="label"
 												/>
-											) : null}
+											)}
 										</div>
 									</div>
 								</Col>
@@ -333,7 +344,7 @@ const EditWorkoutContainer = (props) => {
 												<option value="Pending">Pending</option>
 												<option value="Draft">Draft</option>
 											</select>
-											{errors.status && touched.status ? (
+											{errors.status && (
 												<Typography
 													alignment="left"
 													title={errors.status}
@@ -341,8 +352,6 @@ const EditWorkoutContainer = (props) => {
 													color="red"
 													type="label"
 												/>
-											) : (
-												<></>
 											)}
 										</div>
 									</div>
@@ -374,7 +383,7 @@ const EditWorkoutContainer = (props) => {
 										backgroundColor: "#F4F4F4",
 									}}
 								/>
-								{errors.description && touched.description ? (
+								{errors.description && (
 									<Typography
 										alignment="left"
 										title={errors.description}
@@ -382,8 +391,6 @@ const EditWorkoutContainer = (props) => {
 										color="red"
 										type="label"
 									/>
-								) : (
-									""
 								)}
 							</div>
 						</div>
@@ -394,241 +401,8 @@ const EditWorkoutContainer = (props) => {
 				</div>
 			)}
 		</Formik>
+	) : (
+		<SpinnerComponent />
 	);
 };
-
-// const ExerciseItem = (props) => {
-// 	const [visible, setVisible] = React.useState(true);
-// 	const setVideoValue = (item) => {
-// 		props.item.video = item;
-// 	};
-// 	const setAudioValue = (item) => {
-// 		props.item.audio = item;
-// 	};
-// 	return (
-// 		<div>
-// 			<div className="rowing">
-// 				<div className="alignMeStart">
-// 					<span
-// 						className="tableTitle"
-// 						style={{ fontWeight: 600, color: "#222222" }}
-// 					>
-// 						Exercise # 1
-// 					</span>
-// 					<span>
-// 						<AiFillEye
-// 							size={25}
-// 							style={{
-// 								color: "#2DAB22",
-// 								marginLeft: 15,
-// 								marginRight: 15,
-// 							}}
-// 						/>
-// 					</span>
-// 					<span onClick={() => props.deleteMe(props.item.id)}>
-// 						<AiFillDelete
-// 							size={22}
-// 							style={{ color: "#D30E0E", marginRight: 15 }}
-// 						/>
-// 					</span>
-// 					<span
-// 						className="setToAllText"
-// 						onClick={() => props.setToAll(props.item.id)}
-// 					>
-// 						set to all
-// 					</span>
-// 				</div>
-// 				<span onClick={() => setVisible(!visible)}>
-// 					{visible ? (
-// 						<SlArrowUp
-// 							color={"#D30E0E"}
-// 							size={22}
-// 							style={{ fontWeight: "bold" }}
-// 						/>
-// 					) : (
-// 						<SlArrowDown
-// 							color={"#D30E0E"}
-// 							size={22}
-// 							style={{ fontWeight: "bold" }}
-// 						/>
-// 					)}
-// 				</span>
-// 			</div>
-// 			{visible && (
-// 				<div style={{ marginTop: 42 }}>
-// 					<Row>
-// 						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
-// 							<div className="flexStart mb30">
-// 								<span className="addBlogInputLabel">Exercise Name</span>
-// 								<div style={{ marginTop: 10 }}>
-// 									<input
-// 										className="addBlogInput inputText"
-// 										type={"text"}
-// 										onChange={(e) => (props.item.name = e.target.value)}
-// 										value={props.item.name}
-// 									/>
-// 								</div>
-// 							</div>
-// 							<div className="flexStart mb30">
-// 								<span className="addBlogInputLabel">Instructions</span>
-// 								<div style={{ marginTop: 10 }}>
-// 									<TextArea
-// 										className="addBlogInput inputText"
-// 										rows={12}
-// 										placeholder="Please enter instructions for exercise"
-// 										onChange={(e) => {
-// 											// console.log("e", e.target.value);
-// 											props.item.instructions = e.target.value;
-// 										}}
-// 										allowClear
-// 										defaultValue={props.item.instructions}
-// 									/>
-// 								</div>
-// 							</div>
-// 						</Col>
-// 						<Col xs={24} sm={24} md={24} lg={12} xl={12}>
-// 							<div className="flexStart mb30">
-// 								<span className="addBlogInputLabel">Exercise Video</span>
-// 								<div
-// 									style={{
-// 										display: "flex",
-// 										justifyContent: "flex-start",
-// 										alignItems: "center",
-// 										marginTop: 10,
-// 									}}
-// 								>
-// 									{props.item.video ? (
-// 										<div
-// 											style={{
-// 												display: "flex",
-// 												justifyContent: "center",
-// 												alignItems: "center",
-// 											}}
-// 										>
-// 											<img
-// 												src={props.item.video}
-// 												alt="UserImage"
-// 												style={{
-// 													width: 156,
-// 													height: 156,
-// 													borderRadius: "50%",
-// 												}}
-// 											/>
-// 											<div
-// 												className="centerAligner"
-// 												style={{
-// 													width: 15,
-// 													height: 15,
-// 													borderRadius: "50%",
-// 													backgroundColor: "#fff",
-// 													marginLeft: -10,
-// 													marginTop: -20,
-// 													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-// 													cursor: "pointer",
-// 													border: "1px solid #000",
-// 												}}
-// 												onClick={() => setVideoValue("")}
-// 											>
-// 												<CloseOutlined
-// 													style={{ fontSize: 8, color: primaryColor }}
-// 												/>
-// 											</div>
-// 										</div>
-// 									) : (
-// 										<EmployeeDropZone
-// 											{...{
-// 												setImageUrl: setVideoValue,
-// 												small: false,
-// 											}}
-// 										/>
-// 									)}
-// 								</div>
-// 							</div>
-// 							<div className="flexStart mb30">
-// 								<span className="addBlogInputLabel ">Exercise Audio</span>
-// 								<div
-// 									style={{
-// 										display: "flex",
-// 										justifyContent: "flex-start",
-// 										alignItems: "center",
-// 										marginTop: 10,
-// 									}}
-// 								>
-// 									{props.item.audio ? (
-// 										<div
-// 											style={{
-// 												display: "flex",
-// 												justifyContent: "center",
-// 												alignItems: "center",
-// 											}}
-// 										>
-// 											<img
-// 												src={props.item.audio}
-// 												alt="UserImage"
-// 												style={{
-// 													width: 156,
-// 													height: 156,
-// 													borderRadius: "50%",
-// 												}}
-// 											/>
-// 											<div
-// 												className="centerAligner"
-// 												style={{
-// 													width: 15,
-// 													height: 15,
-// 													borderRadius: "50%",
-// 													backgroundColor: "#fff",
-// 													marginLeft: -10,
-// 													marginTop: -20,
-// 													boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-// 													cursor: "pointer",
-// 													border: "1px solid #000",
-// 												}}
-// 												onClick={() => setAudioValue("")}
-// 											>
-// 												<CloseOutlined
-// 													style={{ fontSize: 8, color: primaryColor }}
-// 												/>
-// 											</div>
-// 										</div>
-// 									) : (
-// 										<AudioDropZone
-// 											{...{
-// 												setImageUrl: setAudioValue,
-// 												small: false,
-// 											}}
-// 										/>
-// 									)}
-// 								</div>
-// 							</div>
-// 						</Col>
-// 					</Row>
-// 					<div className="flexStart mb30" style={{ width: "100%" }}>
-// 						<span className="addBlogInputLabel">Target Area</span>
-// 						<div style={{ marginTop: 10 }}>
-// 							<TextArea
-// 								className="inputText textAreaGrey"
-// 								rows={4}
-// 								cols={20}
-// 								placeholder="Please enter instructions for exercise"
-// 								onChange={(e) => {
-// 									props.item.targetArea = e.target.value;
-// 								}}
-// 								value={props.item.targetArea}
-
-// 								// allowClear
-// 								// style={{
-// 								// 	width: "85%",
-// 								// 	backgroundColor: "#F4F4F4",
-// 								// 	borderRadius: 8,
-// 								// }}
-// 							/>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			)}
-// 		</div>
-// 	);
-// };
-
-export default EditWorkoutContainer;
+export default CloneWorkoutContainer;

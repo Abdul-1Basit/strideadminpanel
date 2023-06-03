@@ -37,6 +37,8 @@ import Onboarding from "../Pages/Onboarding";
 import ReqConsultation from "../Pages/ReqConsultation";
 import ExerciseCategory from "../Pages/ExerciseCategory";
 import WorkoutCategory from "../Pages/WorkoutCategory";
+import ViewWorkout from "../Pages/Workouts/ViewWorkout";
+import CloneWorkout from "../Pages/Workouts/CloneWorkout";
 export default function StrideRoutes() {
 	return (
 		<BrowserRouter>
@@ -139,6 +141,22 @@ export default function StrideRoutes() {
 					element={
 						<AuthenticateRoute>
 							<EditWorkout />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/workouts/view/:id"
+					element={
+						<AuthenticateRoute>
+							<ViewWorkout />
+						</AuthenticateRoute>
+					}
+				/>
+				<Route
+					path="/workouts/clone/:id"
+					element={
+						<AuthenticateRoute>
+							<CloneWorkout />
 						</AuthenticateRoute>
 					}
 				/>

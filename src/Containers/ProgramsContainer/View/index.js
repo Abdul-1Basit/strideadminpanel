@@ -178,7 +178,7 @@ const ViewProgramContainer = (props) => {
 									<span
 										// className="duplicateBtn"
 										className="draftBtn"
-										style={{ backgroundColor: "#7D7D7D" }}
+										style={{ backgroundColor: "#222222" }}
 										onClick={() => navigate(-1)}
 									>
 										Back
@@ -199,7 +199,7 @@ const ViewProgramContainer = (props) => {
 										<div className="colStart">
 											<div className="flexStart mb30">
 												<span className="addBlogInputLabel">PROGRAM NAME</span>
-												<div style={{ marginTop: 10 }}>
+												<div style={{ marginTop: 10 }} onClick={showWarning}>
 													<input
 														className="addBlogInput inputText"
 														type={"text"}
@@ -224,7 +224,7 @@ const ViewProgramContainer = (props) => {
 											</div>
 											<div className="flexStart mb30">
 												<span className="addBlogInputLabel">SUBTITLE</span>
-												<div style={{ marginTop: 10 }}>
+												<div style={{ marginTop: 10 }} onClick={showWarning}>
 													<input
 														className="addBlogInput inputText"
 														type={"text"}
@@ -253,7 +253,7 @@ const ViewProgramContainer = (props) => {
 										<div className="colStart">
 											<div className="flexStart mb30">
 												<span className="addBlogInputLabel">DIFFICULTY</span>
-												<div style={{ marginTop: 10 }}>
+												<div style={{ marginTop: 10 }} onClick={showWarning}>
 													<Radio.Group
 														name="difficultyLevel"
 														onChange={handleChange}
@@ -311,7 +311,7 @@ const ViewProgramContainer = (props) => {
 											</div>
 											<div className="flexStart mb30">
 												<span className="addBlogInputLabel">STATUS</span>
-												<div style={{ marginTop: 10 }}>
+												<div style={{ marginTop: 10 }} onClick={showWarning}>
 													<select
 														name="status"
 														id="category"
@@ -394,6 +394,7 @@ const ViewProgramContainer = (props) => {
 													border: "1px solid #000",
 												}}
 												// onClick={() => setBasicDetailMedia("")}
+												onClick={showWarning}
 											>
 												<CloseOutlined
 													style={{ fontSize: 8, color: primaryColor }}
@@ -481,6 +482,7 @@ const ViewProgramContainer = (props) => {
 															border: "1px solid #000",
 														}}
 														// onClick={() => setOverviewMediaOne("")}
+														onClick={showWarning}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -519,7 +521,7 @@ const ViewProgramContainer = (props) => {
 											width: 800,
 										}}
 									/>
-									<div style={{ marginTop: 10 }}>
+									<div style={{ marginTop: 10 }} onClick={showWarning}>
 										<TextArea
 											autoSize={{
 												minRows: 16,
@@ -603,6 +605,7 @@ const ViewProgramContainer = (props) => {
 															border: "1px solid #000",
 														}}
 														// onClick={() => setOverviewMediaTwo("")}
+														onClick={showWarning}
 													>
 														<CloseOutlined
 															style={{ fontSize: 8, color: primaryColor }}
@@ -672,6 +675,7 @@ const ViewProgramContainer = (props) => {
 																		border: "1px solid #000",
 																	}}
 																	// onClick={() => setScheduleMedia("")}
+																	onClick={showWarning}
 																>
 																	<CloseOutlined
 																		style={{ fontSize: 8, color: primaryColor }}
@@ -703,7 +707,10 @@ const ViewProgramContainer = (props) => {
 									<Col xs={24} sm={24} md={24} lg={14} xl={14}>
 										<div className="flexStart mb30">
 											<span className="addBlogInputLabel">DESCRIPTION</span>
-											<div style={{ marginTop: 10, width: 500 }}>
+											<div
+												style={{ marginTop: 10, width: 500 }}
+												onClick={showWarning}
+											>
 												<TextArea
 													autoSize={{
 														minRows: 11,
@@ -750,7 +757,7 @@ const ViewProgramContainer = (props) => {
 								<span className="oOfDays">Program Duration</span>
 								<div className="flexEndd mb30">
 									<span className="oOfDays">No. of Days</span>
-									<div className="daysAdditionBtnDiv" onClick={showWarning}>
+									<div className="daysAdditionBtnDiv">
 										<input
 											type={"number"}
 											defaultValue={daysNumber}
@@ -760,6 +767,9 @@ const ViewProgramContainer = (props) => {
 										<button
 											className="dayssAdditionBtn"
 											onClick={() => {
+												showWarning();
+												return;
+
 												let tempDays = [...days];
 												for (let i = 0; i < daysNumber; i++) {
 													tempDays.push({
@@ -783,7 +793,6 @@ const ViewProgramContainer = (props) => {
 													},
 												});
 											}}
-											disabled
 										>
 											Add
 										</button>

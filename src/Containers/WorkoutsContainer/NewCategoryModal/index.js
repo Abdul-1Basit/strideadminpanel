@@ -1,4 +1,3 @@
-import Modal from "react-modal";
 import React from "react";
 import Wrapper from "../../../Components/Wrapper";
 import Typography from "../../../Components/Typography";
@@ -8,7 +7,7 @@ import UserSchema, { initVals } from "./Constants";
 import union from "./../../../Assets/Union.png";
 import CustomButton from "../../../Components/CustomButton";
 import SpinnerComponent from "../../../Components/SpinnerComponent";
-import { message, notification, Input } from "antd";
+import { message, notification, Input, Modal } from "antd";
 // import { CloseOutlined } from "@ant-design/icons";
 import { Formik, Form } from "formik";
 // import { primaryColor } from "../../../Constants";
@@ -71,10 +70,13 @@ function NewCategoryModal({ open, setOpen }) {
 	};
 	return (
 		<Modal
-			isOpen={open}
-			onRequestClose={() => setOpen(false)}
-			style={customStyles}
-			contentLabel="Exercise Category Modal"
+			open={open}
+			onCancel={() => setOpen(false)}
+			className={"addProductModal"}
+			// contentLabel="Example Modal"
+			destroyOnClose
+			footer={() => null}
+			closable={false}
 		>
 			<div
 				style={{
@@ -94,7 +96,7 @@ function NewCategoryModal({ open, setOpen }) {
 						src={union}
 						alt="Close icon"
 						onClick={() => setOpen(false)}
-						style={{ width: 14, height: 14 }}
+						style={{ width: 14, height: 14, cursor: "pointer" }}
 						className="closeIcon"
 					/>
 				</Wrapper>

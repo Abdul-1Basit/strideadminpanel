@@ -100,7 +100,7 @@ const AddWorkoutContainer = (props) => {
 								<span className="draftBtn">Save as draft</span> */}
 								<span
 									className="draftBtn"
-									style={{ backgroundColor: "#7D7D7D" }}
+									style={{ backgroundColor: "#222222" }}
 									onClick={() => navigate(-1)}
 								>
 									Cancel
@@ -195,11 +195,7 @@ const AddWorkoutContainer = (props) => {
 													value={values.category}
 													className="addBlogInput inputText"
 												>
-													<option
-														value="default"
-														selected={true}
-														disabled={true}
-													>
+													<option value="" selected={true} disabled={true}>
 														Select Category
 													</option>
 													{categoryListing.map((item) => (
@@ -298,12 +294,15 @@ const AddWorkoutContainer = (props) => {
 													background:
 														values.status === "Active"
 															? "#5DB135"
-															: values.status === "Inactive"
+															: values.status === "Pending"
 															? "#E2BB2E"
+															: values.status === "Draft"
+															? "#7D7D7D"
 															: "#F4F4F4",
 													color:
 														values.status === "Active" ||
-														values.status === "Inactive"
+														values.status === "Pending" ||
+														values.status === "Draft"
 															? "#fff"
 															: "#000000",
 													paddingRight: 50,
@@ -314,7 +313,8 @@ const AddWorkoutContainer = (props) => {
 													Select Status
 												</option>
 												<option value="Active">Active</option>
-												<option value="Inactive">Inactive</option>
+												<option value="Pending">Pending</option>
+												<option value="Draft">Draft</option>
 											</select>
 											{errors.status && touched.status ? (
 												<Typography

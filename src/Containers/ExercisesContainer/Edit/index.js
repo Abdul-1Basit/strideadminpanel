@@ -137,7 +137,7 @@ const EditExerciseContainer = (props) => {
 								<div className="rowing">
 									<span
 										className="draftBtn"
-										style={{ backgroundColor: "#7D7D7D" }}
+										style={{ backgroundColor: "#222222" }}
 										onClick={() => navigate(-1)}
 									>
 										Cancel
@@ -257,11 +257,7 @@ const EditExerciseContainer = (props) => {
 													value={values.category}
 													className="addBlogInput inputText"
 												>
-													<option
-														value="default"
-														selected={true}
-														disabled={true}
-													>
+													<option value="none" selected={true} disabled={true}>
 														Select Category
 													</option>
 													{categoryListing.map((item) => (
@@ -342,9 +338,9 @@ const EditExerciseContainer = (props) => {
 																src={imageurl}
 																alt="UserImage"
 																style={{
-																	width: 156,
-																	height: 156,
-																	borderRadius: "50%",
+																	width: 200,
+																	height: 200,
+																	borderRadius: 4,
 																}}
 															/>
 															<div
@@ -412,9 +408,9 @@ const EditExerciseContainer = (props) => {
 																src={videoValue}
 																alt="UserImage"
 																style={{
-																	width: 156,
-																	height: 156,
-																	borderRadius: "50%",
+																	width: 200,
+																	height: 200,
+																	borderRadius: 4,
 																}}
 															/>
 															<div

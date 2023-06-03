@@ -17,7 +17,7 @@ import DayEdit from "../Add/DayEdit";
 import NewCategoryModal from "../NewCategoryModal";
 const { TextArea } = Input;
 
-const EditWorkoutContainer = (props) => {
+const ViewWorkoutContainer = (props) => {
 	let { id } = useParams();
 	const [addingUser, setAddingUser] = React.useState(false);
 	const navigate = useNavigate();
@@ -38,7 +38,7 @@ const EditWorkoutContainer = (props) => {
 		setBasicDetailMediaError(false);
 		setAddingUser(true);
 		setProgressPercent(25);
-		values.id = id;
+		values.id = activeData.id;
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "";
 		values.exercises = data;
 		console.log("values", values);
@@ -87,8 +87,17 @@ const EditWorkoutContainer = (props) => {
 		}
 		setBasicDetailMedia(foundData.basicDetailMedia);
 		setData(foundData.exercises);
+		console.log("acrtive data is", activeData);
 	}
-
+	const showWarning = () => {
+		notification.warning({
+			message: `You are in a quick view`,
+			description: `Select the edit option to make changes to this workout`,
+			placement: "topRight",
+			duration: 2,
+			onClose: function () {},
+		});
+	};
 	return (
 		<Formik
 			initialValues={activeData}
@@ -118,12 +127,7 @@ const EditWorkoutContainer = (props) => {
 								>
 									Cancel
 								</span>
-								<span
-									className="savebtn"
-									onClick={() => {
-										addProgramToList(values);
-									}}
-								>
+								<span className="savebtn" onClick={showWarning}>
 									Save
 								</span>
 							</div>
@@ -151,9 +155,12 @@ const EditWorkoutContainer = (props) => {
 													className="addBlogInput inputText"
 													type={"text"}
 													name="name"
-													onChange={handleChange}
+													// onChange={handleChange}
 													onBlur={handleBlur}
 													value={values.name}
+													// disabled
+													// onChange={handleChange}
+													onClick={showWarning}
 												/>
 												{errors.name && touched.name ? (
 													<Typography
@@ -175,7 +182,8 @@ const EditWorkoutContainer = (props) => {
 													className="addBlogInput inputText"
 													type={"text"}
 													name="subtitle"
-													onChange={handleChange}
+													// onChange={handleChange}
+													onClick={showWarning}
 													onBlur={handleBlur}
 													value={values.subtitle}
 												/>
@@ -193,13 +201,15 @@ const EditWorkoutContainer = (props) => {
 											</div>
 										</div>
 									</div>
-									<div className="flexStart mb30">
+									<div className="flexStart mb30" style={{ marginTop: 20 }}>
 										<span>
 											<span className="addBlogInputLabel">CATEGORY</span>
 											<span
 												className="newCategorybtn"
 												onClick={() => {
-													setOpen(true);
+													// setOpen(true);
+													// onChange={handleChange}
+													showWarning();
 												}}
 											>
 												Add new category
@@ -209,7 +219,8 @@ const EditWorkoutContainer = (props) => {
 											<select
 												name="category"
 												id="category"
-												onChange={handleChange}
+												// onChange={handleChange}
+												onClick={showWarning}
 												onBlur={handleBlur}
 												value={values.category}
 												className="addBlogInput inputText"
@@ -255,7 +266,7 @@ const EditWorkoutContainer = (props) => {
 													alt="UserImage"
 													style={{
 														width: 250,
-														height: 250,
+														height: 233,
 														borderRadius: 6,
 													}}
 												/>
@@ -272,7 +283,8 @@ const EditWorkoutContainer = (props) => {
 														cursor: "pointer",
 														border: "1px solid #000",
 													}}
-													onClick={() => setBasicDetailMedia("")}
+													// onChange={handleChange}
+													onClick={showWarning}
 												>
 													<CloseOutlined
 														style={{ fontSize: 8, color: primaryColor }}
@@ -303,7 +315,8 @@ const EditWorkoutContainer = (props) => {
 											<select
 												name="status"
 												id="category"
-												onChange={handleChange}
+												// onChange={handleChange}
+												onClick={showWarning}
 												onBlur={handleBlur}
 												value={values.status}
 												className="addBlogInput inputText"
@@ -326,7 +339,7 @@ const EditWorkoutContainer = (props) => {
 													borderRight: "16px solid transparent",
 												}}
 											>
-												<option value="" selected={true} disabled={true}>
+												<option value="none" selected={true} disabled={true}>
 													Select Status
 												</option>
 												<option value="Active">Active</option>
@@ -364,7 +377,8 @@ const EditWorkoutContainer = (props) => {
 									showCount
 									className="addBlogInput overViewDescription"
 									name="description"
-									onChange={handleChange}
+									// onChange={handleChange}
+									onClick={showWarning}
 									onBlur={handleBlur}
 									value={values.description}
 									style={{
@@ -389,7 +403,9 @@ const EditWorkoutContainer = (props) => {
 						</div>
 						<br />
 						<br /> <br />
-						{data && <DayEdit {...{ data, setData }} />}
+						{data && (
+							<DayEdit {...{ data, setData, viewMode: true, showWarning }} />
+						)}
 					</div>
 				</div>
 			)}
@@ -631,4 +647,4 @@ const EditWorkoutContainer = (props) => {
 // 	);
 // };
 
-export default EditWorkoutContainer;
+export default ViewWorkoutContainer;

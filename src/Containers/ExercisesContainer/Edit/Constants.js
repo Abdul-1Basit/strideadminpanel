@@ -12,7 +12,7 @@ const CategorySchema = Yup.object().shape({
 export const initVals = {
 	// subCategoryId:1,
 	name: "",
-	category: "default",
+	category: "none",
 	status: "",
 	instructions: "",
 	targetArea: "",

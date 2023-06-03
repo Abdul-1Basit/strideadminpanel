@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import { LoadingOutlined } from "@ant-design/icons";
 
 import { RiDeleteBinLine } from "react-icons/ri";
+import { BsShareFill } from "react-icons/bs";
 const PrizeListing = (props) => {
 	const columns = [
 		{
@@ -42,14 +43,20 @@ const PrizeListing = (props) => {
 			render: (rowData) => {
 				return (
 					<div
-						style={{
-							flexDirection: "row",
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "flex-start",
+						// style={{
+						// 	flexDirection: "row",
+						// 	display: "flex",
+						// 	alignItems: "center",
+						// 	justifyContent: "flex-start",
+						// }}
+						className="rowStart pNameUnderline"
+						onClick={() => {
+							props.viewThisWorkout(rowData.id);
 						}}
 					>
-						<span className="label">{rowData.name}</span>
+						<Tooltip placement="top" title={"Quick View"}>
+							<span className="label">{rowData.name}</span>
+						</Tooltip>
 					</div>
 				);
 			},
@@ -130,6 +137,19 @@ const PrizeListing = (props) => {
 			//render: () =>
 			render: (rowData) => (
 				<Wrapper type="rowEvenAlign">
+					<Tooltip placement="topRight" title={"Duplicate"}>
+						<div
+							className={"centerAligner actions"}
+							onClick={() => {
+								props.cloneThisWorkout(rowData.id);
+								//console.log(rowData);
+								// props.setEditModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<img src="/copySign.png" style={{ width: 22, height: 20 }} />
+						</div>
+					</Tooltip>
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
 							className={"centerAligner actions"}
@@ -152,7 +172,19 @@ const PrizeListing = (props) => {
 							}}
 						>
 							<RiDeleteBinLine color="#EF4444" />
-						</div>{" "}
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Share"}>
+						<div
+							className={"centerAligner actions"}
+							onClick={() => {
+								// props.setActiveCategory(rowData);
+								// props.setShowDeleteModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<BsShareFill color="#7D7D7D" size={20} />
+						</div>
 					</Tooltip>
 				</Wrapper>
 			),

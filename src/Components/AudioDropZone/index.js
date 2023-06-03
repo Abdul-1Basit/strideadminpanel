@@ -20,15 +20,15 @@ function AudioDropZone({ setImageUrl, small = false, increaseLength = false }) {
 	) : (
 		<div
 			{...getRootProps()}
-			className="dropZoneDiv"
-			style={{ width: increaseLength ? 500 : 298, height: 130 }}
+			className="audioDropzonee"
+			style={{ width: "100%", height: 130 }}
 		>
 			{isDragActive ? (
 				!small && <p>Drop the files here ...</p>
 			) : (
 				<div
 					className="colCenteral drpzn"
-					style={{ width: increaseLength ? 500 : 298, height: 108 }}
+					style={{ width: "100%", height: 108 }}
 				>
 					<input {...getInputProps()} />
 					<div className="rowing">

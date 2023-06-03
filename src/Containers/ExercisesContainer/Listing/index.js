@@ -6,6 +6,8 @@ import "./index.css";
 // import { RiDeleteBinLine } from "react-icons/ri";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { BsShareFill } from "react-icons/bs";
 const PrizeListing = (props) => {
 	const columns = [
 		{
@@ -56,7 +58,7 @@ const PrizeListing = (props) => {
 				<Wrapper type="rowEvenAlign">
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
-							className={"centerAligner pointing"}
+							className={"centerAligner pointing actions"}
 							onClick={() => {
 								props.editThisProgram(rowData.id);
 							}}
@@ -66,13 +68,25 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							className={"centerAligner pointing"}
+							className={"centerAligner actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);
 							}}
 						>
-							<AiTwotoneDelete color="#EF4444" size={20} />
+							<RiDeleteBinLine color="#EF4444" />
+						</div>
+					</Tooltip>
+					<Tooltip placement="topRight" title={"Share"}>
+						<div
+							className={"centerAligner actions"}
+							onClick={() => {
+								// props.setActiveCategory(rowData);
+								// props.setShowDeleteModal(true);
+							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
+						>
+							<BsShareFill color="#7D7D7D" size={20} />
 						</div>
 					</Tooltip>
 				</Wrapper>

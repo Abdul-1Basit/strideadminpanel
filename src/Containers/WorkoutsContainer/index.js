@@ -86,7 +86,12 @@ const WorkoutsContainer = (props) => {
 	const editThisWorkout = (id) => {
 		navigate("/workouts/edit/" + id);
 	};
-
+	const viewThisWorkout = (id) => {
+		navigate("/workouts/view/" + id);
+	};
+	const cloneThisWorkout = (id) => {
+		navigate("/workouts/clone/" + id);
+	};
 	return (
 		<div
 			style={{
@@ -129,7 +134,6 @@ const WorkoutsContainer = (props) => {
 						}}
 					/>
 				</Modal>
-
 				<Modal
 					visible={showDeleteModal}
 					title=""
@@ -199,6 +203,7 @@ const WorkoutsContainer = (props) => {
 					type=""
 				/>
 			</div>
+
 			<div
 				style={{
 					width: "100%",
@@ -239,6 +244,8 @@ const WorkoutsContainer = (props) => {
 						filterBy,
 						searchProgramQuery,
 						searchUserQuery,
+						viewThisWorkout,
+						cloneThisWorkout,
 					}}
 				/>
 			</div>

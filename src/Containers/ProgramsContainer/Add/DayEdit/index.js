@@ -168,6 +168,9 @@ export default function DayEdit(props) {
 		setVisible(false);
 	};
 	console.log("cooldown", cooldown);
+	React.useLayoutEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
 	React.useEffect(() => {
 		if (refreshMe) {
 			setRefereshMe(false);
@@ -200,15 +203,6 @@ export default function DayEdit(props) {
 		setListOfCategories(listOfExercisez);
 		console.log("list ofexercises", listOfExercisez);
 	};
-	// const showMessage = () => {
-	// 	notification.warning({
-	// 		message: `You are in a quick view`,
-	// 		description: `Select the edit option to make changes to this program`,
-	// 		placement: "topRight",
-	// 		duration: 2,
-	// 		onClose: function () {},
-	// 	});
-	// };
 
 	return (
 		<div className="containerForAdd">
@@ -226,7 +220,7 @@ export default function DayEdit(props) {
 				<div className="rowing">
 					<span
 						className="draftBtn"
-						style={{ backgroundColor: "#7D7D7D" }}
+						style={{ backgroundColor: "#222222" }}
 						onClick={() => {
 							notification.info({
 								message: `Your changes haven't been made`,

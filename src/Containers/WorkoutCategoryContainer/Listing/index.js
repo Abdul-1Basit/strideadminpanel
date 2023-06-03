@@ -4,8 +4,8 @@ import Wrapper from "../../../Components/Wrapper";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 // import { RiDeleteBinLine } from "react-icons/ri";
-import { AiTwotoneDelete } from "react-icons/ai";
 import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBinLine } from "react-icons/ri";
 const PrizeListing = (props) => {
 	const columns = [
 		{
@@ -53,7 +53,7 @@ const PrizeListing = (props) => {
 				<Wrapper type="rowEvenAlign">
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
-							className={"centerAligner pointing"}
+							className={"centerAligner pointing actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setEditModal(true);
@@ -64,13 +64,13 @@ const PrizeListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							className={"centerAligner pointing"}
+							className={"centerAligner pointing actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setDeleteModal(true);
 							}}
 						>
-							<AiTwotoneDelete color="#EF4444" size={20} />
+							<RiDeleteBinLine color="#EF4444" size={20} />
 						</div>
 					</Tooltip>
 				</Wrapper>

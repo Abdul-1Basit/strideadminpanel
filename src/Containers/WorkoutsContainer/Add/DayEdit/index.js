@@ -8,7 +8,12 @@ import { getAllExercises } from "../../../../Helpers/firebase";
 import { Input, notification } from "antd";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 const { TextArea } = Input;
-export default function DayEdit({ data, setData }) {
+export default function DayEdit({
+	data,
+	setData,
+	viewMode = false,
+	showWarning = null,
+}) {
 	const [warmupCounter, setWarmupCounter] = React.useState(1);
 	const [warmupOpen, setWarmupOpen] = React.useState(true);
 	const [workoutCounter, setWorkoutCounter] = React.useState(1);
@@ -89,24 +94,32 @@ export default function DayEdit({ data, setData }) {
 										style={{ width: 50 }}
 										value={warmupCounter}
 										onChange={(e) => {
-											if (parseInt(e.target.value) > -1)
-												setWarmupCounter(parseInt(e.target.value));
-											if (!e.target.value) {
-												setWarmupCounter(0);
+											if (!viewMode) {
+												if (parseInt(e.target.value) > -1)
+													setWarmupCounter(parseInt(e.target.value));
+												if (!e.target.value) {
+													setWarmupCounter(0);
+												}
+												return;
 											}
+											showWarning();
 										}}
 									/>
 									<div className="colCenter">
 										<IoIosArrowUp
 											onClick={() => {
-												setWarmupCounter((prev) => prev + 1);
+												viewMode
+													? showWarning()
+													: setWarmupCounter((prev) => prev + 1);
 											}}
 											style={{ cursor: "pointer" }}
 										/>
 										<IoIosArrowDown
 											onClick={() => {
 												if (warmupCounter !== 0)
-													setWarmupCounter((prev) => prev - 1);
+													viewMode
+														? showWarning()
+														: setWarmupCounter((prev) => prev - 1);
 											}}
 											style={{ cursor: "pointer" }}
 										/>
@@ -114,38 +127,42 @@ export default function DayEdit({ data, setData }) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...data.warmup];
-											for (let i = 0; i < warmupCounter; i++) {
-												tempDays.push({
-													id: data.warmup.length + i,
-													name: "",
-													reps: 0,
-													sets: 0,
-													weightunit: "lbs",
-													timeUnit: "Sec",
-													restUnit: "Sec",
-													weight: 0,
-													time: 0,
-													rest: 0,
+											if (viewMode) {
+												showWarning();
+											} else {
+												let tempDays = [...data.warmup];
+												for (let i = 0; i < warmupCounter; i++) {
+													tempDays.push({
+														id: data.warmup.length + i,
+														name: "",
+														reps: 0,
+														sets: 0,
+														weightunit: "lbs",
+														timeUnit: "Sec",
+														restUnit: "Sec",
+														weight: 0,
+														time: 0,
+														rest: 0,
+													});
+												}
+												setData({
+													...data,
+													warmup: tempDays,
+												});
+												setWarmupOpen(true);
+												notification.success({
+													message:
+														warmupCounter > 1
+															? `You have added ${warmupCounter} exercises to the warmup`
+															: `You have added ${warmupCounter} exercise to the warmup`,
+													description: ``,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setWarmupCounter(0);
+													},
 												});
 											}
-											setData({
-												...data,
-												warmup: tempDays,
-											});
-											setWarmupOpen(true);
-											notification.success({
-												message:
-													warmupCounter > 1
-														? `You have added ${warmupCounter} exercises to the warmup`
-														: `You have added ${warmupCounter} exercise to the warmup`,
-												description: ``,
-												placement: "topRight",
-												duration: 3,
-												onClose: function () {
-													setWarmupCounter(0);
-												},
-											});
 										}}
 									>
 										Add
@@ -180,31 +197,37 @@ export default function DayEdit({ data, setData }) {
 											setterFunc={changeItem}
 											activeParentItem={data.warmup}
 											type="warmup"
+											viewMode={viewMode}
+											showWarning={showWarning}
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...data.warmup];
-									for (let i = 0; i < 1; i++) {
-										tempDays.push({
-											id: data.warmup.length + i,
-											name: "",
-											reps: 0,
-											sets: 0,
-											weightunit: "lbs",
-											timeUnit: "Sec",
-											restUnit: "Sec",
-											weight: 0,
-											time: 0,
-											rest: 0,
+									if (viewMode) {
+										showWarning();
+									} else {
+										let tempDays = [...data.warmup];
+										for (let i = 0; i < 1; i++) {
+											tempDays.push({
+												id: data.warmup.length + i,
+												name: "",
+												reps: 0,
+												sets: 0,
+												weightunit: "lbs",
+												timeUnit: "Sec",
+												restUnit: "Sec",
+												weight: 0,
+												time: 0,
+												rest: 0,
+											});
+										}
+										setData({
+											...data,
+											warmup: tempDays,
 										});
 									}
-									setData({
-										...data,
-										warmup: tempDays,
-									});
 								}}
 							>
 								<IoMdAdd
@@ -246,21 +269,33 @@ export default function DayEdit({ data, setData }) {
 										style={{ width: 50 }}
 										value={workoutCounter}
 										onChange={(e) => {
-											if (parseInt(e.target.value) > -1)
-												setWorkoutCounter(parseInt(e.target.value));
+											if (viewMode) {
+												showWarning();
+											} else {
+												if (parseInt(e.target.value) > -1)
+													setWorkoutCounter(parseInt(e.target.value));
+											}
 										}}
 									/>
 									<div className="colCenter">
 										<IoIosArrowUp
 											onClick={() => {
-												setWorkoutCounter((prev) => prev + 1);
+												if (viewMode) {
+													showWarning();
+												} else {
+													setWorkoutCounter((prev) => prev + 1);
+												}
 											}}
 											style={{ cursor: "pointer" }}
 										/>
 										<IoIosArrowDown
 											onClick={() => {
-												if (workoutCounter !== 0)
-													setWorkoutCounter((prev) => prev - 1);
+												if (viewMode) {
+													showWarning();
+												} else {
+													if (workoutCounter !== 0)
+														setWorkoutCounter((prev) => prev - 1);
+												}
 											}}
 											style={{ cursor: "pointer" }}
 										/>
@@ -268,38 +303,42 @@ export default function DayEdit({ data, setData }) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...data.workout];
-											for (let i = 0; i < workoutCounter; i++) {
-												tempDays.push({
-													id: data.workout.length + i,
-													name: "",
-													reps: 0,
-													sets: 0,
-													weightunit: "lbs",
-													timeUnit: "Sec",
-													restUnit: "Sec",
-													weight: 0,
-													time: 0,
-													rest: 0,
+											if (viewMode) {
+												showWarning();
+											} else {
+												let tempDays = [...data.workout];
+												for (let i = 0; i < workoutCounter; i++) {
+													tempDays.push({
+														id: data.workout.length + i,
+														name: "",
+														reps: 0,
+														sets: 0,
+														weightunit: "lbs",
+														timeUnit: "Sec",
+														restUnit: "Sec",
+														weight: 0,
+														time: 0,
+														rest: 0,
+													});
+												}
+												setData({
+													...data,
+													workout: tempDays,
+												});
+												setWorkoutOpen(true);
+												notification.success({
+													message:
+														workoutCounter > 1
+															? `You have added ${workoutCounter} exercises to the workout`
+															: `You have added ${workoutCounter} exercise to the workout`,
+													description: ``,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setWorkoutCounter(0);
+													},
 												});
 											}
-											setData({
-												...data,
-												workout: tempDays,
-											});
-											setWorkoutOpen(true);
-											notification.success({
-												message:
-													workoutCounter > 1
-														? `You have added ${workoutCounter} exercises to the workout`
-														: `You have added ${workoutCounter} exercise to the workout`,
-												description: ``,
-												placement: "topRight",
-												duration: 3,
-												onClose: function () {
-													setWorkoutCounter(0);
-												},
-											});
 										}}
 									>
 										Add
@@ -308,7 +347,9 @@ export default function DayEdit({ data, setData }) {
 							</div>
 						</div>
 						<div
-							onClick={() => setWorkoutOpen(!workoutOpen)}
+							onClick={() => {
+								setWorkoutOpen(!workoutOpen);
+							}}
 							style={{ cursor: "pointer", fontWeight: "bold" }}
 						>
 							{workoutOpen ? (
@@ -334,31 +375,37 @@ export default function DayEdit({ data, setData }) {
 											setterFunc={changeItem}
 											activeParentItem={data.workout}
 											type="workout"
+											viewMode={viewMode}
+											showWarning={showWarning}
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...data.workout];
-									for (let i = 0; i < 1; i++) {
-										tempDays.push({
-											id: data.workout.length + i,
-											name: "",
-											reps: 0,
-											sets: 0,
-											weightunit: "lbs",
-											timeUnit: "Sec",
-											restUnit: "Sec",
-											weight: 0,
-											time: 0,
-											rest: 0,
+									if (viewMode) {
+										showWarning();
+									} else {
+										let tempDays = [...data.workout];
+										for (let i = 0; i < 1; i++) {
+											tempDays.push({
+												id: data.workout.length + i,
+												name: "",
+												reps: 0,
+												sets: 0,
+												weightunit: "lbs",
+												timeUnit: "Sec",
+												restUnit: "Sec",
+												weight: 0,
+												time: 0,
+												rest: 0,
+											});
+										}
+										setData({
+											...data,
+											workout: tempDays,
 										});
 									}
-									setData({
-										...data,
-										workout: tempDays,
-									});
 								}}
 							>
 								<IoMdAdd
@@ -400,21 +447,33 @@ export default function DayEdit({ data, setData }) {
 										style={{ width: 50 }}
 										value={cooldownCounter}
 										onChange={(e) => {
-											if (parseInt(e.target.value) > -1)
-												setCoolDownCounter(parseInt(e.target.value));
+											if (viewMode) {
+												showWarning();
+											} else {
+												if (parseInt(e.target.value) > -1)
+													setCoolDownCounter(parseInt(e.target.value));
+											}
 										}}
 									/>
 									<div className="colCenter">
 										<IoIosArrowUp
 											onClick={() => {
-												setCoolDownCounter((prev) => prev + 1);
+												if (viewMode) {
+													showWarning();
+												} else {
+													setCoolDownCounter((prev) => prev + 1);
+												}
 											}}
 											style={{ cursor: "pointer" }}
 										/>
 										<IoIosArrowDown
 											onClick={() => {
-												if (cooldownCounter !== 0)
-													setCoolDownCounter((prev) => prev - 1);
+												if (viewMode) {
+													showWarning();
+												} else {
+													if (cooldownCounter !== 0)
+														setCoolDownCounter((prev) => prev - 1);
+												}
 											}}
 											style={{ cursor: "pointer" }}
 										/>
@@ -422,38 +481,42 @@ export default function DayEdit({ data, setData }) {
 									<button
 										className="dayssAdditionBtn"
 										onClick={() => {
-											let tempDays = [...data.cooldown];
-											for (let i = 0; i < cooldownCounter; i++) {
-												tempDays.push({
-													id: data.cooldown.length + i,
-													name: "",
-													reps: 0,
-													sets: 0,
-													weightunit: "lbs",
-													timeUnit: "Sec",
-													restUnit: "Sec",
-													weight: 0,
-													time: 0,
-													rest: 0,
+											if (viewMode) {
+												showWarning();
+											} else {
+												let tempDays = [...data.cooldown];
+												for (let i = 0; i < cooldownCounter; i++) {
+													tempDays.push({
+														id: data.cooldown.length + i,
+														name: "",
+														reps: 0,
+														sets: 0,
+														weightunit: "lbs",
+														timeUnit: "Sec",
+														restUnit: "Sec",
+														weight: 0,
+														time: 0,
+														rest: 0,
+													});
+												}
+												setCoolDownOpen(true);
+												setData({
+													...data,
+													cooldown: tempDays,
+												});
+												notification.success({
+													message:
+														cooldownCounter > 1
+															? `You have added ${cooldownCounter} days to the cooldown`
+															: `You have added ${cooldownCounter} day to the cooldown`,
+													description: ``,
+													placement: "topRight",
+													duration: 3,
+													onClose: function () {
+														setCoolDownCounter(0);
+													},
 												});
 											}
-											setCoolDownOpen(true);
-											setData({
-												...data,
-												cooldown: tempDays,
-											});
-											notification.success({
-												message:
-													cooldownCounter > 1
-														? `You have added ${cooldownCounter} days to the cooldown`
-														: `You have added ${cooldownCounter} day to the cooldown`,
-												description: ``,
-												placement: "topRight",
-												duration: 3,
-												onClose: function () {
-													setCoolDownCounter(0);
-												},
-											});
 										}}
 									>
 										Add
@@ -488,31 +551,37 @@ export default function DayEdit({ data, setData }) {
 											setterFunc={changeItem}
 											activeParentItem={data.cooldown}
 											type="cooldown"
+											viewMode={viewMode}
+											showWarning={showWarning}
 										/>
 									))}
 							</div>
 							<span
 								className="additionForNewWarmup"
 								onClick={() => {
-									let tempDays = [...data.cooldown];
-									for (let i = 0; i < 1; i++) {
-										tempDays.push({
-											id: data.cooldown.length + i,
-											name: "",
-											reps: 0,
-											sets: 0,
-											weightunit: "lbs",
-											timeUnit: "Sec",
-											restUnit: "Sec",
-											weight: 0,
-											time: 0,
-											rest: 0,
+									if (viewMode) {
+										showWarning();
+									} else {
+										let tempDays = [...data.cooldown];
+										for (let i = 0; i < 1; i++) {
+											tempDays.push({
+												id: data.cooldown.length + i,
+												name: "",
+												reps: 0,
+												sets: 0,
+												weightunit: "lbs",
+												timeUnit: "Sec",
+												restUnit: "Sec",
+												weight: 0,
+												time: 0,
+												rest: 0,
+											});
+										}
+										setData({
+											...data,
+											cooldown: tempDays,
 										});
 									}
-									setData({
-										...data,
-										cooldown: tempDays,
-									});
 								}}
 							>
 								<IoMdAdd
@@ -537,12 +606,16 @@ export default function DayEdit({ data, setData }) {
 							showCount
 							className="addBlogInput overViewDescription"
 							name="overviewDescription"
-							onChange={(e) =>
-								setData({
-									...data,
-									notes: e.target.value,
-								})
-							}
+							onChange={(e) => {
+								if (viewMode) {
+									showWarning();
+								} else {
+									setData({
+										...data,
+										notes: e.target.value,
+									});
+								}
+							}}
 							value={data.notes}
 							style={{
 								width: "100%",
@@ -567,6 +640,8 @@ const ExerciseItem = ({
 	setterFunc,
 	activeParentItem,
 	type,
+	viewMode = false,
+	showWarning,
 }) => {
 	const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -575,14 +650,17 @@ const ExerciseItem = ({
 			<div className="rowing">
 				<div className="rowing">
 					<span className="exerciseLabel">Exercise # {index + 1}</span>
-					<span className="deleteWarmup" onClick={() => deleteMe(type, item)}>
+					<span
+						className="deleteWarmup"
+						onClick={() => (viewMode ? showWarning() : deleteMe(type, item))}
+					>
 						<AiFillDelete color="#D30E0E" size={22} />
 					</span>
 
 					{index === 0 && (
 						<span
 							className="seeAll"
-							onClick={() => setToAll(type, item)}
+							onClick={() => (viewMode ? showWarning() : setToAll(type, item))}
 							onMouseEnter={() => {
 								setActiveIndex(0);
 							}}
@@ -604,9 +682,13 @@ const ExerciseItem = ({
 							defaultInputValue={activeParentItem[index].name}
 							defaultValue={activeParentItem[index].name}
 							onChange={(e) => {
-								let prevValues = [...activeParentItem];
-								prevValues[index].name = e.value;
-								setterFunc(type, prevValues);
+								if (viewMode) {
+									showWarning();
+								} else {
+									let prevValues = [...activeParentItem];
+									prevValues[index].name = e.value;
+									setterFunc(type, prevValues);
+								}
 							}}
 							styles={{
 								control: (baseStyles, state) => ({
@@ -649,9 +731,13 @@ const ExerciseItem = ({
 							placeholder={"0-0"}
 							value={activeParentItem[index].reps}
 							onChange={(e) => {
-								let prevValues = [...activeParentItem];
-								prevValues[index].reps = e.target.value;
-								setterFunc(type, prevValues);
+								if (viewMode) {
+									showWarning();
+								} else {
+									let prevValues = [...activeParentItem];
+									prevValues[index].reps = e.target.value;
+									setterFunc(type, prevValues);
+								}
 							}}
 						/>
 					</div>
@@ -673,9 +759,13 @@ const ExerciseItem = ({
 							placeholder={"0-0"}
 							value={activeParentItem[index].sets}
 							onChange={(e) => {
-								let prevValues = [...activeParentItem];
-								prevValues[index].sets = e.target.value;
-								setterFunc(type, prevValues);
+								if (viewMode) {
+									showWarning();
+								} else {
+									let prevValues = [...activeParentItem];
+									prevValues[index].sets = e.target.value;
+									setterFunc(type, prevValues);
+								}
 							}}
 						/>
 					</div>
@@ -697,9 +787,13 @@ const ExerciseItem = ({
 							placeholder={"0"}
 							value={activeParentItem[index].weight}
 							onChange={(e) => {
-								let prevValues = [...activeParentItem];
-								prevValues[index].weight = e.target.value;
-								setterFunc(type, prevValues);
+								if (viewMode) {
+									showWarning();
+								} else {
+									let prevValues = [...activeParentItem];
+									prevValues[index].weight = e.target.value;
+									setterFunc(type, prevValues);
+								}
 							}}
 						/>
 						<WeightSelection
@@ -728,15 +822,19 @@ const ExerciseItem = ({
 								placeholder={"0"}
 								value={activeParentItem[index].time}
 								onChange={(e) => {
-									let newVal = activeParentItem[index].time;
-									if (!e.target.value || parseInt(e.target.value) > -1)
-										newVal = e.target.value;
-									// if (!e.target.value) newVal = 0;
-									// if (!e.target.value) newVal = e.target.value;
-									let prevValues = [...activeParentItem];
-									prevValues[index].time = newVal;
-									// setterFunc(prevValues);
-									setterFunc(type, prevValues);
+									if (viewMode) {
+										showWarning();
+									} else {
+										let newVal = activeParentItem[index].time;
+										if (!e.target.value || parseInt(e.target.value) > -1)
+											newVal = e.target.value;
+										// if (!e.target.value) newVal = 0;
+										// if (!e.target.value) newVal = e.target.value;
+										let prevValues = [...activeParentItem];
+										prevValues[index].time = newVal;
+										// setterFunc(prevValues);
+										setterFunc(type, prevValues);
+									}
 								}}
 							/>
 							<TimeSelection
@@ -768,14 +866,18 @@ const ExerciseItem = ({
 							// placeholder={"0"}
 							value={activeParentItem[index].rest}
 							onChange={(e) => {
-								let newVal = activeParentItem[index].rest;
-								if (parseInt(e.target.value) > -1 || !e.target.value)
-									newVal = e.target.value;
-								// if (!e.target.value) newVal = e.target.value;
-								let prevValues = [...activeParentItem];
-								prevValues[index].rest = newVal;
-								// setterFunc(prevValues)
-								setterFunc(type, prevValues);
+								if (viewMode) {
+									showWarning();
+								} else {
+									let newVal = activeParentItem[index].rest;
+									if (parseInt(e.target.value) > -1 || !e.target.value)
+										newVal = e.target.value;
+									// if (!e.target.value) newVal = e.target.value;
+									let prevValues = [...activeParentItem];
+									prevValues[index].rest = newVal;
+									// setterFunc(prevValues)
+									setterFunc(type, prevValues);
+								}
 							}}
 						/>
 						<TimeSelection

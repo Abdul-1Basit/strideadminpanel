@@ -170,7 +170,7 @@ const EditProgramContainer = (props) => {
 									<span
 										// className="duplicateBtn"
 										className="draftBtn"
-										style={{ backgroundColor: "#7D7D7D" }}
+										style={{ backgroundColor: "#222222" }}
 										onClick={() => navigate(-1)}
 									>
 										Cancel

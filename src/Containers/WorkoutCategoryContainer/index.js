@@ -1,5 +1,5 @@
 import React from "react";
-import { notification } from "antd";
+import { notification, Modal } from "antd";
 import Add from "./Add";
 import Edit from "./Edit";
 import UserListing from "./Listing";
@@ -11,7 +11,7 @@ import {
 	getAllExerciseCategories,
 	getAllWorkoutCategories,
 } from "../../Helpers/firebase";
-import Modal from "react-modal";
+// import Modal from "react-modal";
 // import CustomSmallCard from "../../Components/CustomSmallCard";
 // import { BsCheck } from "react-icons/bs";
 // import { RxCross2 } from "react-icons/rx";
@@ -120,20 +120,27 @@ const WorkoutCategoryContainer = () => {
 				}}
 			>
 				<Modal
-					isOpen={addModal}
-					onRequestClose={() => setAddModal(false)}
-					style={customStyles}
-					contentLabel="Example Modal"
+					open={addModal}
+					onCancel={() => setAddModal(false)}
+					className={"addProductModal"}
+					// contentLabel="Example Modal"
+					destroyOnClose
+					footer={() => null}
+					closable={false}
 				>
 					<div>
 						<Add {...{ setAddModal }} />
 					</div>
 				</Modal>
 				<Modal
-					isOpen={editModal}
-					onRequestClose={() => setEditModal(false)}
-					style={customStyles}
-					contentLabel="Example Modal"
+					open={editModal}
+					onCancel={() => setEditModal(false)}
+					// style={customStyles}
+					className={"addProductModal"}
+					// contentLabel="Example Modal"
+					destroyOnClose
+					footer={() => null}
+					closable={false}
 				>
 					<Edit
 						{...{

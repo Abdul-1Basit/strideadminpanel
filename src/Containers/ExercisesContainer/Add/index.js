@@ -125,7 +125,7 @@ const AddProductCategory = (props) => {
 								<div className="rowing">
 									<span
 										className="draftBtn"
-										style={{ backgroundColor: "#7D7D7D" }}
+										style={{ backgroundColor: "#222222" }}
 										onClick={() => props.setAddModal(false)}
 									>
 										Cancel
@@ -143,7 +143,7 @@ const AddProductCategory = (props) => {
 							)}
 						</div>
 						{open && <NewCategoryModal {...{ open, setOpen }} />}
-						<div className="cardAdditionBlog">
+						<div className={"cardAdditionBlog"} style={{}}>
 							<span className="tableTitle">Basic Detail</span>
 							<div className="barVertical" />
 							<div style={{ marginTop: 42 }}>
@@ -253,11 +253,7 @@ const AddProductCategory = (props) => {
 													value={values.category}
 													className="addBlogInput inputText"
 												>
-													<option
-														value="default"
-														selected={true}
-														disabled={true}
-													>
+													<option value="" selected={true} disabled={true}>
 														Select Category
 													</option>
 													{categoryListing.map((item) => (
@@ -338,9 +334,9 @@ const AddProductCategory = (props) => {
 																src={imageurl}
 																alt="UserImage"
 																style={{
-																	width: 156,
-																	height: 156,
-																	borderRadius: "50%",
+																	width: 200,
+																	height: 200,
+																	borderRadius: 4,
 																}}
 															/>
 															<div
@@ -372,7 +368,7 @@ const AddProductCategory = (props) => {
 															}}
 														/>
 													)}
-													{imageError && (
+													{imageError && !imageurl && (
 														<Typography
 															alignment="left"
 															title={"Image is required!"}
@@ -408,9 +404,9 @@ const AddProductCategory = (props) => {
 																src={videoValue}
 																alt="UserImage"
 																style={{
-																	width: 156,
-																	height: 156,
-																	borderRadius: "50%",
+																	width: 200,
+																	height: 200,
+																	borderRadius: 4,
 																}}
 															/>
 															<div

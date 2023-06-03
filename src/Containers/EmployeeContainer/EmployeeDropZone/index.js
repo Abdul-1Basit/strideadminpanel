@@ -55,7 +55,12 @@ function EmployeeDropZone({
 					>
 						Upload a Video or Image{" "}
 					</p>
-					<span className="imageMesaurement">(Should be 1280 x 800)</span>
+					<span
+						className="newTextForPicker"
+						style={{ marginTop: -10, marginBottom: 5 }}
+					>
+						(Should be 1280 x 800)
+					</span>
 					<div className="plusAddSign">
 						<IoMdAdd color="#fff" size={25} />
 					</div>
