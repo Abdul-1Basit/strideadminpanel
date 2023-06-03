@@ -79,6 +79,7 @@ const DashboardContainer = (props) => {
 									subHeading="$9,246.4"
 									type=""
 								/>
+
 								<CustomSmallCard
 									textColor="#fff"
 									primaryColor="#222222"

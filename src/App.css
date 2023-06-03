@@ -1110,12 +1110,21 @@ cursor: pointer;
   height: 40px;
   width: 45px;
 }
+.selectForProgramItem{
+  width: 314px;
+}
 @media screen and (max-width: 1250px) {
   .programDaysInput{
     width: 90px;
     margin-top: 10px;
+    margin-right: 3px;
   }
   .addonField{
     width: 40px;
   }
+  .selectForProgramItem{
+    width: 275px;
+    margin-right: 5px;
+  }
+
 }

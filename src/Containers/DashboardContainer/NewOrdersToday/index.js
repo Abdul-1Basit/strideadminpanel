@@ -6,7 +6,6 @@ export default function NewOrdersToday(props) {
 			className="customCrdSpecial"
 			style={{
 				backgroundColor: "#F94F00",
-				width: 330,
 			}}
 		>
 			<div className="rowingStart">

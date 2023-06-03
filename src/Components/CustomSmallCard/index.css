@@ -65,3 +65,11 @@ letter-spacing: -0.02em;
 color: #D18A00;
 
 }
+
+@media screen and (max-width: 1250px) {
+    .customCrd{
+      width: 265px;
+    }
+  
+  }
+  

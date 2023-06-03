@@ -39,3 +39,12 @@ border-radius: 21px;
 .margB16{
     margin-bottom: 16px;
 }
+@media screen and (max-width: 1250px) {
+    .cardTotalUsers{
+      width: 280px;
+    }
+  .progressBar{
+    width: 245px;
+  }
+  }
+  

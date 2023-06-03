@@ -5,7 +5,7 @@ import { IoIosArrowUp, IoIosArrowDown, IoMdAdd } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
 import { WeightSelection, TimeSelection } from "./AddOns";
 import { getAllExercises } from "../../../../Helpers/firebase";
-import { Input, notification } from "antd";
+import { Input, notification, Row, Col } from "antd";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 const { TextArea } = Input;
 export default function DayEdit({
@@ -690,11 +690,11 @@ const ExerciseItem = ({
 									setterFunc(type, prevValues);
 								}
 							}}
+							className="selectForProgramItem"
 							styles={{
 								control: (baseStyles, state) => ({
 									...baseStyles,
 									// padding: "18px 24px",
-									width: 314,
 									height: 58,
 									background: "#F4F4F4",
 									borderRadius: 8,
