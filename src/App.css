@@ -1118,9 +1118,10 @@ cursor: pointer;
     width: 90px;
     margin-top: 10px;
     margin-right: 3px;
+    padding:8px;
   }
   .addonField{
-    width: 40px;
+    width: 45px;
   }
   .selectForProgramItem{
     width: 275px;

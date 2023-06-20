@@ -97,6 +97,7 @@ const EditProgramContainer = (props) => {
 		}
 		setBasicDetailMediaError(false);
 		setScheduleMediaError(false);
+		setAddingUser(true);
 		setProgressPercent(25);
 		values.id = id;
 		values.days = days;
@@ -105,11 +106,11 @@ const EditProgramContainer = (props) => {
 		values.overviewMediaTwo = overviewMediaTwo ? overviewMediaTwo : "noimg";
 		values.scheduleImage = scheduleMedia ? scheduleMedia : "noimg";
 		setProgressPercent(50);
-		console.log("values", values);
+		// console.log("values", values);
 		if (await updateProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully saved your program!`,
+				message: `Your changes have been saved!`,
 				description: ``, //`${values.name}  has been successfully updated`,
 				placement: "topRight",
 				duration: 3,

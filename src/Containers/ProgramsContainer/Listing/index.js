@@ -126,12 +126,19 @@ const PrizeListing = (props) => {
 						className="capsule"
 						style={{
 							backgroundColor:
-								rowData.status === "Active"
+								rowData.status.toLowerCase() === "active"
 									? "#5DB135"
-									: rowData.status === "Draft"
+									: rowData.status.toLowerCase() === "pending"
+									? "#E2BB2E"
+									: rowData.status.toLowerCase() === "draft"
 									? "#7D7D7D"
-									: "#D30E0E",
-							// : "#E2BB2E",
+									: "#F4F4F4",
+							color:
+								rowData.status.toLowerCase() === "active" ||
+								rowData.status.toLowerCase() === "pending" ||
+								rowData.status.toLowerCase() === "draft"
+									? "#fff"
+									: "#000000",
 						}}
 					>
 						<span className="tableContent" style={{ color: "#fff" }}>

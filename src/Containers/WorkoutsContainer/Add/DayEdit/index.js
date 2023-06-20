@@ -862,7 +862,7 @@ const ExerciseItem = ({
 							placeholder={0}
 							defaultValue={activeParentItem[index].rest}
 							// value={item.rest}
-							style={{ width: "100%", maxWidth: 55, paddingLeft: 0 }}
+							style={{ width: "100%", maxWidth: 54, paddingLeft: 0 }}
 							// placeholder={"0"}
 							value={activeParentItem[index].rest}
 							onChange={(e) => {

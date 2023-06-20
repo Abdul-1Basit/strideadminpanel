@@ -118,7 +118,19 @@ const PrizeListing = (props) => {
 						className="capsule"
 						style={{
 							backgroundColor:
-								rowData.status === "Inactive" ? "#D30E0E" : "#5DB135",
+								rowData.status.toLowerCase() === "active"
+									? "#5DB135"
+									: rowData.status.toLowerCase() === "pending"
+									? "#E2BB2E"
+									: rowData.status.toLowerCase() === "draft"
+									? "#7D7D7D"
+									: "#F4F4F4",
+							color:
+								rowData.status.toLowerCase() === "active" ||
+								rowData.status.toLowerCase() === "pending" ||
+								rowData.status.toLowerCase() === "draft"
+									? "#fff"
+									: "#000000",
 							// : "#E2BB2E",
 						}}
 					>
@@ -159,8 +171,9 @@ const PrizeListing = (props) => {
 								// props.setEditModal(true);
 								props.editThisWorkout(rowData.id);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<FiEdit color="#0F172A" />
+							<FiEdit color="#0F172A" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
@@ -170,8 +183,9 @@ const PrizeListing = (props) => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<RiDeleteBinLine color="#EF4444" />
+							<RiDeleteBinLine color="#EF4444" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Share"}>

@@ -71,6 +71,7 @@ const AddProgramContainer = (props) => {
 		}
 		setBasicDetailMediaError(false);
 		setScheduleMediaError(false);
+		setAddingUser(true);
 		setProgressPercent(25);
 		values.days = days;
 		values.basicDetailMedia = basicDetailMedia ? basicDetailMedia : "noimg";
@@ -78,7 +79,7 @@ const AddProgramContainer = (props) => {
 		values.overviewMediaTwo = overviewMediaTwo ? overviewMediaTwo : "noimg";
 		values.scheduleImage = scheduleMedia ? scheduleMedia : "noimg";
 		setProgressPercent(50);
-		console.log("values", values);
+		// console.log("values", values);
 		if (await addProgram(values)) {
 			setProgressPercent(100);
 			notification.success({

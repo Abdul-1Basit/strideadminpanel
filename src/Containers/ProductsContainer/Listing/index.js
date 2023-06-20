@@ -160,7 +160,8 @@ const ProductListing = (props) => {
 				<Wrapper type="rowEvenAlign" w={100}>
 					<Tooltip placement="topLeft" title={"View"}>
 						<div
-							style={{ cursor: "pointer" }}
+							className={"centerAligner pointing actions"}
+							style={{ marginRight: 10, cursor: "pointer" }}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setCloneModal(true);
@@ -171,24 +172,26 @@ const ProductListing = (props) => {
 					</Tooltip>
 					<Tooltip placement="topLeft" title={"Edit"}>
 						<div
-							style={{ cursor: "pointer" }}
+							className={"centerAligner pointing actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setEditModal(true);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<FiEdit color="#6BA2E1" size={20} />
+							<FiEdit color="#0F172A" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
 						<div
-							style={{ cursor: "pointer" }}
+							className={"centerAligner pointing actions"}
 							onClick={() => {
 								props.setActiveCategory(rowData);
 								props.setDeleteModal(true);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<MdDelete color="#D30E0E" size={20} />
+							<RiDeleteBinLine color="#EF4444" size={20} />
 						</div>
 					</Tooltip>
 				</Wrapper>

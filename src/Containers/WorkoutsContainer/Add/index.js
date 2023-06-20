@@ -46,8 +46,8 @@ const AddWorkoutContainer = (props) => {
 		if (await addWorkout(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Added!`,
-				description: `${values.name}  has been successfully added`,
+				message: `Successfully added your workout!`,
+				description: ``, // `${values.name}  has been successfully added`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {

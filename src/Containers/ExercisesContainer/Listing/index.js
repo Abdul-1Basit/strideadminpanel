@@ -8,6 +8,7 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { BsShareFill } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
 const PrizeListing = (props) => {
 	const columns = [
 		{
@@ -62,8 +63,9 @@ const PrizeListing = (props) => {
 							onClick={() => {
 								props.editThisProgram(rowData.id);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<FaRegEdit color="#6BA2E1" size={20} />
+							<FiEdit color="#0F172A" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Delete"}>
@@ -73,8 +75,9 @@ const PrizeListing = (props) => {
 								props.setActiveCategory(rowData);
 								props.setShowDeleteModal(true);
 							}}
+							style={{ marginRight: 10, cursor: "pointer" }}
 						>
-							<RiDeleteBinLine color="#EF4444" />
+							<RiDeleteBinLine color="#EF4444" size={20} />
 						</div>
 					</Tooltip>
 					<Tooltip placement="topRight" title={"Share"}>

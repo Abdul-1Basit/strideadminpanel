@@ -46,8 +46,8 @@ const CloneWorkoutContainer = (props) => {
 		if (await addWorkout(values)) {
 			setProgressPercent(100);
 			notification.success({
-				message: `Successfully Added!`,
-				description: `${values.name}  has been successfully added`,
+				message: `Your changes have been saved!`,
+				description: ``, //`${values.name}  has been successfully updated`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {

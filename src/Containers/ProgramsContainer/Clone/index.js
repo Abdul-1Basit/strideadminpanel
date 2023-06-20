@@ -95,6 +95,7 @@ const CloneProgramContainer = (props) => {
 		}
 		setBasicDetailMediaError(false);
 		setScheduleMediaError(false);
+		setAddingUser(true);
 		setProgressPercent(25);
 		// values.id = id;
 		values.days = days;
@@ -103,12 +104,12 @@ const CloneProgramContainer = (props) => {
 		values.overviewMediaTwo = overviewMediaTwo ? overviewMediaTwo : "noimg";
 		values.scheduleImage = scheduleMedia ? scheduleMedia : "noimg";
 		setProgressPercent(50);
-		console.log("values", values);
+		// console.log("values", values);
 		if (await addProgram(values)) {
 			setProgressPercent(100);
 			notification.success({
 				message: `Successfully added your program!`,
-				description: ``, //`${values.name}  has been successfully updated`,
+				description: ``, // `${values.name}  has been successfully added`,
 				placement: "topRight",
 				duration: 2,
 				onClose: function () {
