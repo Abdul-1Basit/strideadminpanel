@@ -212,8 +212,9 @@ const ExerciseItem = ({
 							value={activeParentItem[index].rest}
 							onChange={(e) => {
 								let newVal = activeParentItem[index].rest;
-								if (parseInt(e.target.value) > -1) newVal = e.target.value;
-								if (!e.target.value) newVal = 0;
+								if (parseInt(e.target.value) > -1 || !e.target.value)
+									newVal = e.target.value;
+
 								let prevValues = [...activeParentItem];
 								prevValues[index].rest = newVal;
 								setterFunc(prevValues);
