@@ -78,7 +78,7 @@ letter-spacing: -0.02em;
 
 color: #F8F8F8;
 }
-@media screen and (max-width: 1250px) {
+@media screen and (max-width: 1300px) {
     .customCrdSpecial{
       width: 280px;
     }
