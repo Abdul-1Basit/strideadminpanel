@@ -64,7 +64,7 @@ const ExerciseItem = ({
 									fontStyle: "normal",
 									fontWeight: "500",
 									fontSize: 18,
-									paddingLeft: 24,
+									paddingLeft: 0,
 									// lineHeight: 22,
 								}),
 							}}

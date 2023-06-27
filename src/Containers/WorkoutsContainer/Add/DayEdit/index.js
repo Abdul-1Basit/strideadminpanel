@@ -702,7 +702,7 @@ const ExerciseItem = ({
 									fontStyle: "normal",
 									fontWeight: "500",
 									fontSize: 18,
-									paddingLeft: 24,
+									paddingLeft: 5,
 								}),
 							}}
 							options={listOfCategories.map((itm) => {

@@ -1113,9 +1113,9 @@ cursor: pointer;
 .selectForProgramItem{
   width: 314px;
 }
-@media screen and (max-width: 1250px) {
+@media screen and (max-width: 1350px) {
   .programDaysInput{
-    width: 90px;
+    width: 85px;
     margin-top: 10px;
     margin-right: 3px;
     padding:8px;
@@ -1124,7 +1124,7 @@ cursor: pointer;
     width: 45px;
   }
   .selectForProgramItem{
-    width: 275px;
+    width: 265px;
     margin-right: 5px;
   }
 
