@@ -54,7 +54,7 @@ const DashboardContainer = (props) => {
 								// justifyContent: "space-evenly",
 							}
 						}
-						spacing={2}
+						gutter={[20, 10]}
 					>
 						<Col xs={24} xm={24} md={24} lg={16} xl={16} xxl={16}>
 							<div
