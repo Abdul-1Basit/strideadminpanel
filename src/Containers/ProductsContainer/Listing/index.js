@@ -35,27 +35,27 @@ const ProductListing = (props) => {
 				</div>
 			),
 		},
-		{
-			title: "PRODUCT ID",
-			width: 30,
-			render: (rowData) => (
-				<div
-					style={{
-						flexDirection: "row",
-						display: "flex",
-						alignItems: "flex-start",
-						justifyContent: "flex-start",
-						width: 30,
-					}}
-				>
-					<span className="label">
-						{rowData.id.toString().length > 5
-							? rowData.id.toString().substr(0, 5)
-							: rowData.id.toString()}
-					</span>
-				</div>
-			),
-		},
+		// {
+		// 	title: "PRODUCT ID",
+		// 	width: 30,
+		// 	render: (rowData) => (
+		// 		<div
+		// 			style={{
+		// 				flexDirection: "row",
+		// 				display: "flex",
+		// 				alignItems: "flex-start",
+		// 				justifyContent: "flex-start",
+		// 				width: 30,
+		// 			}}
+		// 		>
+		// 			<span className="label">
+		// 				{rowData.id.toString().length > 5
+		// 					? rowData.id.toString().substr(0, 5)
+		// 					: rowData.id.toString()}
+		// 			</span>
+		// 		</div>
+		// 	),
+		// },
 		{
 			title: "PRODUCT NAME",
 			dataIndex: "productName",

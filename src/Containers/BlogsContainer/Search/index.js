@@ -9,25 +9,9 @@ import { useNavigate } from "react-router-dom";
 const { Search } = Input;
 const ProductCategorySearch = (props) => {
 	const navigate = useNavigate();
-	// const [arr, setArr] = React.useState(null);
-
-	// React.useEffect(() => {
-	// 	if (!arr) {
-	// 		getProductCategories();
-	// 	}
-	// }, [arr]);
-
-	// const { Option } = Select;
-
-	// function onChange(value) {
-	// 	props.setFilterItem(value);
-	// }
-
-	// function onSearch(value) {}
 	return (
 		<Wrapper
 			type="rowSpaced"
-			// marginTop={32}
 			marginBottom={24}
 			marginLeft={30}
 			marginRight={30}
@@ -35,13 +19,6 @@ const ProductCategorySearch = (props) => {
 			backColor="transparent"
 		>
 			<Wrapper type="rowStart" backColor="transparent">
-				{/* <Typography
-					alignment="left"
-					title="List of Employees"
-					fontFamily="Gilroy-Bold"
-					color="#0F172A"
-					type="Heading"
-				/> */}
 				<span className="tableTitle">List of Blogs</span>
 			</Wrapper>
 			<div className="searchDropDownWithButton">

@@ -7,6 +7,17 @@ import Wrapper from "../../../Components/Wrapper";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const UserListing = (props) => {
+	// dob,
+	// 	emailAddress,
+	// 	firstName,
+	// 	lastName,
+	// 	gender,
+	// 	password,
+	// 	phoneNumber,
+	// 	address,
+	// 	image,
+	// 	role = "user",
+	// 	joinedOn = moment(new Date()).format("MM-DD-YYYY"),
 	const columns = [
 		{
 			title: "USER ID",
@@ -40,15 +51,15 @@ const UserListing = (props) => {
 			title: "NAME",
 			// dataIndex: "emailAddress",
 			// fixed: "left",
-			width: 100,
+			width: 120,
 			render: (rowData) => (
 				<div
 					style={{
 						display: "flex",
 						flexDirection: "row",
 						alignItems: "flex-start",
-						justifyContent: "space-between",
-						width: 100,
+						// justifyContent: "space-between",
+						width: 120,
 					}}
 				>
 					<Typography
@@ -79,7 +90,7 @@ const UserListing = (props) => {
 						fontFamily="Gilroy-Medium"
 						type="label"
 						color={"#334155"}
-						title={rowData.emailAddress}
+						title={rowData.email}
 					/>
 				</div>
 			),
@@ -117,7 +128,7 @@ const UserListing = (props) => {
 						alignment="left"
 						fontFamily="Gilroy-Medium"
 						type="label"
-						title={item.address}
+						title={item.city + ", " + item.country}
 					/>
 				</div>
 			),

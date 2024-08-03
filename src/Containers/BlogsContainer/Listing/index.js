@@ -6,7 +6,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import "./index.css";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { BsShareFill } from "react-icons/bs";
-import { AiFillEye } from "react-icons/ai";
+// import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 const PrizeListing = (props) => {
@@ -44,7 +44,6 @@ const PrizeListing = (props) => {
 		{
 			title: "DESCRIPTION",
 			width: 190,
-
 			render: (rowData) => {
 				return (
 					<span className="label" style={{ width: 190 }}>
@@ -57,9 +56,30 @@ const PrizeListing = (props) => {
 			},
 		},
 		{
+			title: "Blog Type",
+			width: 100,
+			render: (rowData) => {
+				return (
+					<div
+						// className="capsule"
+						style={{
+							display: "flex",
+							alignItems: "flex-start",
+						}}
+					>
+						<span
+							className="tableContent"
+							style={{ textTransform: "capitalize" }}
+						>
+							{rowData.blogType}
+						</span>
+					</div>
+				);
+			},
+		},
+		{
 			title: "STATUS",
 			width: 100,
-
 			render: (rowData) => {
 				return (
 					<div
@@ -83,7 +103,6 @@ const PrizeListing = (props) => {
 		{
 			title: "DATE CREATED",
 			width: 150,
-
 			render: (rowData) => {
 				return (
 					<span className="label">
@@ -96,7 +115,6 @@ const PrizeListing = (props) => {
 				);
 			},
 		},
-
 		{
 			title: "ACTION",
 			width: 150,
@@ -163,6 +181,8 @@ const PrizeListing = (props) => {
 			spin
 		/>
 	);
+	console.log("rowdata", props.blogList);
+
 	return (
 		<div style={{ width: "100%", backgroundColor: "#E5E5E5" }}>
 			{props.loading ? (

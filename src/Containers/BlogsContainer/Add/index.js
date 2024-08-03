@@ -216,6 +216,40 @@ const AddBlogContainer = (props) => {
 										)}
 									</div> */}
 								</div>
+								<div className="flexStart mb30">
+									<span className="addBlogInputLabel">Blog Type</span>
+									<div style={{ marginTop: 10 }}>
+										<select
+											name="blogType"
+											id="blogType"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											value={values.blogType}
+											className="addBlogInput inputText"
+											style={{
+												paddingRight: 50,
+												borderRight: "16px solid transparent",
+											}}
+										>
+											<option value="" selected={true} disabled={true}>
+												Select Blog Type
+											</option>
+											<option value="general">General</option>
+											<option value="education">Education</option>
+										</select>
+										{errors.blogType && touched.blogType ? (
+											<Typography
+												alignment="left"
+												title={errors.blogType}
+												fontFamily="Gilroy-Medium"
+												color="red"
+												type="label"
+											/>
+										) : (
+											<></>
+										)}
+									</div>
+								</div>
 							</div>
 							<div>
 								<div

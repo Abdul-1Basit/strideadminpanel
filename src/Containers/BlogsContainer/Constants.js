@@ -6,6 +6,7 @@ const blogSchema = Yup.object().shape({
 		.required("Blog name is required"),
 	description: Yup.string().required("Blog Description are required"),
 	status: Yup.string().required("Status is required"),
+	blogType: Yup.string().required("Blog Type is required"),
 	dateCreated: Yup.string().notRequired(""),
 });
 const initVals = {
@@ -15,5 +16,6 @@ const initVals = {
 	description: "",
 	status: "",
 	dateCreated: "",
+	blogType: "",
 };
 export { initVals, blogSchema };

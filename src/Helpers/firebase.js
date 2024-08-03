@@ -523,7 +523,7 @@ const addUser = async (user) => {
 	} = user;
 	//console.log("capmpig", campaign);
 	try {
-		await addDoc(collection(db, "strideuser"), {
+		await addDoc(collection(db, "users"), {
 			dob,
 			emailAddress,
 			firstName,
@@ -544,7 +544,7 @@ const addUser = async (user) => {
 	}
 };
 const getAllUsers = async () => {
-	const querySnapshot = await getDocs(collection(db, "strideuser"));
+	const querySnapshot = await getDocs(collection(db, "users"));
 	let newData = [];
 	querySnapshot.forEach((doc) => {
 		let temp = doc.data();
@@ -570,7 +570,7 @@ const updateUser = async (user) => {
 
 	try {
 		//console.log("roze", prize.id);
-		const prodRef = await doc(db, "strideuser", user.id);
+		const prodRef = await doc(db, "users", user.id);
 		await updateDoc(prodRef, {
 			dob,
 			emailAddress,
@@ -595,7 +595,7 @@ const updateUser = async (user) => {
 
 const deleteUser = async (user) => {
 	try {
-		await deleteDoc(doc(db, "strideuser", user.id));
+		await deleteDoc(doc(db, "users", user.id));
 		return true;
 	} catch (err) {
 		console.log("err", err);
@@ -811,6 +811,7 @@ const addBlog = async (Order, productListNew) => {
 		image,
 		status = "Active",
 		dateCreated = new Date(),
+		blogType,
 	} = Order;
 	//console.log("capmpig", campaign);
 	try {
@@ -820,6 +821,7 @@ const addBlog = async (Order, productListNew) => {
 			image,
 			status,
 			dateCreated,
+			blogType,
 		});
 		return true;
 	} catch (err) {
@@ -838,7 +840,7 @@ const getAllBlogs = async () => {
 	return newData;
 };
 const updateBlog = async (blog) => {
-	const { name, description, image, status, dateCreated } = blog;
+	const { name, description, image, status, dateCreated, blogType = "" } = blog;
 
 	try {
 		//console.log("roze", prize.id);
@@ -848,6 +850,7 @@ const updateBlog = async (blog) => {
 			description,
 			image,
 			status,
+			blogType,
 			dateCreated,
 		});
 		return true;
